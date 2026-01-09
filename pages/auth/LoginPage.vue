@@ -7,8 +7,8 @@
 <script>
 import { defineComponent } from 'vue'
 
-import { UserStore } from '@metano/quasar/stores/AuthStore'
-import FormLogin from '@metano/quasar/components/FormLogin.vue'
+import { UserStore } from './../../stores/AuthStore'
+import FormLogin from './../../components/FormLogin.vue'
 
 export default defineComponent({
   components: {
