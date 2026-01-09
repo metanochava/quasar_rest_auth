@@ -45,9 +45,8 @@ axios.defaults.headers = {
   Accept: 'application/json'
 }
 
-export const wsApi = process.env.API.replace('http', 'ws') + '/' + apiBaseUrl
+export const wsApi = (process.env.API + '/' + apiBaseUrl).replace('http', 'ws')
 
-// const TOKKEN = JSON.parse(getStorage('c', 'user'))?.tokens?.access
 
 export const HTTPClient = axios.create({
   baseURL: process.env.API,

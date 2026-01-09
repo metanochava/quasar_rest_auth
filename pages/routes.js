@@ -1,17 +1,17 @@
 import { tdc } from '../boot/app'
 
-export let rotas = [
-  { 
-    path: '/rotas', 
-    component: () => import('../components/MyTest.vue'), 
-    name: 'list_test', 
-    meta: { title: tdc('Lista de') + ' ' + tdc('Tests'), 
-    requiresAuth: true, 
-    requiredRole: 'list_test' } 
-  },
-]
+// export let rotas = [
+//   { 
+//     path: '/rotas', 
+//     component: () => import('../components/MyTest.vue'), 
+//     name: 'list_test', 
+//     meta: { title: tdc('Lista de') + ' ' + tdc('Tests'), 
+//     requiresAuth: true, 
+//     requiredRole: 'list_test' } 
+//   },
+// ]
 
-export const mytech = {
+export const rest = {
   path: '/',
   component: () => import('../layouts/MainLayout.vue'),
   children: { 
