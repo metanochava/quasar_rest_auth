@@ -1,5 +1,5 @@
 {
-  "name": "@quasar_rest_auth",
+  "name": "@metano/quasar_rest_auth",
   "publishConfig": {
     "access": "public"
   },
