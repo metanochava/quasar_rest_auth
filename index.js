@@ -1,5 +1,6 @@
 export * from './stores/AuthStore.js'
 export * from './stores/SettingsStore.js'
+export * from './pages/routes.js'
 
 
 
