@@ -1,0 +1,31 @@
+{
+  "name": "@quasar_rest_auth",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "1.0.1",
+  "description": "Para cabesalho do quasar framework",
+  "keywords": [
+    "mytech",
+    "api"
+  ],
+  "homepage": "https://github.com/metanochava/quasar#readme",
+  "bugs": {
+    "url": "https://github.com/metanochava/quasar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metanochava/quasar_rest_auth.git"
+  },
+  "license": "MIT",
+  "author": "Dias Metano Salvador Chavana",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "No test"
+  },
+  "dependencies": {
+    "axios": "^1.13.1",
+    "crypto-js": "^4.2.0"
+  }
+}
