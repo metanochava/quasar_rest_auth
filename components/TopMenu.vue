@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <SearchMenu  style="height: 28px; margin-top:-4px;"/>
+    <SearchMenu  />
     <q-space />
     <TopMenuSegundo ></TopMenuSegundo>
   </q-bar>
