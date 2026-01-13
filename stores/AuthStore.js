@@ -449,7 +449,7 @@ export const UserStore = defineStore("user", {
     async setEntidadeModulos () {
       if (getStorage('c', 'userEntidade') !== null) {
 
-        const rsp = await HTTPAuth.get(url({ type: 'u', url: 'auth/entidades/' + this.Entidade.id + '/modulos/', params: { } }))
+        const rsp = await HTTPAuth.get(url({ type: 'u', url: 'auth/entidades/' + this.Entidade?.id + '/modulos/', params: { } }))
           .then(res => {
             setStorage('c', 'entidadeModulos', JSON.stringify(res.data), 365)
             this.EntidadeModulos = res.data

@@ -1,18 +1,21 @@
 <template>
     <div >
-      <q-input  standout v-model="Auth.search"   square :class="[$q.dark.isActive ? 'bg-transparent ' : 'bg-transparent', 'input-28', 'q-pa-0']"  dense @update:model-value="filterMenus"
-        :label=" ' ' + tdc(' Procurar') + ' '">
-        <template v-slot:append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+      <input
+        v-model="Auth.search"
+        class="bg-transparent input-28 "
+        @input="filterMenus"
+        :placeholder="tdc('Procurar')"
+      />
     </div>
 </template>
 
 <style scoped>
-  .input-28 .q-field__control {
+  .input-28 {
     height: 28px;
-    min-height: 28px;
+    line-height: 28px;   /* centraliza o texto verticalmente */
+    width: 220px;        /* ajuste o comprimento aqui */
+    padding: 0 8px;      /* espaço interno lateral */
+    box-sizing: border-box;
   }
 </style>
 
