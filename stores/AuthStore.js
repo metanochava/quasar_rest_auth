@@ -82,13 +82,31 @@ export const LanguageStore = defineStore("lang", {
   state: () => ({
     current: {} ,
     list: [],
+    TraducaoMap: {}
   }),
 
   actions: {
     change(lang) {
       this.current = lang
+      this.setTraducao()
     },
 
+    async setTraducao() {
+      this.TraducaoMap = {}
+
+      await HTTPClient.get(url({type: "u", url: "auth/traducaos", params: {}}) )
+      .then(res => {
+        const payload = res.data
+        for (const bloco in payload) {
+          for (const key in payload[bloco]) {
+            const normalizada = key.trim()
+            this.TraducaoMap[normalizada] = payload[bloco][key]
+          }
+        }
+      }).catch(err => {
+      })
+    },
+    
     async get() {
       await HTTPClient.get(url({type: "u", url: "auth/idiomas", params: {}}) )
       .then(res => {

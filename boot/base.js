@@ -1,3 +1,5 @@
+import { LanguageStore } from '../stores/AuthStore' 
+
 
 let result = false
 export const localStorageSetItem = (key, value) => {
@@ -10,22 +12,6 @@ export const localStorageSetItem = (key, value) => {
 }
 
 
-export const IsAuthorized = {
-  bind (el, binding, vnode) {
-    const store = vnode.context.$store
-    const permissions = store.getters['auth/getPermissions']
-
-    permissions.forEach(element => {
-      if (element.nome === binding.value) {
-        result = true
-      }
-    })
-
-    if (!result) {
-      el.style.display = 'none'
-    }
-  }
-}
 
 export const pegaDominio = function () {
   let pagelocalurl = location.href // pega endereço que esta no navegador
@@ -34,64 +20,45 @@ export const pegaDominio = function () {
   return dominiourl // retorna a parte www.endereco.com.brs@
 }
 
-export const MeIsAuthorized = function (permissions, permission) {
-  let result = false
-  // permissions.forEach(element => {
-  //   if (element.nome === permission) {
-  //     result = true
-  //   }
-  // })
-  result = true
-  return result
+
+
+
+export const traducao = (texto = '') => {
+  const linguaStore = LanguageStore()
+  const chave = texto.toLowerCase().trim()
+
+  const traducaoDireta = linguaStore.TraducaoMap[chave]
+
+  if (!traducaoDireta) {
+    return texto
+  }
+
+  return replaceTraducao
+    ? replaceTraducao(texto, traducaoDireta)
+    : traducaoDireta
 }
 
-export const traducao = function (texto = '') {
-  let returne = ''
-  try {
-    if (this.$store?.state?.lingua?.Traducao !== '') {
-      for (const txt in this.$store?.state?.lingua?.Traducao) {
-        for (const key in this.$store?.state?.lingua?.Traducao[txt]) {
-          if (remocao(key) === remocao(texto)) {
-            const traducao = this.$store?.state?.lingua?.Traducao[txt][key]
-            returne = replaceTraducao(texto, traducao)
-          }
-        }
-      }
+function captura (texto = '') {
+  return texto.match(/\s*%-\s*[\w\s-]+\s*-%\s*/g) || []
+}
+
+function replaceTraducao (texto = '', textDeTraducao = '') {
+  const valores = captura(texto)
+  if (!valores.length) return textDeTraducao
+
+  let i = 0
+
+  return textDeTraducao.replace(
+    /\s*%-\s*[\w\s-]+\s*-%\s*/g,
+    () => {
+      const v = valores[i++]
+      return v
+        ? ' ' + v.replace('%-', '').replace('-%', '').trim() + ' '
+        : ''
     }
-  } catch (error) {
-
-  }
-  if (returne === '') {
-    returne = texto
-  }
-  return returne
+  )
 }
 
-function remocao (texto) {
-  const re = /(\s*%-\s*[a-zA-Z-0-9\s*]+\s*-%\s*)/g
-  const newstr = texto?.replace(re, ' ')
-  return newstr
-}
-
-function captura (texto) {
-  const re = /(\s*%-\s*[a-zA-Z-0-9\s*]+\s*-%\s*)/g
-  const newstr = texto.match(re)
-  return newstr
-}
-
-function replaceTraducao (texto, textDeTraducao) {
-  const array = captura(texto)
-  if (array != null) {
-    array.forEach(element => {
-      element = element.replace('%-', '')
-      element = element.replace('-%', '')
-      const text = element.trim()
-      const re = /(\s*%-\s*[a-zA-Z-0-9\s*]+\s*-%\s*)/
-      textDeTraducao = textDeTraducao.replace(re, ' ' + text + ' ')
-    })
-  }
-  return textDeTraducao
-}
 
 export const MeIsTipoEntidade = function (entidade, permission) {
   let result = false

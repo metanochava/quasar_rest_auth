@@ -49,20 +49,6 @@ export const pegaDominio = function () {
   return dominiourl // retorna a parte www.endereco.com.brs@
 }
 
-export const MeIsAuthorized = function (permissions, permission) {
-  // const store = useStore()
-  let result = false
-  if (Array.isArray(permissions)) {
-    permissions.forEach(element => {
-      if (element.nome === permission) {
-        result = true
-      } else {
-        // store?.commit('auth/SET_PAGEPERMISSOES', permission)
-      }
-    })
-  }
-  return result
-}
 
 export const tdc = traducao
 export const ds = dateSplit
