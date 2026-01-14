@@ -53,9 +53,7 @@
 
 import LeftMenuSegundo from './LeftMenuSegundo.vue'
 
-
 import { defineComponent } from 'vue'
-import { HTTPClient, url } from '../boot/api'
 import { tdc } from '../boot/app'
 import { UserStore } from '../stores/AuthStore'
 

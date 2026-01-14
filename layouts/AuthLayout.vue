@@ -4,7 +4,7 @@
       <q-toolbar class="no-wrap q-px-md">
         <HeaderBrand />
         <q-space />
-        <HeaderDarkModeToggle />
+        <HeaderDarkMode />
         <HeaderFullScreen />
         <HeaderLanguage />
         <Servicos />
@@ -33,7 +33,7 @@ import { AuthStore, LoadStore, UserStore } from '../stores/AuthStore'
 
 /* -------------------- IMPORT COMPONENTS -------------------- */
 import HeaderBrand from '../components/header/HeaderBrand.vue'
-import HeaderDarkModeToggle from '../components/header/HeaderDarkModeToggle.vue'
+import HeaderDarkMode from '../components/header/HeaderDarkMode.vue'
 import HeaderLanguage from '../components/header/HeaderLanguage.vue'
 import HeaderFullScreen from '../components/header/HeaderFullScreen.vue'
 import Servicos from '../components/header/HeaderServices.vue'
@@ -44,7 +44,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
     HeaderBrand,
-    HeaderDarkModeToggle,
+    HeaderDarkMode,
     HeaderLanguage,
     HeaderFullScreen,
     Servicos,

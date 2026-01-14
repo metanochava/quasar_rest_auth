@@ -25,6 +25,7 @@ export const barStyle = {
 }
 
 
+
 // Initialize the annoying-background directive.
 export const IsAuthorized = {
   bind (el, binding, vnode) {

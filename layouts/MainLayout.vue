@@ -18,9 +18,7 @@
           <q-space />
           <q-btn dense flat icon="close" v-close-popup />
         </q-bar>
-
         <q-separator />
-
         <q-card-section class="scroll">
           <DefinicoesLayout />
         </q-card-section>
@@ -57,7 +55,7 @@
         <q-space />
 
         <!-- Dark Mode -->
-        <HeaderDarkModeToggle />
+        <HeaderDarkMode />
 
         <!-- Full Screen -->
         <HeaderFullScreen />
@@ -130,7 +128,7 @@ import { AuthStore, LoadStore, UserStore } from '../stores/AuthStore'
 /* -------------------- IMPORT COMPONENTS -------------------- */
 import HeaderBrand from '../components/header/HeaderBrand.vue'
 import HeaderUser from '../components/header/HeaderUser.vue'
-import HeaderDarkModeToggle from '../components/header/HeaderDarkModeToggle.vue'
+import HeaderDarkMode from '../components/header/HeaderDarkMode.vue'
 import HeaderLanguage from '../components/header/HeaderLanguage.vue'
 import HeaderFullScreen from '../components/header/HeaderFullScreen.vue'
 import Servicos from '../components/header/HeaderServices.vue'
@@ -144,12 +142,16 @@ import Rodape from '../components/footer/MainFooter.vue'
 
 
 import { defineComponent } from 'vue'
+import { barStyle, thumbStyle } from '../boot/app'
+import UserPermissioes from '../components/UserPermissioes.vue'
+import PagePermissoes from '../components/PagePermissoes.vue'
+import DefinicoesLayout from '../components/DefinicoesLayout.vue'
 
 export default defineComponent({
   components: {
     HeaderBrand,
     HeaderUser,
-    HeaderDarkModeToggle,
+    HeaderDarkMode,
     HeaderLanguage,
     HeaderFullScreen,
     Servicos,
@@ -158,6 +160,10 @@ export default defineComponent({
     TopMenu,
     RightMenu,
     Rodape,
+    UserPermissioes,
+    PagePermissoes,
+    DefinicoesLayout
+
   },
   setup() {
     const Auth = AuthStore()
@@ -167,6 +173,8 @@ export default defineComponent({
       Auth,
       User,
       Load,
+      barStyle, 
+      thumbStyle 
     }
   },
   data() {
