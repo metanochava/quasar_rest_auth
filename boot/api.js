@@ -101,7 +101,8 @@ HTTPAuth.interceptors.request.use(async config => {
     E: 'userEntidade',
     S: 'userSucursal',
     G: 'userGrupo',
-    ET: 'tipoEntidade'
+    ET: 'tipoEntidade',
+    L: 'userLang'
   }
 
   config.headers.Authorization = `Bearer ${getStorage('c', 'access') || ''}`
