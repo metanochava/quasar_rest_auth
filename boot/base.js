@@ -1,4 +1,16 @@
-import { LanguageStore } from '../stores/AuthStore' 
+
+import { getActivePinia } from 'pinia'
+import { LanguageStore } from '../stores/AuthStore'
+
+export const traducao = (texto = '') => {
+  if (!getActivePinia()) return texto
+
+  const store = LanguageStore()
+  const chave = texto.toLowerCase().trim()
+
+  return store.TraducaoMap[chave] || texto
+}
+
 
 
 let result = false
@@ -22,21 +34,6 @@ export const pegaDominio = function () {
 
 
 
-
-export const traducao = (texto = '') => {
-  const linguaStore = LanguageStore()
-  const chave = texto.toLowerCase().trim()
-
-  const traducaoDireta = linguaStore.TraducaoMap[chave]
-
-  if (!traducaoDireta) {
-    return texto
-  }
-
-  return replaceTraducao
-    ? replaceTraducao(texto, traducaoDireta)
-    : traducaoDireta
-}
 
 function captura (texto = '') {
   return texto.match(/\s*%-\s*[\w\s-]+\s*-%\s*/g) || []
