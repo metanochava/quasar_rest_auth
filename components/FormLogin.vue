@@ -21,7 +21,7 @@
           <br>
           <q-form class="">
 
-            <q-input outlined dense   clearable v-model="email" type="email" :label="tdc('Usuario ou Celular ou Email')">
+            <q-input outlined dense   clearable v-model="identifier" :label="tdc('Usuario ou Celular ou Email')">
               <template v-slot:prepend>
                 <q-icon name="email" />
               </template>
@@ -106,7 +106,7 @@ export default defineComponent({
       entidade_id: null,
       isPwd: true,
       readonly: false,
-      email: '',
+      identifier: '',
       password: '',
       incorrectAuth: false,
       correctAuth: false,
@@ -203,7 +203,7 @@ export default defineComponent({
       this.correctAuth = false
 
       await this.User.login({
-        email: this.email,
+        identifier: this.identifier,
         password: this.password,
         info: navigator.platform + ' ' + this.ipAddress,
         dispositivo: navigator.userAgent,
