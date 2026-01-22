@@ -1,11 +1,11 @@
-up:
+push:
 	npm version patch --no-git-tag-version; \
 	git add .; \
 	VERSION=$$(node -p "require('./package.json').version"); \
 	read -p "Mensagem do release: " m; \
 	git commit -m "release: v$$VERSION - $$m"; \
 	git push origin main; 
-uptag:
+pushtag:
 	npm version patch --no-git-tag-version; \
 	git add .; \
 	VERSION=$$(node -p "require('./package.json').version"); \
@@ -14,7 +14,7 @@ uptag:
 	git tag v$$VERSION; \
 	git push origin main; \
 	git push origin v$$VERSION; 
-upnpm:
+pushnpm:
 	npm version patch --no-git-tag-version; \
 	git add .; \
 	VERSION=$$(node -p "require('./package.json').version"); \
