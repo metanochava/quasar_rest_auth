@@ -120,9 +120,9 @@ export default defineComponent({
 
   },
   watch: {
-    'User.Grupo' (val) {
+    'User.redirect' (val) {
       if (!val) return
-      this.$router.push({ name: 'wellcome' })
+      this.$router.push({ name: val })
     },
   },
   mounted () {

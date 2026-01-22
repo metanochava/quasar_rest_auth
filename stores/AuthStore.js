@@ -140,6 +140,7 @@ export const UserStore = defineStore("user", {
     isLogin: false,
     isLogout: false,
     manterLogado: false,
+    redirect: '',
   }),
 
   getters: {
@@ -292,6 +293,7 @@ export const UserStore = defineStore("user", {
         } else {
           if (res.data.length === 0) {
             this.Grupo = {id: '1',  name: 'Gest' }
+            this.redirect = 'wellcome'
             return  
           }
           const entidades = res.data.map(e => ({
@@ -328,11 +330,13 @@ export const UserStore = defineStore("user", {
       await HTTPAuth.get(url({ type: 'u', url: 'auth/users/' + this.data?.id + '/userSucursals/', params: { } }))
         .then(async res => {
           setStorage('c', 'userSucursals', JSON.stringify(res.data), 365)
+          
           if (res.data.length === 1) {
             this.selectSucursal_(res.data[0], q)
           } else {
             if (res.data.length === 0) {
               this.Grupo = {id: '1',  name: 'Gest' }
+              this.redirect = 'wellcome'
               return  
             }
             const sucursals = []
@@ -431,6 +435,7 @@ export const UserStore = defineStore("user", {
       }else{
         if (res.data.length === 0) {
           this.Grupo = {id: '1',  name: 'Gest' }
+          this.redirect = 'wellcome'
           return  
         }
         const grupos = []
@@ -452,6 +457,7 @@ export const UserStore = defineStore("user", {
           this.selectGrupo_(data)
         }).onCancel(() => {
           this.Grupo = {id: '1',  name: 'Gest' }
+          this.redirect = 'wellcome'
         })
       }
       return res
