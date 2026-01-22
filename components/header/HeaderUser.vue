@@ -159,7 +159,7 @@ export default defineComponent({
   watch: {
     'User.Grupo' (val) {
       if (!val) return
-      if (this.$route.name !== 'wellcome') {
+      if (this.$route.name !== 'welcome') {
         this.$router.push({ name: 'home' })
       }
     },

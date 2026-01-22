@@ -88,6 +88,8 @@ export const LanguageStore = defineStore("lang", {
   actions: {
     change(lang) {
       this.current = lang
+      const User = UserStore()
+      User.setIdioma(this.current)
       this.setTraducao()
     },
 
@@ -178,6 +180,7 @@ export const UserStore = defineStore("user", {
     },
     setIdioma(idioma){
       this.Idioma = idioma
+      setStorage('c', 'userLang', idioma)
     },
     selectGroup(grupo){
       this.Grupo = grupo
@@ -224,6 +227,8 @@ export const UserStore = defineStore("user", {
       const rsp = await HTTPAuth.get(url({type: "u", url: "auth/me", params: {}}) )
       .then(res => {
         this.data = res.data
+        const Language = LanguageStore()
+        Language.change(res.data.language)
         setStorage('c', 'user', JSON.stringify(this.data),  365)
       }).catch(err => {
         console.log(err)
@@ -247,20 +252,12 @@ export const UserStore = defineStore("user", {
     async change_password_email(email, antiga, nova) {
       const data = { email: email, password: antiga, passwordNova: nova }
       const rsp = await HTTPAuth.post(url({type: "u", url: "auth/change_password_email/", params: {}}), data )
-      .then(res => {
-      }).catch(err => {
-
-      })
       return rsp
     },
 
     async change_password_numero(mobile, otp, nova) {
       const data = { mobile: mobile, otp: otp, password: nova }
       const rsp = await HTTPAuth.post(url({type: "u", url: "auth/change_password_email/", params: {}}), data )
-      .then(res => {
-      }).catch(err => {
-
-      })
       return rsp
     },
 
@@ -293,7 +290,7 @@ export const UserStore = defineStore("user", {
         } else {
           if (res.data.length === 0) {
             this.Grupo = {id: '1',  name: 'Gest' }
-            this.redirect = 'wellcome'
+            this.redirect = 'welcome'
             return  
           }
           const entidades = res.data.map(e => ({
@@ -336,7 +333,7 @@ export const UserStore = defineStore("user", {
           } else {
             if (res.data.length === 0) {
               this.Grupo = {id: '1',  name: 'Gest' }
-              this.redirect = 'wellcome'
+              this.redirect = 'welcome'
               return  
             }
             const sucursals = []
@@ -435,7 +432,7 @@ export const UserStore = defineStore("user", {
       }else{
         if (res.data.length === 0) {
           this.Grupo = {id: '1',  name: 'Gest' }
-          this.redirect = 'wellcome'
+          this.redirect = 'welcome'
           return  
         }
         const grupos = []
@@ -457,7 +454,7 @@ export const UserStore = defineStore("user", {
           this.selectGrupo_(data)
         }).onCancel(() => {
           this.Grupo = {id: '1',  name: 'Gest' }
-          this.redirect = 'wellcome'
+          this.redirect = 'welcome'
         })
       }
       return res
