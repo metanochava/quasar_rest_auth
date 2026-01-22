@@ -1,40 +1,28 @@
 <template>
   <q-btn
-    dense flat round
+    round dense flat
     :icon="$q.dark.isActive ? 'mdi-weather-night' : 'mdi-white-balance-sunny'"
     @click="toggleDark"
   >
-    <q-tooltip
-      :class="$q.dark.isActive ? 'bg-dark text-white' : 'bg-primary text-white'"
-    >
-      {{ $q.dark.isActive ? tdc('Clique para modo dia') : tdc('Clique para modo noite') }}
+    <q-tooltip>
+      {{ $q.dark.isActive ? tdc('Modo dia') : tdc('Modo noite') }}
     </q-tooltip>
   </q-btn>
 </template>
 
+<script setup>
+import { useQuasar } from 'quasar'
+import { tdc } from '../../boot/app'
+import { getStorage, setStorage } from '../../boot/base'
 
-<script>
-  import { defineComponent } from 'vue'
-  import { tdc } from '../../boot/app'
-  import { getStorage, setStorage } from '../../boot/base'
+const $q = useQuasar()
 
-  export default defineComponent({
-    name: 'HeaderDarkMode',
-    data () {
-      return {
-        tdc: tdc
-      }
-    },
-    mounted() {
-      const isDark = ('' + getStorage('c', 'dark')).toLowerCase() === 'true'
-      this.$q.dark.set(isDark) 
-    },
-    methods: {
-      toggleDark () {
-        const newValue = !this.$q.dark.isActive
-        this.$q.dark.set(newValue)
-        setStorage('c', 'dark', newValue, 365)
-      }
-    }
-  })
+const toggleDark = () => {
+  const newValue = !$q.dark.isActive
+  $q.dark.set(newValue)
+  setStorage('c', 'dark', newValue, 365)
+}
+
+const isDark = getStorage('c', 'dark') === 'true'
+$q.dark.set(isDark)
 </script>

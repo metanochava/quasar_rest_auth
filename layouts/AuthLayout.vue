@@ -8,6 +8,8 @@
         <HeaderFullScreen />
         <HeaderLanguage />
         <Servicos />
+        <HeaderUser v-show="User.data" />
+        <q-space />
       </q-toolbar>
     </q-header>
 
@@ -38,6 +40,7 @@ import HeaderLanguage from '../components/header/HeaderLanguage.vue'
 import HeaderFullScreen from '../components/header/HeaderFullScreen.vue'
 import Servicos from '../components/header/HeaderServices.vue'
 import Rodape from '../components/footer/MainFooter.vue'
+import HeaderUser from '../components/header/HeaderUser.vue'
 
 import { defineComponent } from 'vue'
 
@@ -45,6 +48,7 @@ export default defineComponent({
   components: {
     HeaderBrand,
     HeaderDarkMode,
+    HeaderUser,
     HeaderLanguage,
     HeaderFullScreen,
     Servicos,
