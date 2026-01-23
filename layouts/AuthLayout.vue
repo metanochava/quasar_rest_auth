@@ -9,7 +9,6 @@
         <HeaderLanguage />
         <Servicos />
         <HeaderUser v-show="User.data" />
-        <q-space />
       </q-toolbar>
     </q-header>
 

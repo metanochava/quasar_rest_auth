@@ -148,7 +148,7 @@ export const UserStore = defineStore("user", {
   getters: {
     username: (state) => state.data?.username || ".",
     perfil: (state) =>
-      state.data?.perfil.url ||
+      state.data?.perfil?.url ||
       "https://awsacademy.instructure.com/images/messages/avatar-50.png",
   },
 
