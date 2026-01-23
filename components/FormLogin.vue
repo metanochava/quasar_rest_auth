@@ -92,12 +92,12 @@ export default defineComponent({
   setup () {
     const Auth = AuthStore()
     const  User = UserStore()
-    const $q = useQuasar()
+    const q = useQuasar()
     return {
       Auth,
       tdc,
       User,
-      $q
+      q
     }
   },
   data () {
@@ -120,10 +120,15 @@ export default defineComponent({
 
   },
   watch: {
-    'User.grupo' (val) {
-      alert(val)
-      if (!val) return
-      this.$router.push({ name: val })
+    'User.redirect' (val) {
+    //   if (!val) return
+    //   if ( this.User.Grupo.id !== 1){
+    //     this.$router.push({ name: 'authwelcome' })
+    //   }else{
+    //     this.$router.push({ name: 'welcome' })
+    //   }
+    //   console.log(this.User.Grupo.id)
+      console.log(val)
     },
   },
   mounted () {
@@ -185,7 +190,7 @@ export default defineComponent({
 
     },
     errorPosition () {
-      this.$q.notify({
+      this.q.notify({
         position: 'bottom',
         timeout: 3000,
         color: 'negative',
@@ -211,7 +216,7 @@ export default defineComponent({
         local_lat: this.latitude || '-26.372109',
         local_lon: this.longitude || '28.233608',
         local: JSON.stringify(this.local)
-      }, this.$q)
+      }, this.q, this.$router)
     }
   }
 })

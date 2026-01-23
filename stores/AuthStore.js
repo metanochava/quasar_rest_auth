@@ -131,7 +131,7 @@ export const UserStore = defineStore("user", {
     Sucursals: [],
     Sucursal: null,
     Grupos: [],
-    Grupo: {id: '1',  name: 'Gest' },  
+    Grupo: {id: 1,  name: 'Gest' },  
     Settings: false,
     Permicoes: [],
     access: null,
@@ -198,7 +198,7 @@ export const UserStore = defineStore("user", {
       setStorage('c', 'right_top', this.RightTop)
     },
 
-    async login(data, q) {
+    async login(data, q, r) {
       const rsp = await HTTPClient.post(url({type: "u", url: "auth/login/", params: {}}), data )
       .then(async res => {
         this.access = res.data.tokens.access
@@ -215,7 +215,7 @@ export const UserStore = defineStore("user", {
         }
         
         await this.me()
-        await this.getEntidades_(q)
+        await this.getEntidades_(q, r)
       }).catch(err => {
         console.log(err)
         
@@ -269,7 +269,7 @@ export const UserStore = defineStore("user", {
       return rsp
     },
 
-     async getEntidades_ (q) {
+     async getEntidades_ (q, r) {
 
       if (!this.data?.id) return
 
@@ -289,8 +289,8 @@ export const UserStore = defineStore("user", {
           this.selectEntidade_(res.data[0], q)
         } else {
           if (res.data.length === 0) {
-            this.Grupo = {id: '1',  name: 'Gest' }
-            this.redirect = 'welcome'
+            this.Grupo = {id: 1,  name: 'Gest' }
+            r.push({name: 'welcome'})
             return  
           }
           const entidades = res.data.map(e => ({
@@ -307,9 +307,10 @@ export const UserStore = defineStore("user", {
             },
             cancel: true,
             persistent: true
-          }).onOk(data => this.selectEntidade_(data, q))
+          }).onOk(data => this.selectEntidade_(data, q, r))
           .onCancel(() => {
-            this.Grupo = {id: '1',  name: 'Gest' }
+            this.Grupo = {id: 1,  name: 'Gest' }
+            r.push({name: 'welcome'})
           })
         }
       } catch (err) {
@@ -317,23 +318,23 @@ export const UserStore = defineStore("user", {
       }
     },
 
-    selectEntidade_ (entidade, q) {
+    selectEntidade_ (entidade, q, r) {
       this.Entidade = entidade
       setStorage('c', 'userEntidade', JSON.stringify(entidade), 365)
-      this.getSucursals_(q)
+      this.getSucursals_(q, r)
     },
 
-    async getSucursals_ (q) {
+    async getSucursals_ (q, r) {
       await HTTPAuth.get(url({ type: 'u', url: 'auth/users/' + this.data?.id + '/userSucursals/', params: { } }))
         .then(async res => {
           setStorage('c', 'userSucursals', JSON.stringify(res.data), 365)
           
           if (res.data.length === 1) {
-            this.selectSucursal_(res.data[0], q)
+            this.selectSucursal_(res.data[0], q, r)
           } else {
             if (res.data.length === 0) {
-              this.Grupo = {id: '1',  name: 'Gest' }
-              this.redirect = 'welcome'
+              this.Grupo = {id: 1,  name: 'Gest' }
+              r.push({name: 'authwelcome'})
               return  
             }
             const sucursals = []
@@ -351,9 +352,10 @@ export const UserStore = defineStore("user", {
               cancel: true,
               persistent: true
             }).onOk(data => {
-              this.selectSucursal_(data, q)
+              this.selectSucursal_(data, q, r)
             }).onCancel(() => {
-              this.Grupo = {id: '1',  name: 'Gest' }
+              this.Grupo = {id: 1,  name: 'Gest' }
+              r.push({name: 'authwelcome'})
             })
           }
         }).catch(err => {
@@ -361,10 +363,10 @@ export const UserStore = defineStore("user", {
         })
     },
 
-    selectSucursal_ (sucursal, q) {
+    selectSucursal_ (sucursal, q, r) {
       this.Sucursal = sucursal
       setStorage('c', 'userSucursal', JSON.stringify(sucursal), 365)
-      this.getGrupos_(q)
+      this.getGrupos_(q, r)
     },
 
     selectEntidade (entidade) {
@@ -395,8 +397,6 @@ export const UserStore = defineStore("user", {
       }
     },
 
-    
-
     async selectGrupo (grupo) {
       setStorage('c', 'userGrupo', JSON.stringify(grupo), 365)
       this.Grupo = grupo
@@ -418,25 +418,24 @@ export const UserStore = defineStore("user", {
       return res
     }, 
     
-    async getGrupos_ (q) {
+    async getGrupos_ (q, r) {
 
       const res = await HTTPAuth.get(
         url({ type: 'u', url: `auth/users/${this.data?.id}/userGrupos/`, params: {} })
       )
-
       setStorage('c', 'userGrupos', JSON.stringify(res.data), 365)
       this.Grupos = res.data
 
       if (res.data.length === 1) {
-        this.selectGrupo_(res.data[0])
+        this.selectGrupo_(res.data[0], r)
       }else{
         if (res.data.length === 0) {
-          this.Grupo = {id: '1',  name: 'Gest' }
-          this.redirect = 'welcome'
+          this.Grupo = {id: 1,  name: 'Gest' }
+          r.push({name: 'authwelcome'})
           return  
         }
         const grupos = []
-        grupos.push( { label: 'Gest', value: {id: '1',  name: 'Gest' } })
+        grupos.push( { label: 'Gest', value: {id: 1,  name: 'Gest' } })
         res.data.forEach(element => {
           grupos.push({ label: this.perfilSplint(element.name), value: element })
         })
@@ -451,19 +450,21 @@ export const UserStore = defineStore("user", {
           cancel: true,
           persistent: true
         }).onOk(data => {
-          this.selectGrupo_(data)
+          this.selectGrupo_(data, r)
         }).onCancel(() => {
-          this.Grupo = {id: '1',  name: 'Gest' }
-          this.redirect = 'welcome'
+          this.Grupo = {id: 1,  name: 'Gest' }
+          rr.push({name: 'authwelcome'})
         })
       }
       return res
     },
 
-    selectGrupo_ (group) {
+    selectGrupo_ (group, r) {
       this.Grupo = group
       setStorage('c', 'userGrupo', JSON.stringify(group), 365)
       this.getPermicoes()
+      r.push({name: 'authwelcome'})
+      
     },
 
     async setEntidadeModulos () {
