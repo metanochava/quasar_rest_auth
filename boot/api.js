@@ -30,11 +30,8 @@ export const url = (payload = {type: 'u', url: '', params: {} }) => {
   if (payload.type === 'nu') {
     urlFinal = apiBaseUrl + '/' + tipoEntidadeNome.toLowerCase() + '/' + payload.url
   }
-
-  const Auth = AuthStore()
-  let lang = Auth?.Idioma
   
-  urlFinal = urlFinal + '?format=json&lang=' + lang?.nome
+  urlFinal = urlFinal + '?format=json'
   for (const [key, value] of Object.entries(payload?.params)) {
     urlFinal = urlFinal + `&${key}=${value}`
   }
@@ -51,35 +48,26 @@ export const wsApi = (process.env.API + '/' + apiBaseUrl).replace('http', 'ws')
 export const HTTPClient = axios.create({
   baseURL: process.env.API,
   headers: {
-    FEK: process.env.FRONT_END_KEY,
-    FEP: process.env.FRONT_END_PASSWORD
   }
 })
 
 export const HTTPClientBlob = axios.create({
   baseURL: process.env.API,
   headers: {
-    FEK: process.env.FRONT_END_KEY,
-    FEP: process.env.FRONT_END_PASSWORD
   }
 })
 
 export const HTTPAuth = axios.create({
   baseURL: process.env.API,
-  
   headers: {
-    FEK: process.env.FRONT_END_KEY,
-    FEP: process.env.FRONT_END_PASSWORD,
     Accept: 'application/json',
     'Content-Type': 'application/json'
   }
-})
+}) 
 
 export const HTTPAuthBlob = axios.create({
   baseURL: process.env.API,
   headers: {
-    FEK: process.env.FRONT_END_KEY,
-    FEP: process.env.FRONT_END_PASSWORD,
     Accept: 'application/json'
   },
   responseType: 'blob'
