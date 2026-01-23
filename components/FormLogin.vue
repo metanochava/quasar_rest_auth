@@ -121,6 +121,7 @@ export default defineComponent({
   },
   watch: {
     'User.redirect' (val) {
+      alert(val)
       if (!val) return
       this.$router.push({ name: val })
     },
