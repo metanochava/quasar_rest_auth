@@ -121,7 +121,7 @@ export default defineComponent({
   },
   watch: {
     'User.redirect' (val) {
-
+      if (val) router.push({ name: val })
     },
   },
   mounted () {
