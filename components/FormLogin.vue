@@ -77,6 +77,7 @@ import { tdc } from '../boot/app'
 import { AuthStore, UserStore } from '../stores/AuthStore'
 import { setStorage, getStorage } from '../boot/storage';
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
 
 export default defineComponent({
@@ -93,11 +94,13 @@ export default defineComponent({
     const Auth = AuthStore()
     const  User = UserStore()
     const q = useQuasar()
+    const r = useRouter()
     return {
       Auth,
       tdc,
       User,
-      q
+      q, 
+      r
     }
   },
   data () {
@@ -121,7 +124,7 @@ export default defineComponent({
   },
   watch: {
     'User.redirect' (val) {
-      if (val) router.push({ name: val })
+      if (val) this.r.push({ name: val })
     },
   },
   mounted () {
