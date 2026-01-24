@@ -414,7 +414,7 @@ export const UserStore = defineStore("user", {
       this.Grupos = res.data
 
       if (res.data.length === 1) {
-        this.selectGrupo_(res.data[0])
+        this.selectGrupo_(res.data[0], r)
       }
       return res
     }, 
