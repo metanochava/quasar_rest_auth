@@ -291,7 +291,7 @@ export const UserStore = defineStore("user", {
         } else {
           if (res.data.length === 0) {
             
-            this.redirect = 'welcome'
+            r.push({name: 'welcome'})
             return  
           }
           const entidades = res.data.map(e => ({
@@ -311,7 +311,7 @@ export const UserStore = defineStore("user", {
           }).onOk(data => this.selectEntidade_(data, q, r))
           .onCancel(() => {
             
-            this.redirect= 'welcome'
+            r.push({name: 'welcome'})
           })
         }
       } catch (err) {
@@ -335,7 +335,7 @@ export const UserStore = defineStore("user", {
           } else {
             if (res.data.length === 0) {
               
-              this.redirect = 'authwelcome'
+              r.push({name: 'authwelcome'})
               return  
             }
             const sucursals = []
@@ -356,7 +356,7 @@ export const UserStore = defineStore("user", {
               this.selectSucursal_(data, q, r)
             }).onCancel(() => {
               
-              this.redirect='authwelcome'
+              r.push({name: 'authwelcome'})
             })
           }
         }).catch(err => {
@@ -432,7 +432,7 @@ export const UserStore = defineStore("user", {
       }else{
         if (res.data.length === 0) {
           
-          this.redirect = 'authwelcome'
+          r.push({name: 'authwelcome'})
           return  
         }
         const grupos = []
@@ -454,7 +454,7 @@ export const UserStore = defineStore("user", {
           this.selectGrupo_(data, r)
         }).onCancel(() => {
           
-          this.redirect = 'authwelcome'
+          r.push({name: 'authwelcome'})
         })
       }
       return res
@@ -464,7 +464,7 @@ export const UserStore = defineStore("user", {
       this.Grupo = group
       setStorage('c', 'userGrupo', JSON.stringify(group), 365)
       this.getPermicoes()
-      this.redirect = 'authwelcome'
+      r.push({name: 'authwelcome'})
       
     },
 

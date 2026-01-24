@@ -123,9 +123,7 @@ export default defineComponent({
 
   },
   watch: {
-    'User.redirect' (val) {
-      if (val) this.r.push({ name: val })
-    },
+
   },
   mounted () {
 
@@ -172,7 +170,7 @@ export default defineComponent({
       await this.User.login({
         identifier: this.identifier,
         password: this.password,
-      }, this.q, this.$router)
+      }, this.q, this.r)
     }
   }
 })
