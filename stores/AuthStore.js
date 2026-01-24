@@ -199,6 +199,7 @@ export const UserStore = defineStore("user", {
     },
 
     async login(data, q, r) {
+      console.log(r)
       const rsp = await HTTPClient.post(url({type: "u", url: "auth/login/", params: {}}), data )
       .then(async res => {
         this.access = res.data.tokens.access
@@ -289,7 +290,7 @@ export const UserStore = defineStore("user", {
           this.selectEntidade_(res.data[0], q)
         } else {
           if (res.data.length === 0) {
-            this.Grupo = {id: 1,  name: 'Gest' }
+            
             r.push({name: 'welcome'})
             return  
           }
@@ -309,7 +310,7 @@ export const UserStore = defineStore("user", {
             persistent: true
           }).onOk(data => this.selectEntidade_(data, q, r))
           .onCancel(() => {
-            this.Grupo = {id: 1,  name: 'Gest' }
+            
             r.push({name: 'welcome'})
           })
         }
@@ -333,7 +334,7 @@ export const UserStore = defineStore("user", {
             this.selectSucursal_(res.data[0], q, r)
           } else {
             if (res.data.length === 0) {
-              this.Grupo = {id: 1,  name: 'Gest' }
+              
               r.push({name: 'authwelcome'})
               return  
             }
@@ -354,7 +355,7 @@ export const UserStore = defineStore("user", {
             }).onOk(data => {
               this.selectSucursal_(data, q, r)
             }).onCancel(() => {
-              this.Grupo = {id: 1,  name: 'Gest' }
+              
               r.push({name: 'authwelcome'})
             })
           }
@@ -430,7 +431,7 @@ export const UserStore = defineStore("user", {
         this.selectGrupo_(res.data[0], r)
       }else{
         if (res.data.length === 0) {
-          this.Grupo = {id: 1,  name: 'Gest' }
+          
           r.push({name: 'authwelcome'})
           return  
         }
@@ -452,8 +453,8 @@ export const UserStore = defineStore("user", {
         }).onOk(data => {
           this.selectGrupo_(data, r)
         }).onCancel(() => {
-          this.Grupo = {id: 1,  name: 'Gest' }
-          rr.push({name: 'authwelcome'})
+          
+          r.push({name: 'authwelcome'})
         })
       }
       return res
