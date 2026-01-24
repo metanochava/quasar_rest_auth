@@ -121,14 +121,7 @@ export default defineComponent({
   },
   watch: {
     'User.redirect' (val) {
-    //   if (!val) return
-    //   if ( this.User.Grupo.id !== 1){
-    //     this.$router.push({ name: 'authwelcome' })
-    //   }else{
-    //     this.$router.push({ name: 'welcome' })
-    //   }
-    //   console.log(this.User.Grupo.id)
-      console.log(val)
+
     },
   },
   mounted () {
@@ -159,35 +152,10 @@ export default defineComponent({
         this.errorPosition()
       }
     },
-    async getLocalFromCoords(lat, lon) {
-      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=pt`
-
-      const res = await fetch(url, {
-        headers: {
-          // 'User-Agent': 'SeuApp/1.0'
-        }
-      })
-
-      const data = await res.json()
-
-      return {
-        cidade: data.address.city
-          || data.address.town
-          || data.address.village
-          || '',
-        bairro: data.address.suburb || '',
-        pais: data.address.country || '',
-        nomeCompleto: data.display_name || '.'
-      }
-    },
     setPosition (position) {
       const coords = position.coords
       this.latitude = coords.latitude
       this.longitude = coords.longitude
-
-      this.local = this.getLocalFromCoords(this.latitude, this.longitude)
-      console.log(this.local)
-
     },
     errorPosition () {
       this.q.notify({
@@ -211,11 +179,6 @@ export default defineComponent({
       await this.User.login({
         identifier: this.identifier,
         password: this.password,
-        info: navigator.platform + ' ' + this.ipAddress,
-        dispositivo: navigator.userAgent,
-        local_lat: this.latitude || '-26.372109',
-        local_lon: this.longitude || '28.233608',
-        local: JSON.stringify(this.local)
       }, this.q, this.$router)
     }
   }
