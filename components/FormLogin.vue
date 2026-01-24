@@ -1,44 +1,75 @@
+
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page-container>
+  <q-page class=" row items-center justify-evenly">
+    <div class="row">
+      <q-card square  flat class="text-center">
+        <q-card-section class="text-left justify-evenly">
+          <q-card  v-if="incorrectAuth" class="my-card bg-red text-white">
+            <q-card-section>
+              <div class="text-subtitle2">{{ tdc('Incorrect username or password entered') }} <br> {{ tdc('please try again') }}</div>
+            </q-card-section>
 
-    <q-card square flat class="text-center">
-      <q-card-section>
+          </q-card>
+          <q-card  v-if="correctAuth" class="my-card bg-green text-white">
+            <q-card-section>
+              <div class="text-subtitle2"> {{ tdc('Login successfuly') }} <br>
+                {{ tdc('Redirect to home page') }} ...</div>
+            </q-card-section>
 
-        <q-card v-if="incorrectAuth" class="bg-red text-white">
-          <q-card-section>
-            {{ tdc('Incorrect username or password') }}
-          </q-card-section>
-        </q-card>
+          </q-card>
+          <br>
+          <q-form  @submit.prevent="login">
 
-        <q-form @submit.prevent="login()">
+            <q-input outlined dense   clearable v-model="identifier" :label="tdc('Usuario ou Celular ou Email')">
+              <template v-slot:prepend>
+                <q-icon name="email" />
+              </template>
+              <template v-slot:append>
+                <q-icon name="phone" />
+              </template>
+            </q-input>
+            <br/>
+            <q-input outlined dense   :readonly="readonly" clearable v-model="password" :type="isPwd ? 'password': 'text'" :label="tdc('Senha')">
 
-          <q-input v-model="identifier" outlined dense label="Email ou Celular" />
+              <template v-slot:prepend>
+                <q-icon
+                  name="lock"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
+              </template>
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
+              </template>
+            </q-input>
 
-          <q-input
-            v-model="password"
-            :type="isPwd ? 'password' : 'text'"
-            outlined dense
-          >
-            <template #append>
-              <q-icon
-                :name="isPwd ? 'visibility_off' : 'visibility'"
-                @click="isPwd = !isPwd"
-                class="cursor-pointer"
-              />
-            </template>
-          </q-input>
+            <br/>
+            <q-checkbox  class="text-grey-7" dense   clearable v-model="User.manterLogado"  @click="check" :label="tdc('Manter-me logado')">
+            </q-checkbox>
+          </q-form>
+        </q-card-section>
 
-          <q-checkbox v-model="User.manterLogado" label="Manter-me logado" />
-
-          <q-btn type="submit" color="primary" label="Entrar" class="full-width" />
-        </q-form>
-
-      </q-card-section>
-    </q-card>
-
+        <q-card-actions class="q-px-md" >
+          <q-btn  :readonly="readonly" size="md" @click="login()"  color="positive" dense class="full-width " :label="tdc('Entrar')" />
+          <p></p>
+        </q-card-actions>
+        <q-card-actions align="around" >
+          <q-btn flat :to="{name:'esquecerpassword'}"  size="md"  color="purple" :label="tdc('Esqueci minha') + ' ' + tdc('Senha')" />
+          <q-btn flat :to="{name:'registarUser'}"  size="md" color="primary" class="" :label="tdc('Registar')" />
+        </q-card-actions>
+      </q-card>
+    </div>
   </q-page>
+  </q-page-container>
 </template>
+<style scoped>
 
+</style>
 <script >
 
 import { defineComponent } from 'vue'
@@ -89,7 +120,9 @@ export default defineComponent({
 
   },
   watch: {
+    'User.redirect' (val) {
 
+    },
   },
   mounted () {
 
@@ -99,7 +132,6 @@ export default defineComponent({
       this.User.manterLogado = false
     }
     this.getGeolocation()
-
   },
   methods: {
     check () {
