@@ -90,13 +90,13 @@ export const LanguageStore = defineStore("lang", {
       this.current = lang
       const User = UserStore()
       User.setIdioma(this.current)
-      this.setTraducao()
+      this.setTraducao(this.current)
     },
 
-    async setTraducao() {
+    async setTraducao(idioma) {
       this.TraducaoMap = {}
 
-      await HTTPClient.get(url({type: "u", url: "auth/traducaos", params: {}}) )
+      await HTTPClient.get(url({type: "u", url: "auth/idioma/"+ idioma?.id+ '/traducaos', params: {}}) )
       .then(res => {
         const payload = res.data
         for (const bloco in payload) {
