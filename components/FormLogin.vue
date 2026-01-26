@@ -77,7 +77,6 @@ import { tdc } from '../boot/app'
 import { AuthStore, UserStore } from '../stores/AuthStore'
 import { setStorage, getStorage } from '../boot/storage';
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
 
 
 export default defineComponent({
@@ -94,13 +93,11 @@ export default defineComponent({
     const Auth = AuthStore()
     const  User = UserStore()
     const q = useQuasar()
-    const r = useRouter()
     return {
       Auth,
       tdc,
       User,
-      q, 
-      r
+      q
     }
   },
   data () {
@@ -176,7 +173,7 @@ export default defineComponent({
       await this.User.login({
         identifier: this.identifier,
         password: this.password,
-      }, this.q, this.r)
+      }, this.q)
     }
   }
 })
