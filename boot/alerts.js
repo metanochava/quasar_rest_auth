@@ -13,7 +13,7 @@ const pushAlert = (sms, type = 'info') => {
   const msg = tdc(String(sms))
 
   Alerta.add({
-    id: crypto.randomUUID(),
+    id: Date.now() + Math.random(),
     sms: msg,
     type
   })
