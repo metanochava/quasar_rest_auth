@@ -217,7 +217,6 @@ export const UserStore = defineStore("user", {
         
         await this.me()
         await this.getEntidades_(q)
-        console.log(r)
       }).catch(err => {
         console.log(err)
         
@@ -272,7 +271,6 @@ export const UserStore = defineStore("user", {
     },
 
      async getEntidades_ (q) {
-      console.log(r)
       if (!this.data?.id) return
 
       try {
