@@ -146,7 +146,17 @@ const AlertInfo = (data) => {
 }
 
 const Alert= (data) => {
-  console.log(data)
+  if (!data) return
+
+  if (data.status >= 200 && data.status < 300) {
+   AlertSuccess(data.data)
+  } 
+  else if (data.status >= 400 && data.status < 500) {
+    AlertError(data.data)
+  } 
+  else if (data.status >= 500) {
+    AlertError(data.data)
+  }
 }
 
 export { AlertError, AlertInfo, AlertSuccess, Alert }
