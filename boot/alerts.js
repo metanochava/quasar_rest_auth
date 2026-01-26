@@ -1,162 +1,157 @@
-
 import { Notify } from 'quasar'
 import { tdc } from './app'
 import { AlertStore } from '../stores/AuthStore'
 
-const AlertSuccess = (data) => {
-  let sms = data
-  let tipo = 'success'
-  let go = false
-  if (typeof data !== 'string') {
-    if (data?.status === 201) {
-      sms = tdc('Criado com sucesso!')
-      go = true
-    }
-    if (data?.status === 202) {
-      sms = tdc('Processado com sucesso!')
-      go = true
-    }
-    if (data?.status === 203) {
-      sms = tdc('Modificado com sucesso!')
-      go = true
-    }
+/* =========================
+   Utils
+========================= */
+const getAlertStore = () => AlertStore()
 
-    if (data?.status === 204) {
-      sms = tdc('Apagado com sucesso!')
-      go = true
-    }
+const pushAlert = (sms, type = 'info') => {
+  const Alerta = getAlertStore()
 
-    if (data?.status === 413) {
-      sms = tdc('Request Entity Too Large')
-      go = true
-    }
+  const msg = tdc(String(sms))
 
-    if (Object.keys(data?.data).includes('alert_success')) {
-      sms = data?.data?.alert_success
-      go = true
-    }
-    if (Object.keys(data?.data).includes('alert_info')) {
-      tipo = 'info'
-      sms = data?.data?.alert_info
-      go = true
-    }
-  }
+  Alerta.add({
+    id: crypto.randomUUID(),
+    sms: msg,
+    type
+  })
 
-  if (typeof data === 'string') {
-    go = true
-  }
-
-  if (go) {
-    Alerta = AlertStore()
-    Alerta.add({id: crypto.randomUUID(), sms:  tdc(sms), type: tipo })
-    Notify.create({
-      type: 'positive',
-      message: tdc(sms),
-      position: 'top-right',
-      html: true,
-      actions: [
-        { icon: 'close', color: 'white', round: true, handler: () => { } }
-      ]
-    })
-  }
-}
-
-const AlertError = (data) => {
-  let sms = data
-  tipo = 'error'
-  let go = false
-  if (typeof data !== 'string') {
-    data = data?.response
-
-    if (data?.status === 400) {
-      sms = tdc(data?.data)
-      go = true
-    }
-    if (data?.status === 401) {
-      sms = tdc(data?.data)
-      go = true
-    }
-
-    if (data?.status === 403) {
-      sms = tdc(data?.data)
-      go = true
-    }
-
-    if (data?.status === 404) {
-      sms = tdc(data?.data)
-      go = true
-      if (Object.keys(data?.data).includes('detail')) {
-        sms = tdc(data?.data?.detail)
-        go = true
-      }
-    }
-
-    if (data?.status === 413) {
-      sms = tdc('Request Entity Too Large')
-      go = true
-    }
-
-    if (data?.status === 500) {
-      try {
-        sms = tdc(data?.data?.replaceAll('h1', 'b').replace('p', ''))
-      } catch (error) {
-
-      }
-      go = true
-    }
-
-    if (data) {
-      if (Object.keys(data?.data).includes('alert_error')) {
-        sms = tdc(data?.data?.alert_error)
-        go = true
-      }
-    }
-  }
-
-  if (typeof data === 'string') {
-    go = true
-  }
-
-  if (go) {
-    Alerta.add({id: crypto.randomUUID(), sms:  tdc(sms), type: tipo })
-    Notify.create({
-      type: 'negative',
-      message: tdc(sms),
-      position: 'top-right',
-      html: true,
-      actions: [
-        { icon: 'close', color: 'white', round: true, handler: () => { } }
-      ]
-    })
-  }
-}
-
-const AlertInfo = (data) => {
-
-  Alerta.add({id: crypto.randomUUID(), sms:  tdc(sms), type: 'info' })
   Notify.create({
-    type: 'info',
+    type:
+      type === 'success' ? 'positive' :
+      type === 'error'   ? 'negative' :
+      type,
+    message: msg,
     position: 'top-right',
-    message: tdc(data),
     html: true,
     actions: [
-      { icon: 'close', color: 'white', round: true, handler: () => { } }
+      { icon: 'close', color: 'white', round: true }
     ]
   })
 }
 
-const Alert= (data) => {
-  if (!data) return
+/* =========================
+   SUCCESS
+========================= */
+const AlertSuccess = (data) => {
+  let sms = ''
+  let tipo = 'success'
+  let go = false
 
-  if (data.status >= 200 && data.status < 300) {
-   AlertSuccess(data.data)
-  } 
-  else if (data.status >= 400 && data.status < 500) {
-    AlertError(data.data)
-  } 
-  else if (data.status >= 500) {
-    AlertError(data.data)
+  // string direta
+  if (typeof data === 'string') {
+    sms = data
+    go = true
+  }
+
+  // response object
+  if (typeof data === 'object' && data !== null) {
+
+    // status codes
+    if (data?.status === 201) { sms = 'Criado com sucesso!'; go = true }
+    if (data?.status === 202) { sms = 'Processado com sucesso!'; go = true }
+    if (data?.status === 203) { sms = 'Modificado com sucesso!'; go = true }
+    if (data?.status === 204) { sms = 'Apagado com sucesso!'; go = true }
+
+    // backend messages
+    if (data?.data?.alert_success) {
+      sms = data.data.alert_success
+      go = true
+    }
+
+    if (data?.data?.alert_info) {
+      sms = data.data.alert_info
+      tipo = 'info'
+      go = true
+    }
+  }
+
+  if (go) pushAlert(sms, tipo)
+}
+
+/* =========================
+   ERROR
+========================= */
+const AlertError = (error) => {
+  let sms = 'Erro inesperado'
+  let tipo = 'error'
+  let go = false
+
+  // axios error
+  const data = error?.response || error
+
+  // string direta
+  if (typeof error === 'string') {
+    sms = error
+    go = true
+  }
+
+  if (data?.status) {
+
+    if ([400,401,403].includes(data.status)) {
+      sms = data?.data || 'Erro de autenticação'
+      go = true
+    }
+
+    if (data.status === 404) {
+      sms = data?.data?.detail || 'Recurso não encontrado'
+      go = true
+    }
+
+    if (data.status === 413) {
+      sms = 'Request Entity Too Large'
+      go = true
+    }
+
+    if (data.status === 500) {
+      sms = 'Erro interno do servidor'
+      go = true
+    }
+
+    if (data?.data?.alert_error) {
+      sms = data.data.alert_error
+      go = true
+    }
+  }
+
+  if (go) pushAlert(sms, tipo)
+}
+
+/* =========================
+   INFO
+========================= */
+const AlertInfo = (data) => {
+  pushAlert(data, 'info')
+}
+
+/* =========================
+   AUTO HANDLER
+========================= */
+const Alert = (response) => {
+  if (!response) return
+
+  // axios response
+  if (response?.status >= 200 && response?.status < 300) {
+    AlertSuccess(response)
+    return
+  }
+
+  if (response?.status >= 400) {
+    AlertError(response)
+    return
+  }
+
+  // string fallback
+  if (typeof response === 'string') {
+    AlertInfo(response)
   }
 }
 
-export { AlertError, AlertInfo, AlertSuccess, Alert }
+export {
+  AlertSuccess,
+  AlertError,
+  AlertInfo,
+  Alert
+}

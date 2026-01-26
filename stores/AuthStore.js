@@ -198,7 +198,7 @@ export const UserStore = defineStore("user", {
       setStorage('c', 'right_top', this.RightTop)
     },
 
-    async login(data, q, r) {
+    async login(data, q) {
 
       const rsp = await HTTPClient.post(url({type: "u", url: "auth/login/", params: {}}), data )
       .then(async res => {
@@ -216,7 +216,7 @@ export const UserStore = defineStore("user", {
         }
         
         await this.me()
-        await this.getEntidades_(q, r)
+        await this.getEntidades_(q)
         console.log(r)
       }).catch(err => {
         console.log(err)
@@ -271,7 +271,7 @@ export const UserStore = defineStore("user", {
       return rsp
     },
 
-     async getEntidades_ (q, r) {
+     async getEntidades_ (q) {
       console.log(r)
       if (!this.data?.id) return
 
@@ -309,7 +309,7 @@ export const UserStore = defineStore("user", {
             },
             cancel: true,
             persistent: true
-          }).onOk(data => this.selectEntidade_(data, q, r))
+          }).onOk(data => this.selectEntidade_(data, q))
           .onCancel(() => {
             const r = useRouter()
             r.push({name: 'welcome'})
@@ -320,19 +320,19 @@ export const UserStore = defineStore("user", {
       }
     },
 
-    selectEntidade_ (entidade, q, r) {
+    selectEntidade_ (entidade, q) {
       this.Entidade = entidade
       setStorage('c', 'userEntidade', JSON.stringify(entidade), 365)
-      this.getSucursals_(q, r)
+      this.getSucursals_(q)
     },
 
-    async getSucursals_ (q, r) {
+    async getSucursals_ (q) {
       await HTTPAuth.get(url({ type: 'u', url: 'auth/users/' + this.data?.id + '/userSucursals/', params: { } }))
         .then(async res => {
           setStorage('c', 'userSucursals', JSON.stringify(res.data), 365)
           
           if (res.data.length === 1) {
-            this.selectSucursal_(res.data[0], q, r)
+            this.selectSucursal_(res.data[0], q)
           } else {
             if (res.data.length === 0) {
               const r = useRouter()
@@ -354,7 +354,7 @@ export const UserStore = defineStore("user", {
               cancel: true,
               persistent: true
             }).onOk(data => {
-              this.selectSucursal_(data, q, r)
+              this.selectSucursal_(data, q)
             }).onCancel(() => {
               const r = useRouter()
               r.push({name: 'authwelcome'})
@@ -365,10 +365,10 @@ export const UserStore = defineStore("user", {
         })
     },
 
-    selectSucursal_ (sucursal, q, r) {
+    selectSucursal_ (sucursal, q) {
       this.Sucursal = sucursal
       setStorage('c', 'userSucursal', JSON.stringify(sucursal), 365)
-      this.getGrupos_(q, r)
+      this.getGrupos_(q)
     },
 
     selectEntidade (entidade) {
@@ -415,12 +415,12 @@ export const UserStore = defineStore("user", {
       this.Grupos = res.data
 
       if (res.data.length === 1) {
-        this.selectGrupo_(res.data[0], r)
+        this.selectGrupo_(res.data[0])
       }
       return res
     }, 
     
-    async getGrupos_ (q, r) {
+    async getGrupos_ (q) {
 
       const res = await HTTPAuth.get(
         url({ type: 'u', url: `auth/users/${this.data?.id}/userGrupos/`, params: {} })
@@ -429,7 +429,7 @@ export const UserStore = defineStore("user", {
       this.Grupos = res.data
 
       if (res.data.length === 1) {
-        this.selectGrupo_(res.data[0], r)
+        this.selectGrupo_(res.data[0])
       }else{
         if (res.data.length === 0) {
           const r = useRouter()
@@ -452,7 +452,7 @@ export const UserStore = defineStore("user", {
           cancel: true,
           persistent: true
         }).onOk(data => {
-          this.selectGrupo_(data, r)
+          this.selectGrupo_(data)
         }).onCancel(() => {
           const r = useRouter()
           r.push({name: 'authwelcome'})
@@ -461,7 +461,7 @@ export const UserStore = defineStore("user", {
       return res
     },
 
-    selectGrupo_ (group, r) {
+    selectGrupo_ (group) {
       this.Grupo = group
       setStorage('c', 'userGrupo', JSON.stringify(group), 365)
       this.getPermicoes()
