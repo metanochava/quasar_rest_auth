@@ -145,10 +145,10 @@ export const UserStore = defineStore("user", {
   },
 
   actions: {
-    async setMenus () {
-      await HTTPAuth.get(url({ type: 'u', url: 'auth/users/' + this.data.id + '/menus', params: {} }))
+    async getMenus () {
+      await HTTPAuth.get(url({ type: 'u', url: 'auth/users/' + this.data.id + '/menus/', params: {} }))
         .then(res => {
-          this.llMenus = res.data
+          this.AllMenus = res.data
           this.Menus = this.AllMenus
         }).catch(err => {
           console.log(err)
@@ -432,7 +432,6 @@ export const UserStore = defineStore("user", {
         this.selectGrupo_(res.data[0])
       }else{
         if (res.data.length === 0) {
-          
           this.redirect = 'authwelcome'
           return  
         }
@@ -454,18 +453,17 @@ export const UserStore = defineStore("user", {
         }).onOk(data => {
           this.selectGrupo_(data)
         }).onCancel(() => {
-          
           this.redirect = 'authwelcome'
         })
       }
       return res
     },
 
-    selectGrupo_ (group) {
+    async selectGrupo_ (group) {
       this.Grupo = group
       setStorage('c', 'userGrupo', JSON.stringify(group), 365)
       this.getPermicoes()
-      
+      await this.getMenus()
       this.redirect = 'authwelcome'
     },
 
