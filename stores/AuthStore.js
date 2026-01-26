@@ -272,7 +272,7 @@ export const UserStore = defineStore("user", {
     },
 
      async getEntidades_ (q, r) {
-
+      console.log(r)
       if (!this.data?.id) return
 
       try {
@@ -291,7 +291,7 @@ export const UserStore = defineStore("user", {
           this.selectEntidade_(res.data[0], q)
         } else {
           if (res.data.length === 0) {
-            
+            const r = useRouter()
             r.push({name: 'welcome'})
             return  
           }
@@ -311,7 +311,7 @@ export const UserStore = defineStore("user", {
             persistent: true
           }).onOk(data => this.selectEntidade_(data, q, r))
           .onCancel(() => {
-            
+            const r = useRouter()
             r.push({name: 'welcome'})
           })
         }
@@ -335,7 +335,7 @@ export const UserStore = defineStore("user", {
             this.selectSucursal_(res.data[0], q, r)
           } else {
             if (res.data.length === 0) {
-              
+              const r = useRouter()
               r.push({name: 'authwelcome'})
               return  
             }
@@ -356,7 +356,7 @@ export const UserStore = defineStore("user", {
             }).onOk(data => {
               this.selectSucursal_(data, q, r)
             }).onCancel(() => {
-              
+              const r = useRouter()
               r.push({name: 'authwelcome'})
             })
           }
@@ -432,7 +432,7 @@ export const UserStore = defineStore("user", {
         this.selectGrupo_(res.data[0], r)
       }else{
         if (res.data.length === 0) {
-          
+          const r = useRouter()
           r.push({name: 'authwelcome'})
           return  
         }
@@ -454,7 +454,7 @@ export const UserStore = defineStore("user", {
         }).onOk(data => {
           this.selectGrupo_(data, r)
         }).onCancel(() => {
-          
+          const r = useRouter()
           r.push({name: 'authwelcome'})
         })
       }
@@ -465,8 +465,8 @@ export const UserStore = defineStore("user", {
       this.Grupo = group
       setStorage('c', 'userGrupo', JSON.stringify(group), 365)
       this.getPermicoes()
+      const r = useRouter()
       r.push({name: 'authwelcome'})
-      
     },
 
     async setEntidadeModulos () {

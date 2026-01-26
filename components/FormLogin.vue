@@ -124,11 +124,11 @@ export default defineComponent({
   },
   watch: {
     'User.redirect'(val) {
-      console.log(val)
-      if (val) {
-        this.r.push({ name: val })   // ✅ agora funciona
-        User.redirect = '' // reset
-      }
+      // console.log(val)
+      // if (val) {
+      //   this.r.push({ name: val })   // ✅ agora funciona
+      //   User.redirect = '' // reset
+      // }
     }
   },
   mounted () {
