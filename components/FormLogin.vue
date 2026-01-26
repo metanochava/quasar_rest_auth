@@ -123,7 +123,13 @@ export default defineComponent({
 
   },
   watch: {
-
+    'User.redirect'(val) {
+      console.log(val)
+      if (val) {
+        this.router.push({ name: val })   // ✅ agora funciona
+        User.redirect = '' // reset
+      }
+    }
   },
   mounted () {
 
