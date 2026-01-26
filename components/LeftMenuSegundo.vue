@@ -2,9 +2,8 @@
     <div class="col-12" style="margin-top: 2px;">
       <search-menu />
         <q-card square flat  class=" col-xs-12 col-md-12 col-lg-12 q-bt-md"
-          v-for="App in Auth.TipoEntidadeMenus" :key="App"
+          v-for="App in User.Menus" :key="App"
           style="padding: 0px;"
-          v-show="User.EntidadeModulos.includes(App.app) && User.isAuthorized(App.app.toLowerCase())"
         >
           <q-expansion-item default-opened
             :class="$q.dark.isActive ? 'bg-dark-custom text-subtitle1' : 'bg-white text-subtitle1 text-primary'"
@@ -20,7 +19,6 @@
               dense
               clickable v-ripple
               :to="{name: sm?.rota}"
-              v-show="User.isAuthorized(sm.role.toLowerCase())"
             >
               <q-item-section avatar>
                 <q-icon :name="sm.icon" />
@@ -28,7 +26,6 @@
               <q-item-section>{{tdc(sm.menu)}}</q-item-section>
               <q-item-section side >
                 <q-item dense  style="margin-right: -20px;"
-                  v-show="User.isAuthorized('add_' + sm.menu.toLowerCase())"
                   clickable v-ripple
                   :to="{name: 'add_' + sm.menu.toLowerCase()}"
                 >

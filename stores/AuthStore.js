@@ -47,9 +47,6 @@ export const AuthStore = defineStore('auth', {
   state: () => ({
     TipoEntidades: [],
     TipoEntidade: { },
-    TipoEntidadeMenus: [],
-    search: '',
-    TipoEntidadeAllMenus: [],
     Idiomas: [ ]
   }),
 
@@ -65,15 +62,6 @@ export const AuthStore = defineStore('auth', {
       }).catch(err => {
 
       })
-    },
-    async setTipoEntidadeMenus () {
-      await HTTPAuth.get(url({ type: 'u', url: 'auth/tipoEntidades/' + this.TipoEntidade.id + '/menus', params: {} }))
-        .then(res => {
-          this.TipoEntidadeAllMenus = res.data
-          this.TipoEntidadeMenus = this.TipoEntidadeAllMenus
-        }).catch(err => {
-          console.log(err)
-        })
     },
   }
 })
@@ -132,6 +120,9 @@ export const UserStore = defineStore("user", {
     Sucursal: null,
     Grupos: [],
     Grupo: {id: 1,  name: 'Gest' },  
+    Menus: [],
+    search: '',
+    AllMenus: [],
     Settings: false,
     Permicoes: [],
     access: null,
@@ -143,16 +134,26 @@ export const UserStore = defineStore("user", {
     isLogout: false,
     manterLogado: false,
     redirect: '',
+    
   }),
 
   getters: {
-    username: (state) => state.data?.username || ".",
+    username: (state) => state.data?.username || "Guest",
     perfil: (state) =>
       state.data?.perfil?.url ||
       "https://cdn-icons-png.flaticon.com/512/149/149071.png",
   },
 
   actions: {
+    async setMenus () {
+      await HTTPAuth.get(url({ type: 'u', url: 'auth/users/' + this.data.id + '/menus', params: {} }))
+        .then(res => {
+          this.llMenus = res.data
+          this.Menus = this.AllMenus
+        }).catch(err => {
+          console.log(err)
+        })
+    },
     async setEntidadeModelos () {
       await HTTPAuth.get(url({ type: 'u', url: 'auth/entidades/' + this.Entidade?.id + '/modelos', params: {} }))
         .then(res => {
@@ -401,6 +402,7 @@ export const UserStore = defineStore("user", {
       setStorage('c', 'userGrupo', JSON.stringify(grupo), 365)
       this.Grupo = grupo
       await this.getPermicoes()
+      await this.getMenus()
     },
 
     async getGrupos () {

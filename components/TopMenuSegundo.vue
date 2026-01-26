@@ -3,7 +3,6 @@
       <q-btn class="q-mr-xs" flat square
         v-for="App in Auth.TipoEntidadeMenus" :key="App"
         style="padding: 0px;"
-        v-show="User.EntidadeModulos.includes(App.app) && User.isAuthorized(App.app.toLowerCase())"
         :icon="App.icon"
         :label="tdc(App.menu)"
       >
@@ -14,7 +13,7 @@
               dense
               clickable v-ripple
               :to="{name: sm?.rota}"
-              v-show="User.isAuthorized(sm.role.toLowerCase())"
+  
             >
               <q-item-section avatar>
                 <q-icon :name="sm.icon" :color="$q.dark.isActive ? '' : 'text-primary'" />
@@ -22,7 +21,6 @@
               <q-item-section :color="$q.dark.isActive ? '' : 'text-primary'">{{tdc(sm.menu)}}</q-item-section>
               <q-item-section side >
                 <q-item dense  style="margin-right: -20px;"
-                  v-show="User.isAuthorized('add_' + sm.menu.toLowerCase())"
                   clickable v-ripple
                   :to="{name: 'add_' + sm.menu.toLowerCase()}"
                 >

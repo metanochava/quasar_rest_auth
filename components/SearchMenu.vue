@@ -1,7 +1,7 @@
 <template>
     <div >
       <input
-        v-model="Auth.search"
+        v-model="User.search"
         class=" input-28 "
         @input="filterMenus"
         :placeholder="tdc('Procurar')"
@@ -53,31 +53,28 @@ export default defineComponent({
   },
   watch: {
     'User.Permicoes' () {
-      this.filterMenus(this.Auth.search)
+      this.filterMenus(this.User.search)
     },
 
     'User.Entidade'() {
-      this.Auth.setTipoEntidadeMenus()
       this.User.setEntidadeModelos()
       this.User.setEntidadeModulos()
     },
 
   },
   mounted () {
-    this.filterMenus(this.Auth.search)
-    this.Auth.setTipoEntidadeMenus()
+    this.filterMenus(this.User.search)
     this.User.setEntidadeModelos()
     this.User.setEntidadeModulos()
   },
   methods: {
       
     filterMenus (val) {
-      console.log(val)
       if (val === '') {
-        this.Auth.TipoEntidadeMenus = this.Auth.TipoEntidadeAllMenus
+        this.User.Menus = this.User.AllMenus
       } else {
         const needle = val.toLowerCase()
-        this.Auth.TipoEntidadeMenus  = this.Auth.TipoEntidadeAllMenus.map(v => ({
+        this.User.Menus  = this.User.AllMenus.map(v => ({
           ...v,
           submenu: v.submenu.filter(sub =>
             sub.menu && sub.menu.toLowerCase().includes(needle.toLowerCase())
