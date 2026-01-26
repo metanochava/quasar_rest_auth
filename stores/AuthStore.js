@@ -149,7 +149,7 @@ export const UserStore = defineStore("user", {
     username: (state) => state.data?.username || ".",
     perfil: (state) =>
       state.data?.perfil?.url ||
-      "https://awsacademy.instructure.com/images/messages/avatar-50.png",
+      "https://cdn-icons-png.flaticon.com/512/149/149071.png,
   },
 
   actions: {
