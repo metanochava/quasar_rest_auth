@@ -126,7 +126,7 @@ export default defineComponent({
     'User.redirect'(val) {
       console.log(val)
       if (val) {
-        this.router.push({ name: val })   // ✅ agora funciona
+        this.r.push({ name: val })   // ✅ agora funciona
         User.redirect = '' // reset
       }
     }
