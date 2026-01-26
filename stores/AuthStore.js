@@ -199,7 +199,7 @@ export const UserStore = defineStore("user", {
     },
 
     async login(data, q, r) {
-      console.log(r)
+
       const rsp = await HTTPClient.post(url({type: "u", url: "auth/login/", params: {}}), data )
       .then(async res => {
         this.access = res.data.tokens.access
@@ -217,6 +217,7 @@ export const UserStore = defineStore("user", {
         
         await this.me()
         await this.getEntidades_(q, r)
+        console.log(r)
       }).catch(err => {
         console.log(err)
         
