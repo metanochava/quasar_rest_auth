@@ -75,7 +75,7 @@
         <!-- Menu Direito -->
         <q-btn dense flat round icon="menu" @click="User.toggleRightTop()" />
       </q-toolbar>
-      <TopMenu v-show="!User.LeftTop"></TopMenu>
+      <TopMenu v-show="!User.LeftTop && route.name !== 'authwelcome' && route.name !== 'welcome'" />
     </q-header>
 
     <!-- -------------------- LEFT DRAWER -------------------- -->
@@ -87,6 +87,7 @@
       bordered
       class="q-pr-0"
       :width="300"
+      v-show="route.name !== 'authwelcome' && route.name !== 'welcome'"
     >
       <q-scroll-area class="fit" :thumb-style="thumbStyle" :bar-style="barStyle">
         <LeftMenu />
