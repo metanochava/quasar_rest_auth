@@ -158,10 +158,20 @@ export default defineComponent({
 
   watch: {
     'User.Grupo' (val) {
+
       if (!val) return
       if (this.$route.name !== 'welcome' && this.$route.name !== 'authwelcome') {
         this.$router.push({ name: 'home' })
       }
+
+      this.User.getMenus()
+
+    },
+
+    'User.Entidade' (val) {
+      if (!val) return
+      this.User.getMenus()
+      this.User.setEntidadeModelos()
 
     },
 
