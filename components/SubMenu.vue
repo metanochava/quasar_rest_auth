@@ -29,7 +29,7 @@
 
       <!-- Recursive submenu -->
       <q-menu v-if="item.submenu?.length" anchor="top right" self="top left">
-        <SubMenu :sub-menus="item.submenu" />
+        <SubMenu :Dados="item.submenu" />
       </q-menu>
 
     </q-item>
