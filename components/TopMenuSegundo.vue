@@ -7,7 +7,7 @@
         :label="tdc(App.menu)"
       >
         
-        <q-menu auto-close>
+        <q-menu >
           <q-list  style="min-width: 155px">
             <SubMenu :Dados="App.submenu" />
           </q-list>
