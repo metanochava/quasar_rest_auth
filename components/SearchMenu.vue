@@ -2,7 +2,7 @@
     <div >
       <input
         v-model="User.search"
-        class=" input-28 "
+        class="in"
         @input="filterMenus"
         :placeholder="tdc('Procurar')"
       />
@@ -10,10 +10,10 @@
 </template>
 
 <style scoped>
-  .input-28 {
+  .in {
     height: 30px;
     line-height: 30px;   /* centraliza o texto verticalmente */
-    width: 300px;        /* ajuste o comprimento aqui */
+    width: 200px;        /* ajuste o comprimento aqui */
     padding: 0 8px;      /* espaço interno lateral */
   }
 </style>

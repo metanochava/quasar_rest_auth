@@ -1,7 +1,7 @@
 <template>
     <div >
       <q-btn class="q-mr-xs" flat square
-        v-for="App in Auth.TipoEntidadeMenus" :key="App"
+        v-for="App in User.Menus" :key="App"
         style="padding: 0px;"
         :icon="App.icon"
         :label="tdc(App.menu)"
@@ -9,29 +9,7 @@
         
         <q-menu auto-close>
           <q-list  style="min-width: 155px">
-            <q-item  v-for="sm in App.submenu" :key="sm"
-              dense
-              clickable v-ripple
-              :to="{name: sm?.rota}"
-  
-            >
-              <q-item-section avatar>
-                <q-icon :name="sm.icon" :color="$q.dark.isActive ? '' : 'text-primary'" />
-              </q-item-section>
-              <q-item-section :color="$q.dark.isActive ? '' : 'text-primary'">{{tdc(sm.menu)}}</q-item-section>
-              <q-item-section side >
-                <q-item dense  style="margin-right: -20px;"
-                  clickable v-ripple
-                  :to="{name: 'add_' + sm.menu.toLowerCase()}"
-                >
-                  <q-icon name="add" size="sm" :color="$q.dark.isActive ? '' : 'primary'">
-                    <q-tooltip :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
-                      {{ tdc('Adicionar ') }} {{ tdc(sm.menu) }}
-                    </q-tooltip>
-                  </q-icon>
-                </q-item>
-              </q-item-section>
-            </q-item>
+            <SubMennu :Dados="App.submenu" />
           </q-list>
         </q-menu>
       </q-btn>
@@ -43,6 +21,7 @@
 import { defineComponent } from 'vue'
 import { tdc } from '../boot/app'
 import { UserStore, AuthStore } from '../stores/AuthStore'
+import SubMenu from './SubMenu.vue'
 
 
 
@@ -50,6 +29,7 @@ export default defineComponent({
   name: 'TopeMenuSegundo',
 
   components: {
+    SubMenu
   },
   setup () {
 

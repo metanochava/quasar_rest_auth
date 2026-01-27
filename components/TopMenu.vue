@@ -35,6 +35,7 @@ import { UserStore } from '../stores/AuthStore'
 import SearchMenu from './SearchMenu.vue';
 
 export default defineComponent({
+  name: 'TopMenu',
   components: {
     TopMenuSegundo,
     SearchMenu
