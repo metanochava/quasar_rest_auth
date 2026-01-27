@@ -1,131 +1,40 @@
 <template>
-  <div >
+  <q-list dense>
+    <q-item
+      v-for="item in Dados"
+      :key="item.menu"
+      clickable
+      v-ripple
+      :to="item.rota ? { name: item.rota } : null"
+    >
+      <!-- Icon -->
+      <q-item-section avatar>
+        <q-icon :name="item.icon || 'menu'" />
+      </q-item-section>
 
-        <q-item
-          v-for="sm in Dados"
-          :key="sm"
-          dense
-          clickable
-          v-ripple
-          :to="{ name: sm?.rota }"
-        >
-          <q-item-section avatar>
-            <q-icon :name="sm.icon" />
-          </q-item-section>
-          <q-item-section>{{ tdc(sm.menu) }}</q-item-section>
-          <q-item-section side>
-            <q-item dense style="margin-right: -20px" clickable v-ripple v-if="sm?.submenu">
-              <q-icon name="chevron_right" size="sm" :color="$q.dark.isActive ? '' : 'primary'">
-                <q-menu anchor="top right" self="top left">
-                  <q-list style="min-width: 150px">
-                    <q-item
-                      v-for="sm1 in sm.submenu"
-                      :key="sm1"
-                      dense
-                      clickable
-                      v-ripple
-                      :to="{ name: sm1?.rota }"
-                    >
-                      <q-item-section avatar>
-                        <q-icon :name="sm.icon" />
-                      </q-item-section>
-                      <q-item-section>{{ tdc(sm1.menu) }}</q-item-section>
-                      <q-item-section side>
-                        <q-item
-                          dense
-                          style="margin-right: -20px"
-                          clickable
-                          v-ripple
-                          v-if="sm1?.submenu"
-                        >
-                          <q-icon
-                            name="chevron_right"
-                            size="sm"
-                            :color="$q.dark.isActive ? '' : 'primary'"
-                          >
-                            <q-menu anchor="top right" self="top left">
-                              <q-list style="min-width: 150px">
-                                <q-item
-                                  v-for="sm2 in sm.submenu"
-                                  :key="sm2"
-                                  dense
-                                  clickable
-                                  v-ripple
-                                  :to="{ name: sm2?.rota }"
-                                >
-                                  <q-item-section avatar>
-                                    <q-icon :name="sm.icon" />
-                                  </q-item-section>
-                                  <q-item-section>{{ tdc(sm2.menu) }}</q-item-section>
-                                  <q-item-section side>
-                                    <q-item
-                                      dense
-                                      style="margin-right: -20px"
-                                      clickable
-                                      v-ripple
-                                      :to="{ name: sm2?.add_rota }"
-                                    >
-                                      <q-icon
-                                        name="add"
-                                        size="sm"
-                                        :color="$q.dark.isActive ? '' : 'primary'"
-                                      >
-                                        <q-tooltip
-                                          :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'"
-                                        >
-                                          {{ tdc('Adicionar ') }} {{ tdc(sm2.menu) }}
-                                        </q-tooltip>
-                                      </q-icon>
-                                    </q-item>
-                                  </q-item-section>
-                                </q-item>
-                              </q-list>
-                            </q-menu>
-                            <q-tooltip :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
-                              {{ tdc('Expandir Menu ') }}
-                            </q-tooltip>
-                          </q-icon>
-                        </q-item>
-                        <q-item
-                          dense
-                          style="margin-right: -20px"
-                          clickable
-                          v-ripple
-                          :to="{ name: sm1.add_rota }"
-                          v-else
-                        >
-                          <q-icon name="add" size="sm" :color="$q.dark.isActive ? '' : 'primary'">
-                            <q-tooltip :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
-                              {{ tdc('Adicionar ') }} {{ tdc(sm1.menu) }}
-                            </q-tooltip>
-                          </q-icon>
-                        </q-item>
-                      </q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-                <q-tooltip :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
-                  {{ tdc('Expandir Menu') }}
-                </q-tooltip>
-              </q-icon>
-            </q-item>
-            <q-item
-              dense
-              style="margin-right: -20px"
-              clickable
-              v-ripple
-              :to="{ name: sm.add_rota }"
-              v-else
-            >
-              <q-icon name="add" size="sm" :color="$q.dark.isActive ? '' : 'primary'">
-                <q-tooltip :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
-                  {{ tdc('Adicionar ') }} {{ tdc(sm.menu) }}
-                </q-tooltip>
-              </q-icon>
-            </q-item>
-          </q-item-section>
-        </q-item>
-  </div>
+      <!-- Title -->
+      <q-item-section>
+        {{ tdc(item.menu) }}
+      </q-item-section>
+
+      <!-- ADD BUTTON -->
+      <q-item-section side v-if="item.add_rota">
+        <q-btn dense flat icon="add" :to="{ name: item.add_rota }" />
+      </q-item-section>
+
+      <!-- Arrow if has submenu -->
+      <q-item-section side v-if="item.submenu?.length">
+        <q-icon name="chevron_right" />
+      </q-item-section>
+
+      <!-- Recursive submenu -->
+      <q-menu v-if="item.submenu?.length" anchor="top right" self="top left">
+        <SubMenu :sub-menus="item.submenu" />
+      </q-menu>
+
+    </q-item>
+
+  </q-list>
 </template>
 
 <script>
@@ -134,19 +43,16 @@ import { tdc } from '../boot/app'
 
 export default defineComponent({
   name: 'SubMenu',
+
   props: {
     Dados: {
       type: Array,
-      required: true,
       default: () => []
     }
   },
 
-  setup (props) {
-    return {
-      tdc,
-      props
-    }
+  setup () {
+    return { tdc }
   }
 })
 </script>
