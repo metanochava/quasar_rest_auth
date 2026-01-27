@@ -9,7 +9,7 @@
         
         <q-menu auto-close>
           <q-list  style="min-width: 155px">
-            <SubMennu :Dados="App.submenu" />
+            <SubMenu :Dados="App.submenu" />
           </q-list>
         </q-menu>
       </q-btn>

@@ -1,6 +1,6 @@
 <template>
   <div class="col-12" style="margin-top: 2px;">
-    <search-menu />
+    <search-menu :size="'300'" />
     <q-card
       square
       flat

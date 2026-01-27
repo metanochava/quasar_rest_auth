@@ -21,9 +21,11 @@
       </div>
     </div>
 
-    <SearchMenu  />
-    <q-space />
     <TopMenuSegundo ></TopMenuSegundo>
+    <q-space />
+    <SearchMenu  :size="'180'" />
+
+    
   </q-bar>
 </template>
 <script >

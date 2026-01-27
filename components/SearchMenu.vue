@@ -2,21 +2,12 @@
     <div >
       <input
         v-model="User.search"
-        class="in"
+        :style="'height: 30px; line-height: 30px; width: '+size+'px; padding: 0 8px;'"
         @input="filterMenus"
         :placeholder="tdc('Procurar')"
       />
     </div>
 </template>
-
-<style scoped>
-  .in {
-    height: 30px;
-    line-height: 30px;   /* centraliza o texto verticalmente */
-    width: 200px;        /* ajuste o comprimento aqui */
-    padding: 0 8px;      /* espaço interno lateral */
-  }
-</style>
 
 <script >
 
@@ -28,6 +19,13 @@ import { UserStore, AuthStore } from '../stores/AuthStore'
 
 export default defineComponent({
   name: 'SearchMenu',
+  props: {
+    size: {
+      type: String,
+      required: true,
+      default: '300'
+    }
+  },
 
   components: {
 
