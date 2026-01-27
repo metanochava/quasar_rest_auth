@@ -244,6 +244,7 @@ export const UserStore = defineStore("user", {
       const rsp = await HTTPAuth.post(url({type: "u", url: "auth/refresh_token/", params: {}}), data )
       .then(res => {
         this.access = res.data.access
+        setStorage('c', 'access', this.access,  365)
         console.log('deu  access')
       }).catch(err => {
         console.log('nao deu  access')

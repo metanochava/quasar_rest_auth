@@ -3,7 +3,7 @@
     <input
       v-model="User.search"
       :style="'height: 30px; line-height: 30px; width: '+size+'px; padding: 0 8px;'"
-      @input="filterMenus"
+      @input="filterMenus(User.search)"
       :placeholder="tdc('Procurar')"
     />
   </div>
