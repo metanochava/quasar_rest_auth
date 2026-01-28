@@ -80,23 +80,43 @@ export const LanguageStore = defineStore("lang", {
       User.setIdioma(this.current)
       this.setTraducao(this.current)
     },
-
     async setTraducao(idioma) {
-      this.TraducaoMap = {}
+      try {
+        // Reset map
+        this.TraducaoMap = {}
 
-      await HTTPClient.get(url({type: "u", url: "auth/idiomas/"+ idioma?.id+ '/traducaos', params: {}}) )
-      .then(res => {
+        const res = await HTTPClient.get(
+          url({
+            type: "u",
+            url: `auth/idiomas/${idioma?.id}/traducaos`,
+            params: {}
+          })
+        )
+
         const payload = res.data
-        for (const bloco in payload) {
-          for (const key in payload[bloco]) {
-            const normalizada = key.trim()
-            this.TraducaoMap[normalizada] = payload[bloco][key]
+
+        // Função para achatar qualquer JSON
+        const flattenTranslations = (obj, map = {}) => {
+          for (const key in obj) {
+            const value = obj[key]
+
+            if (value && typeof value === "object" && !Array.isArray(value)) {
+              flattenTranslations(value, map)
+            } else {
+              const normalizada = String(key).trim()
+              map[normalizada] = value
+            }
           }
+          return map
         }
 
-        console.log(this.TraducaoMap)
-      }).catch(err => {
-      })
+        this.TraducaoMap = flattenTranslations(payload)
+
+        console.log("✅ Traduções carregadas:", this.TraducaoMap)
+
+      } catch (err) {
+        console.error("❌ Erro ao carregar traduções", err)
+      }
     },
     
     async get() {
