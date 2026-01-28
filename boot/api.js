@@ -158,8 +158,6 @@ HTTPClient.interceptors.request.use(async config => {
     // L: 'userLang'
   }
 
-  config.headers.Authorization = `Bearer ${User.access || ''}`
-
   Object.entries(headersMap).forEach(([key, storage]) => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
