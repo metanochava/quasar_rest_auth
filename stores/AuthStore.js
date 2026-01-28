@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { getStorage, setStorage, deleteStorage } from '../boot/storage'
 import { HTTPAuth, HTTPClient, url } from '../boot/api'
 import { tdc } from '../boot/app'
-import { useRouter } from 'vue-router'
+
 
 
 
@@ -93,6 +93,8 @@ export const LanguageStore = defineStore("lang", {
             this.TraducaoMap[normalizada] = payload[bloco][key]
           }
         }
+
+        console.log(this.TraducaoMap)
       }).catch(err => {
       })
     },
