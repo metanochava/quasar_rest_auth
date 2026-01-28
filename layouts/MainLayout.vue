@@ -190,7 +190,7 @@ export default defineComponent({
   computed: {},
 
   mounted() {
-    if (['authwelcome','welcome'].includes($route.name)){
+    if (['authwelcome','welcome'].includes(this.$route.name)){
       this.User.LeftTop = false
     }
   },
