@@ -75,19 +75,19 @@
         <!-- Menu Direito -->
         <q-btn dense flat round icon="menu" @click="User.toggleRightTop()" />
       </q-toolbar>
-      <TopMenu v-show="!['login','welcome'].includes($route.name)" />
+      <TopMenu v-show="!['authwelcome','welcome'].includes($route.name)" />
     </q-header>
 
     <!-- -------------------- LEFT DRAWER -------------------- -->
     <q-drawer
       v-model="User.LeftTop"
-      show-if-above
+      v-show="!['authwelcome','welcome'].includes($route.name)"
       :mini="miniState"
       side="left"
       bordered
       class="q-pr-0"
       :width="300"
-      v-show="!['login','welcome'].includes($route.name)"
+      
     >
       <q-scroll-area class="fit" :thumb-style="thumbStyle" :bar-style="barStyle">
         <LeftMenu />
