@@ -81,13 +81,13 @@
     <!-- -------------------- LEFT DRAWER -------------------- -->
     <q-drawer
       v-model="User.LeftTop"
-      v-show="!['authwelcome','welcome'].includes($route.name)"
+      show-if-above
       :mini="miniState"
       side="left"
       bordered
       class="q-pr-0"
       :width="300"
-      
+      v-show="!['authwelcome','welcome'].includes($route.name)"
     >
       <q-scroll-area class="fit" :thumb-style="thumbStyle" :bar-style="barStyle">
         <LeftMenu />
