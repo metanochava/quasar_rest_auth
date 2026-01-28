@@ -39,7 +39,9 @@ export const url = (payload = {type: 'u', url: '', params: {} }) => {
 }
 
 axios.defaults.headers = {
-  Accept: 'application/json'
+  Accept: 'application/json',
+  fek:process.env.FRONT_END_KEY,
+  fep:process.env.FRONT_END_PASSWORD
 }
 
 export const wsApi = (process.env.API + '/' + apiBaseUrl).replace('http', 'ws')
@@ -73,6 +75,17 @@ export const HTTPAuthBlob = axios.create({
   responseType: 'blob'
 })
 
+HTTPAuthBlob.interceptors.request.use(async config => {
+  store.commit('load/SET_LOAD', 1)
+  const user = JSON.parse(getStorage('c', 'user'))
+  setStorage('c', 'user', JSON.stringify(user), 365)
+  config.headers.Authorization = 'Bearer ' + user?.tokens?.access
+
+  const Load = LoadStore()
+  Load.inc()
+  return config
+})
+
 
 
 HTTPAuth.interceptors.request.use(async config => {
@@ -99,9 +112,6 @@ HTTPAuth.interceptors.request.use(async config => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
   })
-
-  config.headers['fek'] =process.env.FRONT_END_KEY
-  config.headers['fep'] =process.env.FRONT_END_PASSWORD
   
   const Load = LoadStore()
   Load.inc()
@@ -154,8 +164,7 @@ HTTPClient.interceptors.request.use(async config => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
   })
-  config.headers['fek'] =process.env.FRONT_END_KEY
-  config.headers['fep'] =process.env.FRONT_END_PASSWORD
+
   const Load = LoadStore()
   Load.inc()
 
@@ -184,16 +193,3 @@ HTTPClient.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
-
-
-HTTPAuthBlob.interceptors.request.use(async config => {
-  store.commit('load/SET_LOAD', 1)
-  const user = JSON.parse(getStorage('c', 'user'))
-  setStorage('c', 'user', JSON.stringify(user), 365)
-  config.headers.Authorization = 'Bearer ' + user?.tokens?.access
-
-  const Load = LoadStore()
-  Load.inc()
-  return config
-})
