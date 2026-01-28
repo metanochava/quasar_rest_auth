@@ -23,7 +23,7 @@
 
     <TopMenuSegundo ></TopMenuSegundo>
     <q-space />
-    <SearchMenu  :size="'180'" />
+    <SearchMenu  :size="'180'" /> &nbsp;&nbsp;&nbsp;&nbsp;
 
     
   </q-bar>
