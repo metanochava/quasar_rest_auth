@@ -1,7 +1,7 @@
 <template>
   <div class="row items-center no-wrap q-gutter-sm">
     <q-avatar size="40px">
-      <img   v-if="User.Entidade" :src="User?.Entidade?.logo" />
+      <img   v-if="User.Entidade" :src="User?.Entidade?.logo?.url" />
       <img   v-else :src="User.TipoEntidade?.icon?.url" />
     </q-avatar>
 
