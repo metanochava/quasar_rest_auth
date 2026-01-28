@@ -390,6 +390,8 @@ export const UserStore = defineStore("user", {
       
         const rsp = await HTTPAuth.get(url({ type: 'u', url: 'auth/users/' + this.data?.id + '/userSucursals/', params: { } }))
           .then(res => {
+            this.Sucursal = {}
+            setStorage('c', 'userSucursal', JSON.stringify({}), 365)
             setStorage('c', 'userSucursals', JSON.stringify(res.data), 365)
             this.Sucursals = res.data
           }).catch(err => {
