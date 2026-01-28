@@ -103,7 +103,7 @@ export const LanguageStore = defineStore("lang", {
             if (value && typeof value === "object" && !Array.isArray(value)) {
               flattenTranslations(value, map)
             } else {
-              const normalizada = String(key).trim()
+              const normalizada = String(key).toLowerCase().trim()
               map[normalizada] = value
             }
           }
@@ -112,10 +112,8 @@ export const LanguageStore = defineStore("lang", {
 
         this.TraducaoMap = flattenTranslations(payload)
 
-        console.log("✅ Traduções carregadas:", this.TraducaoMap)
-
       } catch (err) {
-        console.error("❌ Erro ao carregar traduções", err)
+        
       }
     },
     
