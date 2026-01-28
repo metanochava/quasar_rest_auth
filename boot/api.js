@@ -3,7 +3,7 @@ import { getStorage, setStorage } from './storage'
 import { AuthStore, UserStore } from '../stores/AuthStore'
 import { LoadStore } from '../stores/AuthStore'
 
-import { Alert, AlertError, AlertSuccess } from './alerts'
+import { Alert } from './alerts'
 
 const apiBaseUrl = process.env.API
 axios.defaults.baseURL = apiBaseUrl
@@ -93,38 +93,94 @@ HTTPAuth.interceptors.request.use(async config => {
     L: 'userLang'
   }
 
-  config.headers.Authorization = `Bearer ${getStorage('c', 'access') || ''}`
+  config.headers.Authorization = `Bearer ${User.access || ''}`
 
   Object.entries(headersMap).forEach(([key, storage]) => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
   })
+
+  config.headers['fek'] =process.env.FRONT_END_KEY
+  config.headers['fep'] =process.env.FRONT_END_PASSWORD
+  
   const Load = LoadStore()
-  Load.inc
+  Load.inc()
 
   return config
 })
 
 HTTPAuth.interceptors.response.use(
   (response) => {
-    const User = UserStore()
     const Load = LoadStore()
-    Load.dec
+    Load.dec()
     Alert(response)
     return response
   },
   (error) => {
     const User = UserStore()
     const Load = LoadStore()
-    Load.dec
-    if (error.response) {
-      Alert(error.response)
-      const status = error.response.status
+    Load.dec()
+    
+    Alert(error.response)
+    const status = error.response.status
 
-      if (status === 401 || status === 403) {
-        User.logout('N')
-      }
+    if (status === 401 || status === 403) {
+      User.logout('N')
     }
+  
+    return Promise.reject(error)
+  }
+)
+
+
+
+HTTPClient.interceptors.request.use(async config => {
+  const User = UserStore()
+  config.withCredentials = false
+  if (config.headers.Cookie) {
+    delete config.headers.Cookie
+  }
+  
+  if (config.data instanceof FormData) {
+    config.headers['Content-Type'] = 'multipart/form-data'
+  }
+  const headersMap = {
+    // L: 'userLang'
+  }
+
+  config.headers.Authorization = `Bearer ${User.access || ''}`
+
+  Object.entries(headersMap).forEach(([key, storage]) => {
+    const data = safeParse(getStorage('c', storage))
+    if (data?.id) config.headers[key] = data.id
+  })
+  config.headers['fek'] =process.env.FRONT_END_KEY
+  config.headers['fep'] =process.env.FRONT_END_PASSWORD
+  const Load = LoadStore()
+  Load.inc()
+
+  return config
+})
+
+HTTPClient.interceptors.response.use(
+  (response) => {
+    const Load = LoadStore()
+    Load.dec()
+    Alert(response)
+    return response
+  },
+  (error) => {
+    const User = UserStore()
+    const Load = LoadStore()
+    Load.dec()
+    
+    Alert(error.response)
+    const status = error.response.status
+
+    if (status === 401 || status === 403) {
+      User.logout('N')
+    }
+  
     return Promise.reject(error)
   }
 )
@@ -138,6 +194,6 @@ HTTPAuthBlob.interceptors.request.use(async config => {
   config.headers.Authorization = 'Bearer ' + user?.tokens?.access
 
   const Load = LoadStore()
-  Load.inc
+  Load.inc()
   return config
 })
