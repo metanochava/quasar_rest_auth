@@ -153,7 +153,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { Notify } from 'quasar'
-import AUTHClient from 'boot/AUTHClient'
+import AUTHClient from '../boot/AUTHClient'
 
 // -----------------------
 
