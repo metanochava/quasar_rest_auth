@@ -13,4 +13,17 @@ export const restRoutes = [
       requiredRole: 'list_test' } 
     },
   },
+  {
+    path: '/',
+    component: () => import('../layouts/MainLayout.vue'),
+    children: { 
+      path: '/view_scaffold', 
+      name: 'view_scaffold', 
+      component: () => import('pages/commands/scaffold.vue'), 
+      meta: { title: tdc('Vista de') + ' ' + tdc('Scaffold'), 
+      requiresAuth: true, 
+      requiredRole: 'view_scaffold' } 
+    },
+  },
 ]
+

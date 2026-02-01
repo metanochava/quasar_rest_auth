@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { getStorage, setStorage } from './storage'
-import { AuthStore, UserStore } from '../stores/AuthStore'
-import { LoadStore } from '../stores/AuthStore'
+import { LoadStore, UserStore } from '../stores/AuthStore'
 
 import { Alert } from './alerts'
 
@@ -19,7 +18,7 @@ function safeParse (value) {
 }
 
 export const url = (payload = {type: 'u', url: '', params: {} }) => {
-  let tipoEntidadeNome = AuthStore?.TipoEntidate?.nome
+  let tipoEntidadeNome = UserStore()?.TipoEntidade?.nome
 
   let urlFinal = ''
 
@@ -39,9 +38,7 @@ export const url = (payload = {type: 'u', url: '', params: {} }) => {
 }
 
 axios.defaults.headers = {
-  Accept: 'application/json',
-  fek:process.env.FRONT_END_KEY,
-  fep:process.env.FRONT_END_PASSWORD
+  Accept: 'application/json'
 }
 
 export const wsApi = (process.env.API + '/' + apiBaseUrl).replace('http', 'ws')
@@ -76,15 +73,27 @@ export const HTTPAuthBlob = axios.create({
 })
 
 HTTPAuthBlob.interceptors.request.use(async config => {
-  store.commit('load/SET_LOAD', 1)
-  const user = JSON.parse(getStorage('c', 'user'))
-  setStorage('c', 'user', JSON.stringify(user), 365)
-  config.headers.Authorization = 'Bearer ' + user?.tokens?.access
-
+  const User = UserStore()
+  config.headers.Authorization = `Bearer ${User.access || ''}`
   const Load = LoadStore()
   Load.inc()
   return config
 })
+
+
+HTTPAuthBlob.interceptors.response.use(
+  (response) => {
+    const Load = LoadStore()
+    Load.dec()
+    return response
+  },
+  (error) => {
+    const Load = LoadStore()
+    Load.dec()
+    
+    return Promise.reject(error)
+  }
+)
 
 
 
@@ -112,6 +121,9 @@ HTTPAuth.interceptors.request.use(async config => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
   })
+
+  config.headers['fek'] =process.env.FRONT_END_KEY
+  config.headers['fep'] =process.env.FRONT_END_PASSWORD
   
   const Load = LoadStore()
   Load.inc()
@@ -162,7 +174,8 @@ HTTPClient.interceptors.request.use(async config => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
   })
-
+  config.headers['fek'] =process.env.FRONT_END_KEY
+  config.headers['fep'] =process.env.FRONT_END_PASSWORD
   const Load = LoadStore()
   Load.inc()
 

@@ -14,4 +14,5 @@ export const authRoutes = [
     component: () => import('../layouts/AuthLayout.vue'),
     children: [{ path: '/welcome', component: () => import('pages/WelcomePage.vue'), name: 'welcome' }],
   },
+
 ]
