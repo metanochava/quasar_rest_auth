@@ -207,14 +207,14 @@ function isRelation (t) {
 // -----------------------
 
 async function loadApps () {
-  const { data } = await AUTHClient.get('/api/django_saas/scaffold/')
+  const { data } = await AUTHClient.get('/saas/scaffold/')
   apps.value = data.apps
 }
 
 watch(() => form.value.modulo, async (m) => {
   if (!m) return
 
-  const { data } = await AUTHClient.get(`/api/${m}/schema/`)
+  const { data } = await AUTHClient.get(`/saas/${m}/schema/`)
   existingModels.value = data.models || []
 })
 
