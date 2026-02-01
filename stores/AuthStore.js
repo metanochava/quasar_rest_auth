@@ -286,7 +286,7 @@ export const UserStore = defineStore("user", {
 
     async getEntidades () {
       if (!this.data?.id) return
-      const rsp = await HTTPAuth.get( url({ type: 'u', url: `saasusers/${this.data.id}/userEntidades/`,params: {}}))
+      const rsp = await HTTPAuth.get( url({ type: 'u', url: `saas/users/${this.data.id}/userEntidades/`,params: {}}))
       setStorage('c', 'userEntidades', JSON.stringify(rsp.data), 365)
       this.Entidades = rsp.data
       return rsp
