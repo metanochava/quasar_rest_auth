@@ -199,7 +199,7 @@ export default defineComponent({
 
       if (getStorage('c', 'userEntidade') !== null) {
         try {
-          await HTTPAuth.get(url({ type: 'u', url: 'saasusuarios/' + this.User?.id + '/userSucursals/', params: {} }))
+          await HTTPAuth.get(url({ type: 'u', url: 'saas/usuarios/' + this.User?.id + '/userSucursals/', params: {} }))
             .then(res => {
               setStorage('c', 'userSucursals', JSON.stringify(res.data), 365)
 
@@ -215,7 +215,7 @@ export default defineComponent({
     /* --------------------- GET USER PERFILS --------------------- */
     async getUserPerfils () {
       try {
-        await HTTPAuth.get(url({ type: 'u', url: 'saasusuarios/' + this.User?.id + '/userPerfils/', params: {} }))
+        await HTTPAuth.get(url({ type: 'u', url: 'saas/usuarios/' + this.User?.id + '/userPerfils/', params: {} }))
           .then(res => {
             setStorage('c', 'userPerfils', JSON.stringify(res.data), 365)
 
@@ -241,7 +241,7 @@ export default defineComponent({
     async getUserPermicoes () {
       if (getStorage('c', 'userSucursal') !== null) {
         try {
-          await HTTPAuth.get(url({ type: 'u', url: 'saasusuarios/' + this.User?.data?.id + '/userPermicoes/', params: {} }))
+          await HTTPAuth.get(url({ type: 'u', url: 'saas/usuarios/' + this.User?.data?.id + '/userPermicoes/', params: {} }))
             .then(res => {
               setStorage('l', 'userPermicoes', JSON.stringify(res.data), 365)
 
@@ -258,7 +258,7 @@ export default defineComponent({
     async getEntidadeModulos () {
       if (getStorage('c', 'userEntidade') !== null) {
         try {
-          await HTTPAuth.get(url({ type: 'u', url: 'saasentidades/' + this.User?.Entidade.id + '/modulos/', params: {} }))
+          await HTTPAuth.get(url({ type: 'u', url: 'saas/entidades/' + this.User?.Entidade.id + '/modulos/', params: {} }))
             .then(res => {
               setStorage('c', 'entidadeModulos', JSON.stringify(res.data), 365)
 
