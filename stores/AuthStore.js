@@ -88,7 +88,7 @@ export const LanguageStore = defineStore("lang", {
         const res = await HTTPClient.get(
           url({
             type: "u",
-            url: `saasidiomas/${idioma?.id}/traducaos`,
+            url: `saas/idiomas/${idioma?.id}/traducaos`,
             params: {}
           })
         )
@@ -299,7 +299,7 @@ export const UserStore = defineStore("user", {
         const res = await HTTPAuth.get(
           url({
             type: 'u',
-            url: `saasusers/${this.data.id}/userEntidades/`,
+            url: `saas/users/${this.data.id}/userEntidades/`,
             params: {}
           })
         )
@@ -431,7 +431,7 @@ export const UserStore = defineStore("user", {
     async getGrupos () {
 
       const res = await HTTPAuth.get(
-        url({ type: 'u', url: `saasusers/${this.data?.id}/userGrupos/`, params: {} })
+        url({ type: 'u', url: `saas/users/${this.data?.id}/userGrupos/`, params: {} })
       )
 
       setStorage('c', 'userGrupos', JSON.stringify(res.data), 365)
@@ -446,7 +446,7 @@ export const UserStore = defineStore("user", {
     async getGrupos_ (q) {
 
       const res = await HTTPAuth.get(
-        url({ type: 'u', url: `saasusers/${this.data?.id}/userGrupos/`, params: {} })
+        url({ type: 'u', url: `saas/users/${this.data?.id}/userGrupos/`, params: {} })
       )
       setStorage('c', 'userGrupos', JSON.stringify(res.data), 365)
       this.Grupos = res.data

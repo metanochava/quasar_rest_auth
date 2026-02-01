@@ -30,7 +30,7 @@ export const barStyle = {
 export const IsAuthorized = {
   bind (el, binding, vnode) {
     const store = vnode.context.$store
-    const permissions = store.getters['saas//getPermissions']
+    const permissions = store.getters['saas/getPermissions']
     permissions.forEach(element => {
       if (element.nome === binding.value) {
         result = true
