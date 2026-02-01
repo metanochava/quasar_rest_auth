@@ -19,7 +19,7 @@ export const restRoutes = [
     children: { 
       path: '/view_scaffold', 
       name: 'view_scaffold', 
-      component: () => import('pages/commands/scaffold.vue'), 
+      component: () => import('../pages/commands/ScaffoldPage.vue'), 
       meta: { title: tdc('Vista de') + ' ' + tdc('Scaffold'), 
       requiresAuth: true, 
       requiredRole: 'view_scaffold' } 
