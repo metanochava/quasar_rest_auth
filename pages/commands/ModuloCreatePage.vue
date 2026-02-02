@@ -164,14 +164,9 @@ function confirmDelete(app) {
 
 async function deleteModule(app) {
 
-  await HTTPAuth.delete(`/saas/modulo/${app}/`)
-
-  Notify.create({
-    type: 'positive',
-    message: 'Módulo removido'
+  await HTTPAuth.delete(`/saas/modulo/${app}/`).then( async res => {
+      await loadApps()
   })
-
-  await loadApps()
 }
 
 // ----------------------------------
