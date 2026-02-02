@@ -79,7 +79,7 @@ async function createModule () {
 
   try {
     const { data } = await HTTPAuth.post(
-      '/saas/module/',
+      '/saas/modulo/',
       { name: name.value }
     )
 
