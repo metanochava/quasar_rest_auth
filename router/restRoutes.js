@@ -20,6 +20,17 @@ export let restRoutes = [
       requiresAuth: true, 
       requiredRole: 'view_scaffold'
     } 
+  },
+  { 
+    path: '/add_modulo', 
+    name: 'add_modulo', 
+    component: () => import('../pages/commands/ModuloCreatePage.vue'), 
+    meta: { 
+      title: tdc('Add de') + ' ' + tdc('Modulo'), 
+      requiresAuth: true, 
+      icon: 'inventory_2',
+      requiredRole: 'add_modulo'
+    } 
   }
 ]
 
