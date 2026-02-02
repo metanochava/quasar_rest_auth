@@ -39,56 +39,58 @@
             </q-card>
           </div>
 
+          <div class="col-12 col-md-9">
+            <div
+              v-for="app in apps"
+              :key="app.name"
+              class="col-12 col-sm-3"
+            >
+              <q-card bordered class="module-card">
 
-          <div
-            v-for="app in apps"
-            :key="app.name"
-            class="col-12 col-sm-3"
-          >
-            <q-card bordered class="module-card">
+                <q-card-section class="row items-center">
 
-              <q-card-section class="row items-center">
+                  <q-icon name="folder" size="28px" />
 
-                <q-icon name="folder" size="28px" />
+                  <div class="text-subtitle1 q-ml-sm">
+                    {{ app.name }}
+                  </div>
 
-                <div class="text-subtitle1 q-ml-sm">
-                  {{ app.name }}
-                </div>
+                  <q-space />
 
-                <q-space />
+                  <!-- badge models -->
+                  <q-badge color="primary">
+                    {{ app.models }}
+                  </q-badge>
 
-                <!-- badge models -->
-                <q-badge color="primary">
-                  {{ app.models }}
-                </q-badge>
+                </q-card-section>
 
-              </q-card-section>
+                <q-separator />
 
-              <q-separator />
+                <q-card-actions align="between">
 
-              <q-card-actions align="between">
+                  <!-- abrir scaffold -->
+                  <q-btn
+                    flat
+                    color="primary"
+                    icon="build"
+                    label="Abrir"
+                    @click="openScaffold(app.name)"
+                  />
 
-                <!-- abrir scaffold -->
-                <q-btn
-                  flat
-                  color="primary"
-                  icon="build"
-                  label="Abrir"
-                  @click="openScaffold(app.name)"
-                />
+                  <!-- apagar -->
+                  <q-btn
+                    flat
+                    round
+                    color="negative"
+                    icon="delete"
+                    @click="confirmDelete(app.name)"
+                  />
 
-                <!-- apagar -->
-                <q-btn
-                  flat
-                  round
-                  color="negative"
-                  icon="delete"
-                  @click="confirmDelete(app.name)"
-                />
-
-              </q-card-actions>
-            </q-card>
+                </q-card-actions>
+              </q-card>
+            </div>
           </div>
+          
         </div>
       </div>
     </div>
