@@ -135,11 +135,6 @@ async function createModule () {
 
     await HTTPAuth.post('/saas/modulo/', { name: name.value })
 
-    Notify.create({
-      type: 'positive',
-      message: 'Módulo criado 🚀'
-    })
-
     name.value = ''
     await loadApps()
 

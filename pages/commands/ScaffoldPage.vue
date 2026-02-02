@@ -262,12 +262,6 @@ async function submit () {
 
   try {
     await HTTPAuth.post('/saas/scaffold/', form.value)
-
-    Notify.create({
-      type: 'positive',
-      message: 'Modelo criado 🚀'
-    })
-
     step.value = 1
     form.value = { modulo: '', modelo: '', fields: [] }
 

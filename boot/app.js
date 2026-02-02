@@ -26,21 +26,7 @@ export const barStyle = {
 
 
 
-// Initialize the annoying-background directive.
-export const IsAuthorized = {
-  bind (el, binding, vnode) {
-    const store = vnode.context.$store
-    const permissions = store.getters['saas/getPermissions']
-    permissions.forEach(element => {
-      if (element.nome === binding.value) {
-        result = true
-      }
-    })
-    if (!result) {
-      el.style.display = 'none'
-    }
-  }
-}
+
 
 export const pegaDominio = function () {
   let pagelocalurl = location.href // pega endereço que esta no navegador
