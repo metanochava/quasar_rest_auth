@@ -153,7 +153,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { Notify } from 'quasar'
-import { AUTHClient } from '../../boot/api'
+import { HTTPAuth } from '../../boot/api'
 
 // -----------------------
 
@@ -207,14 +207,14 @@ function isRelation (t) {
 // -----------------------
 
 async function loadApps () {
-  const { data } = await AUTHClient.get('/saas/scaffold/')
+  const { data } = await HTTPAuth.get('/saas/scaffold/')
   apps.value = data.apps
 }
 
 watch(() => form.value.modulo, async (m) => {
   if (!m) return
 
-  const { data } = await AUTHClient.get(`/saas/${m}/schema/`)
+  const { data } = await HTTPAuth.get(`/saas/${m}/schema/`)
   existingModels.value = data.models || []
 })
 
@@ -249,7 +249,7 @@ async function submit () {
   loading.value = true
 
   try {
-    await AUTHClient.post('/api/django_saas/scaffold/', form.value)
+    await HTTPAuth.post('/api/django_saas/scaffold/', form.value)
 
     Notify.create({
       type: 'positive',
