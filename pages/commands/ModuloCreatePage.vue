@@ -171,7 +171,7 @@ async function deleteModule(app) {
     message: 'Módulo removido'
   })
 
-  loadApps()
+  await loadApps()
 }
 
 // ----------------------------------
