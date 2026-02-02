@@ -25,4 +25,8 @@ pushnpm:
 	git push origin v$$VERSION; \
 	npm publish
 
-
+gitback:
+	git reset --soft HEAD~1
+gitrmc:
+	read -p "Digite o caminho do ficheiro ou pasta " m; \
+	git rm --cached $$m
