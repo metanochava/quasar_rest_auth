@@ -180,7 +180,7 @@ async function deleteModule(app) {
 
 function openScaffold(app) {
   // router.push(`/dev/scaffold?module=${app}`)
-  router.push({ name: 'view_scaffold', params: {modulo: app } })
+  router.push({ name: 'view_scaffold', query: {modulo: app } })
 }
 
 // ----------------------------------

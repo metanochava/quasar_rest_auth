@@ -158,6 +158,11 @@ import { ref, watch, onMounted } from 'vue'
 import { Notify } from 'quasar'
 import { HTTPAuth } from '../../boot/api'
 
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+
 // -----------------------
 
 const step = ref(1)
@@ -248,11 +253,15 @@ watch(form, () => {
 // SUBMIT
 // -----------------------
 
+onMounted(() => {
+  form.value.modulo = route.query.module
+})
+
 async function submit () {
   loading.value = true
 
   try {
-    await HTTPAuth.post('/api/django_saas/scaffold/', form.value)
+    await HTTPAuth.post('/saas/scaffold/', form.value)
 
     Notify.create({
       type: 'positive',
