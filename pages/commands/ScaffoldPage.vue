@@ -19,8 +19,8 @@
           :options="apps"
           :label="tdc('Select module')"
           outlined
-          option-label="label"
-          option-value="value"
+          option-label="name"
+          option-value="name"
           emit-value
           map-options
         />
