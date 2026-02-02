@@ -8,9 +8,9 @@
 
     <q-stepper v-model="step" flat animated>
 
-      <!-- ================================================= -->
-      <!-- STEP 1 — MODULE -->
-      <!-- ================================================= -->
+      <!-- ========================= -->
+      <!-- STEP 1 -->
+      <!-- ========================= -->
       <q-step :name="1" :title="tdc('Module')" icon="folder">
 
         <q-select
@@ -23,9 +23,9 @@
       </q-step>
 
 
-      <!-- ================================================= -->
-      <!-- STEP 2 — MODEL -->
-      <!-- ================================================= -->
+      <!-- ========================= -->
+      <!-- STEP 2 -->
+      <!-- ========================= -->
       <q-step :name="2" :title="tdc('Model')" icon="schema">
 
         <q-input
@@ -35,7 +35,6 @@
         />
 
         <div v-if="existingModels.length" class="q-mt-md">
-
           <div class="text-caption text-grey">
             {{ tdc('Existing models') }}
           </div>
@@ -48,29 +47,29 @@
           >
             {{ m }}
           </q-chip>
-
         </div>
 
       </q-step>
 
 
-      <!-- ================================================= -->
-      <!-- STEP 3 — FIELDS -->
-      <!-- ================================================= -->
+      <!-- ========================= -->
+      <!-- STEP 3 — DRAG -->
+      <!-- ========================= -->
       <q-step :name="3" :title="tdc('Fields')" icon="list">
 
-        <draggable
+        <VueDraggable
           v-model="form.fields"
+          handle=".drag"
           item-key="id"
-          animation="200"
+          class="column"
         >
+
           <template #item="{ element, index }">
 
             <div class="row q-col-gutter-sm q-mb-sm items-center">
 
-              <q-icon name="drag_indicator" />
+              <q-icon name="drag_indicator" class="drag cursor-pointer" />
 
-              <!-- NAME -->
               <div class="col-3">
                 <q-input
                   v-model="element.name"
@@ -79,7 +78,6 @@
                 />
               </div>
 
-              <!-- TYPE -->
               <div class="col-3">
                 <q-select
                   v-model="element.type"
@@ -93,7 +91,6 @@
                 />
               </div>
 
-              <!-- RELATION -->
               <div class="col-3" v-if="isRelation(element.type)">
                 <q-input
                   v-model="element.relation"
@@ -112,7 +109,8 @@
             </div>
 
           </template>
-        </draggable>
+
+        </VueDraggable>
 
         <q-btn
           class="q-mt-md"
@@ -125,9 +123,9 @@
       </q-step>
 
 
-      <!-- ================================================= -->
-      <!-- STEP 4 — PREVIEW -->
-      <!-- ================================================= -->
+      <!-- ========================= -->
+      <!-- STEP 4 -->
+      <!-- ========================= -->
       <q-step :name="4" :title="tdc('Preview')" icon="code">
 
         <q-tabs v-model="tab">
@@ -139,40 +137,22 @@
         <q-separator />
 
         <q-tab-panels v-model="tab">
-          <q-tab-panel name="model">
-            <pre>{{ preview.model }}</pre>
-          </q-tab-panel>
-
-          <q-tab-panel name="serializer">
-            <pre>{{ preview.serializer }}</pre>
-          </q-tab-panel>
-
-          <q-tab-panel name="view">
-            <pre>{{ preview.view }}</pre>
-          </q-tab-panel>
+          <q-tab-panel name="model"><pre>{{ preview.model }}</pre></q-tab-panel>
+          <q-tab-panel name="serializer"><pre>{{ preview.serializer }}</pre></q-tab-panel>
+          <q-tab-panel name="view"><pre>{{ preview.view }}</pre></q-tab-panel>
         </q-tab-panels>
 
       </q-step>
 
 
-      <!-- ================================================= -->
-      <!-- NAVIGATION -->
-      <!-- ================================================= -->
+      <!-- ========================= -->
+      <!-- NAV -->
+      <!-- ========================= -->
       <template #navigation>
 
-        <q-btn
-          flat
-          :label="tdc('Back')"
-          @click="step--"
-          :disable="step === 1"
-        />
+        <q-btn flat :label="tdc('Back')" @click="step--" :disable="step===1" />
 
-        <q-btn
-          v-if="step < 4"
-          color="primary"
-          :label="tdc('Next')"
-          @click="step++"
-        />
+        <q-btn v-if="step<4" color="primary" :label="tdc('Next')" @click="step++" />
 
         <q-btn
           v-else
@@ -196,16 +176,11 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import draggable from 'vuedraggable'
+import { VueDraggable } from 'vue-draggable-plus'
 import { Notify } from 'quasar'
 
 import { HTTPAuth, tdc, autoLabel } from '@metano/quasar_rest_auth'
 
-
-
-/* =========================================================
-STATE
-========================================================= */
 
 const step = ref(1)
 const tab = ref('model')
@@ -227,12 +202,8 @@ const preview = ref({
 })
 
 
-/* =========================================================
-TYPES (traduzidos dinamicamente)
-========================================================= */
-
 const rawTypes = [
-  'CharField','TextField','IntegerField','DecimalField','BooleanField','DateField',
+  'CharField','TextField','IntegerField','DecimalField','BooleanField',
   'ForeignKey','OneToOneField','ManyToManyField',
   'FileField','ImageField','JSONField','MoneyField'
 ]
@@ -241,48 +212,27 @@ const typeOptions = computed(() =>
   rawTypes.map(t => ({ label: tdc(t), value: t }))
 )
 
-
-/* =========================================================
-HELPERS
-========================================================= */
-
 const canSubmit = computed(() =>
-  form.value.modulo &&
-  form.value.modelo &&
-  form.value.fields.length > 0
+  form.value.modulo && form.value.modelo && form.value.fields.length
 )
 
-function isRelation(t) {
-  return ['ForeignKey','OneToOneField','ManyToManyField'].includes(t)
-}
-
 function addField() {
-  form.value.fields.push({
-    id: Date.now(),
-    name: '',
-    type: 'CharField'
-  })
+  form.value.fields.push({ id: Date.now(), name: '', type: 'CharField' })
 }
 
 function removeField(i) {
   form.value.fields.splice(i, 1)
 }
 
-function notifyFromApi(data) {
-  if (data?.alert_success)
-    Notify.create({ type:'positive', message:data.alert_success })
-
-  if (data?.alert_error)
-    Notify.create({ type:'negative', message:data.alert_error })
-
-  if (data?.alert_warning)
-    Notify.create({ type:'warning', message:data.alert_warning })
+function isRelation(t) {
+  return ['ForeignKey','OneToOneField','ManyToManyField'].includes(t)
 }
 
-
-/* =========================================================
-API
-========================================================= */
+function notifyFromApi(data) {
+  if (data?.alert_success) Notify.create({ type:'positive', message:data.alert_success })
+  if (data?.alert_error) Notify.create({ type:'negative', message:data.alert_error })
+  if (data?.alert_warning) Notify.create({ type:'warning', message:data.alert_warning })
+}
 
 async function loadApps() {
   const { data } = await HTTPAuth.get('/saas/scaffold/')
@@ -297,40 +247,26 @@ watch(() => form.value.modulo, async (m) => {
 
 watch(form, async () => {
   if (!form.value.modelo) return
-
   const { data } = await HTTPAuth.post('/saas/scaffold-preview/', form.value)
-
   preview.value = data
-}, { deep: true })
-
+}, { deep:true })
 
 async function submit() {
   loading.value = true
-
   try {
     const { data } = await HTTPAuth.post('/saas/scaffold/', form.value)
-
     notifyFromApi(data)
-
     step.value = 1
     form.value = { modulo:'', modelo:'', fields:[] }
-
   } finally {
     loading.value = false
   }
 }
 
-
-/* =========================================================
-MOUNT
-========================================================= */
-
 const route = useRoute()
 
 onMounted(() => {
   loadApps()
-
-  if (route.query.module)
-    form.value.modulo = String(route.query.module)
+  if (route.query.module) form.value.modulo = route.query.module
 })
 </script>
