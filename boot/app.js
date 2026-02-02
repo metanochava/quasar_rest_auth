@@ -25,9 +25,6 @@ export const barStyle = {
 }
 
 
-
-
-
 export const pegaDominio = function () {
   let pagelocalurl = location.href // pega endereço que esta no navegador
   pagelocalurl = pagelocalurl.split('/') // quebra o endeço de acordo com a / (barra)
@@ -38,6 +35,14 @@ export const pegaDominio = function () {
 
 export const tdc = traducao
 export const ds = dateSplit
+
+export const autoLabel = function (name) {
+  if (!name) return ''
+  
+  return name
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase())
+}
 
 // Initialize the annoying-background directive.
 export const IsTipoEntidade = {

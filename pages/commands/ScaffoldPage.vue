@@ -1,44 +1,43 @@
 <template>
   <q-page padding>
 
+    <!-- HEADER -->
     <div class="text-h5 q-mb-lg">
-      🔧 Scaffold Wizard
+      🔧 {{ tdc('Scaffold Wizard') }}
     </div>
 
     <q-stepper v-model="step" flat animated>
 
-      <!-- ===================== -->
-      <!-- STEP 1 - MODULE -->
-      <!-- ===================== -->
-      <q-step :name="1" title="Módulo" icon="folder">
+      <!-- ================================================= -->
+      <!-- STEP 1 — MODULE -->
+      <!-- ================================================= -->
+      <q-step :name="1" :title="tdc('Module')" icon="folder">
 
         <q-select
           v-model="form.modulo"
           :options="apps"
-          label="Selecionar módulo"
+          :label="tdc('Select module')"
           outlined
-          map-options
-          option-value="name"
-          option-label="name"
         />
 
       </q-step>
 
 
-      <!-- ===================== -->
-      <!-- STEP 2 - MODEL -->
-      <!-- ===================== -->
-      <q-step :name="2" title="Modelo" icon="schema">
+      <!-- ================================================= -->
+      <!-- STEP 2 — MODEL -->
+      <!-- ================================================= -->
+      <q-step :name="2" :title="tdc('Model')" icon="schema">
 
         <q-input
           v-model="form.modelo"
-          label="Nome do modelo"
+          :label="tdc('Model name')"
           outlined
         />
 
         <div v-if="existingModels.length" class="q-mt-md">
+
           <div class="text-caption text-grey">
-            Modelos existentes:
+            {{ tdc('Existing models') }}
           </div>
 
           <q-chip
@@ -49,58 +48,97 @@
           >
             {{ m }}
           </q-chip>
+
         </div>
 
       </q-step>
 
 
-      <!-- ===================== -->
-      <!-- STEP 3 - FIELDS -->
-      <!-- ===================== -->
-      <q-step :name="3" title="Campos" icon="list">
+      <!-- ================================================= -->
+      <!-- STEP 3 — FIELDS -->
+      <!-- ================================================= -->
+      <q-step :name="3" :title="tdc('Fields')" icon="list">
 
-        <div
-          v-for="(f, i) in form.fields"
-          :key="i"
-          class="row q-col-gutter-sm q-mb-sm"
+        <draggable
+          v-model="form.fields"
+          item-key="id"
+          animation="200"
         >
-          <div class="col-4">
-            <q-input v-model="f.name" label="Nome" outlined />
-          </div>
+          <template #item="{ element, index }">
 
-          <div class="col-4">
-            <q-select v-model="f.type" :options="types" label="Tipo" outlined />
-          </div>
+            <div class="row q-col-gutter-sm q-mb-sm items-center">
 
-          <div class="col-3" v-if="isRelation(f.type)">
-            <q-input v-model="f.relation" label="app.Model" outlined />
-          </div>
+              <q-icon name="drag_indicator" />
 
-          <div class="col-1">
-            <q-btn flat icon="delete" @click="removeField(i)" />
-          </div>
-        </div>
+              <!-- NAME -->
+              <div class="col-3">
+                <q-input
+                  v-model="element.name"
+                  :label="autoLabel(element.name) || tdc('Name')"
+                  outlined
+                />
+              </div>
 
-        <q-btn outlined icon="add" label="Adicionar campo" @click="addField" />
+              <!-- TYPE -->
+              <div class="col-3">
+                <q-select
+                  v-model="element.type"
+                  :options="typeOptions"
+                  option-label="label"
+                  option-value="value"
+                  emit-value
+                  map-options
+                  :label="tdc('Type')"
+                  outlined
+                />
+              </div>
+
+              <!-- RELATION -->
+              <div class="col-3" v-if="isRelation(element.type)">
+                <q-input
+                  v-model="element.relation"
+                  :label="tdc('Relation app.Model')"
+                  outlined
+                />
+              </div>
+
+              <q-btn
+                flat
+                icon="delete"
+                color="negative"
+                @click="removeField(index)"
+              />
+
+            </div>
+
+          </template>
+        </draggable>
+
+        <q-btn
+          class="q-mt-md"
+          icon="add"
+          outlined
+          :label="tdc('Add field')"
+          @click="addField"
+        />
 
       </q-step>
 
 
-      <!-- ===================== -->
-      <!-- STEP 4 - PREVIEW -->
-      <!-- ===================== -->
-      <q-step :name="4" title="Preview" icon="code">
+      <!-- ================================================= -->
+      <!-- STEP 4 — PREVIEW -->
+      <!-- ================================================= -->
+      <q-step :name="4" :title="tdc('Preview')" icon="code">
 
         <q-tabs v-model="tab">
-          <q-tab name="model" label="Model" />
-          <q-tab name="serializer" label="Serializer" />
-          <q-tab name="view" label="View" />
+          <q-tab name="model" :label="tdc('Model')" />
+          <q-tab name="serializer" :label="tdc('Serializer')" />
+          <q-tab name="view" :label="tdc('View')" />
         </q-tabs>
 
         <q-separator />
 
         <q-tab-panels v-model="tab">
-
           <q-tab-panel name="model">
             <pre>{{ preview.model }}</pre>
           </q-tab-panel>
@@ -112,20 +150,19 @@
           <q-tab-panel name="view">
             <pre>{{ preview.view }}</pre>
           </q-tab-panel>
-
         </q-tab-panels>
 
       </q-step>
 
 
-      <!-- ===================== -->
-      <!-- NAV -->
-      <!-- ===================== -->
+      <!-- ================================================= -->
+      <!-- NAVIGATION -->
+      <!-- ================================================= -->
       <template #navigation>
 
         <q-btn
           flat
-          label="Voltar"
+          :label="tdc('Back')"
           @click="step--"
           :disable="step === 1"
         />
@@ -133,7 +170,7 @@
         <q-btn
           v-if="step < 4"
           color="primary"
-          label="Próximo"
+          :label="tdc('Next')"
           @click="step++"
         />
 
@@ -141,8 +178,9 @@
           v-else
           color="positive"
           icon="rocket_launch"
-          label="Criar"
+          :label="tdc('Create')"
           :loading="loading"
+          :disable="!canSubmit"
           @click="submit"
         />
 
@@ -153,21 +191,24 @@
   </q-page>
 </template>
 
+
+
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { Notify } from 'quasar'
-import { HTTPAuth } from '../../boot/api'
-
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import draggable from 'vuedraggable'
+import { Notify } from 'quasar'
 
-const route = useRoute()
+import { HTTPAuth, tdc, autoLabel } from '@metano/quasar_rest_auth'
 
 
-// -----------------------
+/* =========================================================
+STATE
+========================================================= */
 
 const step = ref(1)
-const loading = ref(false)
 const tab = ref('model')
+const loading = ref(false)
 
 const apps = ref([])
 const existingModels = ref([])
@@ -184,90 +225,111 @@ const preview = ref({
   view: ''
 })
 
-// -----------------------
 
-const types = [
-  'CharField',
-  'TextField',
-  'IntegerField',
-  'DecimalField',
-  'BooleanField',
-  'ForeignKey',
-  'ManyToManyField'
+/* =========================================================
+TYPES (traduzidos dinamicamente)
+========================================================= */
+
+const rawTypes = [
+  'CharField','TextField','IntegerField','DecimalField','BooleanField','DateField',
+  'ForeignKey','OneToOneField','ManyToManyField',
+  'FileField','ImageField','JSONField','MoneyField'
 ]
 
-// -----------------------
+const typeOptions = computed(() =>
+  rawTypes.map(t => ({ label: tdc(t), value: t }))
+)
 
-function addField () {
-  form.value.fields.push({ name: '', type: 'CharField' })
+
+/* =========================================================
+HELPERS
+========================================================= */
+
+const canSubmit = computed(() =>
+  form.value.modulo &&
+  form.value.modelo &&
+  form.value.fields.length > 0
+)
+
+function isRelation(t) {
+  return ['ForeignKey','OneToOneField','ManyToManyField'].includes(t)
 }
 
-function removeField (i) {
+function addField() {
+  form.value.fields.push({
+    id: Date.now(),
+    name: '',
+    type: 'CharField'
+  })
+}
+
+function removeField(i) {
   form.value.fields.splice(i, 1)
 }
 
-function isRelation (t) {
-  return ['ForeignKey', 'ManyToManyField'].includes(t)
+function notifyFromApi(data) {
+  if (data?.alert_success)
+    Notify.create({ type:'positive', message:data.alert_success })
+
+  if (data?.alert_error)
+    Notify.create({ type:'negative', message:data.alert_error })
+
+  if (data?.alert_warning)
+    Notify.create({ type:'warning', message:data.alert_warning })
 }
 
-// -----------------------
-// LOAD MODULES + MODELS
-// -----------------------
 
-async function loadApps () {
+/* =========================================================
+API
+========================================================= */
+
+async function loadApps() {
   const { data } = await HTTPAuth.get('/saas/scaffold/')
-  apps.value = data.apps
+  apps.value = data.apps || []
 }
 
 watch(() => form.value.modulo, async (m) => {
   if (!m) return
-
   const { data } = await HTTPAuth.get(`/saas/${m}/schema/`)
   existingModels.value = data.models || []
 })
 
-// -----------------------
-// PREVIEW CODE
-// -----------------------
+watch(form, async () => {
+  if (!form.value.modelo) return
 
-watch(form, () => {
-  const name = form.value.modelo || 'Modelo'
+  const { data } = await HTTPAuth.post('/saas/scaffold-preview/', form.value)
 
-  preview.value.model =
-`class ${name}(BaseModel):
-    pass`
-
-  preview.value.serializer =
-`class ${name}Serializer(BaseSerializer):
-    class Meta:
-        model = ${name}
-        fields = "__all__"`
-
-  preview.value.view =
-`class ${name}APIView(BaseAPIView):
-    queryset = ${name}.objects.all()
-    serializer_class = ${name}Serializer`
+  preview.value = data
 }, { deep: true })
 
-// -----------------------
-// SUBMIT
-// -----------------------
 
-onMounted(() => {
-  form.value.modulo = route.query.module
-})
-
-async function submit () {
+async function submit() {
   loading.value = true
 
   try {
-    await HTTPAuth.post('/saas/scaffold/', form.value)
+    const { data } = await HTTPAuth.post('/saas/scaffold/', form.value)
+
+    notifyFromApi(data)
+
     step.value = 1
-    form.value = { modulo: '', modelo: '', fields: [] }
+    form.value = { modulo:'', modelo:'', fields:[] }
 
   } finally {
     loading.value = false
   }
 }
-onMounted(loadApps)
+
+
+/* =========================================================
+MOUNT
+========================================================= */
+
+const route = useRoute()
+
+onMounted(() => {
+  loadApps()
+
+  if (route.query.module)
+    form.value.modulo = String(route.query.module)
+})
 </script>
