@@ -9,7 +9,7 @@
       <!-- ================================= -->
       <!-- LEFT: CARDS DE MÓDULOS -->
       <!-- ================================= -->
-      <div class="col-12 col-md-7">
+      <div class="col-12 col-md-12">
 
         <div class="row q-col-gutter-md">
           <!-- ================================= -->
@@ -43,7 +43,7 @@
           <div
             v-for="app in apps"
             :key="app.name"
-            class="col-12 col-sm-9"
+            class="col-12 col-sm-3"
           >
             <q-card bordered class="module-card">
 
