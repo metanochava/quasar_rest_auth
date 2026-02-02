@@ -1,5 +1,8 @@
 <template>
   <q-page padding>
+    <div class="text-h5 q-mb-lg">
+      📦 Módulos
+    </div>
 
     <div class="row q-col-gutter-lg">
 
@@ -8,16 +11,39 @@
       <!-- ================================= -->
       <div class="col-12 col-md-7">
 
-        <div class="text-h6 q-mb-md">
-          📦 Módulos
-        </div>
-
         <div class="row q-col-gutter-md">
+          <!-- ================================= -->
+          <!-- RIGHT: CRIAR -->
+          <!-- ================================= -->
+          <div class="col-12 col-md-3">
+            <q-card bordered flat class="q-pa-lg">
+              <div class="text-h6 q-mb-md">
+                ➕ Criar Módulo
+              </div>
+
+              <q-input
+                v-model="name"
+                label="Nome do módulo"
+                filled
+                @keyup.enter="createModule"
+              />
+
+              <q-btn
+                class="q-mt-md full-width"
+                color="primary"
+                icon="add"
+                label="Criar"
+                :loading="loading"
+                @click="createModule"
+              />
+            </q-card>
+          </div>
+
 
           <div
             v-for="app in apps"
             :key="app.name"
-            class="col-12 col-sm-6"
+            class="col-12 col-sm-9"
           >
             <q-card bordered class="module-card">
 
@@ -61,46 +87,10 @@
                 />
 
               </q-card-actions>
-
             </q-card>
           </div>
-
         </div>
-
       </div>
-
-
-      <!-- ================================= -->
-      <!-- RIGHT: CRIAR -->
-      <!-- ================================= -->
-      <div class="col-12 col-md-5">
-
-        <q-card bordered flat class="q-pa-lg">
-
-          <div class="text-h6 q-mb-md">
-            ➕ Criar Módulo
-          </div>
-
-          <q-input
-            v-model="name"
-            label="Nome do módulo"
-            filled
-            @keyup.enter="createModule"
-          />
-
-          <q-btn
-            class="q-mt-md full-width"
-            color="primary"
-            icon="add"
-            label="Criar"
-            :loading="loading"
-            @click="createModule"
-          />
-
-        </q-card>
-
-      </div>
-
     </div>
 
   </q-page>
@@ -188,7 +178,7 @@ async function deleteModule(app) {
 
 function openScaffold(app) {
   // router.push(`/dev/scaffold?module=${app}`)
-  router.push({ name: 'scaffold', params: {modulo: app } })
+  router.push({ name: 'view_scaffold', params: {modulo: app } })
 }
 
 // ----------------------------------
