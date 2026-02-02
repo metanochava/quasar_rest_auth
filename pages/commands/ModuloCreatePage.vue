@@ -24,7 +24,7 @@
               <q-input
                 v-model="name"
                 label="Nome do módulo"
-                outline
+                outlined
                 @keyup.enter="createModule"
               />
 

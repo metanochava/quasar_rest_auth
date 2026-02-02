@@ -16,7 +16,7 @@
           v-model="form.modulo"
           :options="apps"
           label="Selecionar módulo"
-          outline
+          outlined
           map-options
           option-value="name"
           option-label="name"
@@ -33,7 +33,7 @@
         <q-input
           v-model="form.modelo"
           label="Nome do modelo"
-          outline
+          outlined
         />
 
         <div v-if="existingModels.length" class="q-mt-md">
@@ -45,7 +45,7 @@
             v-for="m in existingModels"
             :key="m"
             dense
-            outline
+            outlined
           >
             {{ m }}
           </q-chip>
@@ -65,15 +65,15 @@
           class="row q-col-gutter-sm q-mb-sm"
         >
           <div class="col-4">
-            <q-input v-model="f.name" label="Nome" outline />
+            <q-input v-model="f.name" label="Nome" outlined />
           </div>
 
           <div class="col-4">
-            <q-select v-model="f.type" :options="types" label="Tipo" outline />
+            <q-select v-model="f.type" :options="types" label="Tipo" outlined />
           </div>
 
           <div class="col-3" v-if="isRelation(f.type)">
-            <q-input v-model="f.relation" label="app.Model" outline />
+            <q-input v-model="f.relation" label="app.Model" outlined />
           </div>
 
           <div class="col-1">
@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <q-btn outline icon="add" label="Adicionar campo" @click="addField" />
+        <q-btn outlined icon="add" label="Adicionar campo" @click="addField" />
 
       </q-step>
 
