@@ -11,6 +11,7 @@
       <!-- ========================= -->
       <!-- STEP 1 -->
       <!-- ========================= -->
+       {{}}
       <q-step :name="1" :title="tdc('Module')" icon="folder">
 
         <q-select
@@ -18,6 +19,10 @@
           :options="apps"
           :label="tdc('Select module')"
           outlined
+          option-label="label"
+          option-value="value"
+          emit-value
+          map-options
         />
 
       </q-step>
