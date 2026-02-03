@@ -96,7 +96,7 @@
 
 <script setup>
 import { ref, computed, reactive } from 'vue'
-import { HTTPAuth } from '/../../boot/api'
+import { HTTPAuth } from './../../boot/api'
 import { exportFile } from 'quasar'
 import { tdc } from './../../boot/app'
 
