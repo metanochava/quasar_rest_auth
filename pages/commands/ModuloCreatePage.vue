@@ -133,7 +133,7 @@ async function createModule () {
 
   try {
 
-    await HTTPAuth.post('/saas/modulo/', { name: name.value })
+    await HTTPAuth.post('/saas/modulos/', { name: name.value })
 
     name.value = ''
     await loadApps()
@@ -159,7 +159,7 @@ function confirmDelete(app) {
 
 async function deleteModule(app) {
 
-  await HTTPAuth.delete(`/saas/modulo/${app}/`).then( async res => {
+  await HTTPAuth.delete(`/saas/modulos/${app}/`).then( async res => {
       await loadApps()
   })
 }
@@ -169,7 +169,6 @@ async function deleteModule(app) {
 // ----------------------------------
 
 function openScaffold(app) {
-  // router.push(`/dev/scaffold?module=${app}`)
   router.push({ name: 'view_scaffold', query: {modulo: app } })
 }
 

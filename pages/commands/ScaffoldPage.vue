@@ -240,13 +240,13 @@ function notifyFromApi(data) {
 }
 
 async function loadApps() {
-  const { data } = await HTTPAuth.get('/saas/scaffold/')
+  const { data } = await HTTPAuth.get('/saas/modulos/')
   apps.value = data.apps || []
 }
 
 watch(() => form.value.modulo, async (m) => {
   if (!m) return
-  const { data } = await HTTPAuth.get(`/saas/modulo/${m}/schema/`)
+  const { data } = await HTTPAuth.get(`/saas/modulos/${m}/schema/`)
   existingModels.value = data.models || []
 })
 
