@@ -246,7 +246,7 @@ async function loadApps() {
 
 watch(() => form.value.modulo, async (m) => {
   if (!m) return
-  const { data } = await HTTPAuth.get(`/saas/${m}/schema/`)
+  const { data } = await HTTPAuth.get(`/saas/modulo/${m}/schema/`)
   existingModels.value = data.models || []
 })
 
