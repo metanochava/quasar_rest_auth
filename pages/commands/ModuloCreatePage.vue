@@ -117,7 +117,7 @@ const apps = ref([])
 // ----------------------------------
 
 async function loadApps () {
-  const { data } = await HTTPAuth.get('/saas/scaffold/')
+  const { data } = await HTTPAuth.get('/saas/modulos/')
   apps.value = data.apps
 }
 
