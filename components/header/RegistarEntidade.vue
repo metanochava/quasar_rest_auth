@@ -243,9 +243,10 @@ export default defineComponent({
         try {
           await HTTPAuth.get(url({ type: 'u', url: 'saas/usuarios/' + this.User?.data?.id + '/userPermicoes/', params: {} }))
             .then(res => {
-              setStorage('l', 'userPermicoes', JSON.stringify(res.data), 365)
-
-              if (this.User) this.User.Permicoes = new Set(res.data)
+              if (this.User) {
+                this.User.Permicoes = new Set(res.data)
+                setStorage('l', 'userPermicoes', JSON.stringify(this.User.Permicoes), 365)
+              }
             })
             .catch(err => console.log(err))
         } catch (error) {

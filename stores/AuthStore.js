@@ -518,13 +518,12 @@ export const UserStore = defineStore("user", {
           url({ type: 'u', url: `saas/users/${this.data?.id}/userPermicoes/`, params: {} })
         )
 
-        setStorage('l', 'userPermicoes', JSON.stringify(res.data), 365)
-
         this.Permicoes = new Set(
           (res.data || [])
             .map(p => p?.codename)
             .filter(Boolean)
         )
+        setStorage('l', 'userPermicoes', JSON.stringify(this.Permicoes), 365)
 
         return res
       }
