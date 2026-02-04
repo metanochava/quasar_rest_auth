@@ -144,7 +144,7 @@ export const UserStore = defineStore("user", {
     search: '',
     AllMenus: [],
     Settings: false,
-    Permicoes: [],
+    Permicoes: new Set(),
     access: null,
     refresh: null,
     LeftTop: true,
@@ -162,6 +162,13 @@ export const UserStore = defineStore("user", {
     perfil: (state) =>
       state.data?.perfil?.url ||
       "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+    // ⭐ NOVO (PERMISSÃO REATIVA)
+    hasPermission: (state) => (perm) =>
+      state.Permicoes.has(String(perm).toLowerCase()),
+
+    // ⭐ alias curto (mais bonito no template)
+    can: (state) => (perm) =>
+      state.Permicoes.has(String(perm).toLowerCase()),
   },
 
   actions: {
@@ -504,35 +511,25 @@ export const UserStore = defineStore("user", {
       }
     },
     
-    async getPermicoes () {
+   async getPermicoes () {
       if (getStorage('c', 'userSucursal') !== null) {
 
-        const rsp = await HTTPAuth.get(url({ type: 'u', url: 'saas/users/' + this.data?.id + '/userPermicoes/', params: { } }))
-          .then(res => {
-            setStorage('l', 'userPermicoes', JSON.stringify(res.data), 365)
-            this.Permicoes = res.data
-          }).catch(err => {
-            console.log(err)
-          })
-        return rsp
+        const res = await HTTPAuth.get(
+          url({ type: 'u', url: `saas/users/${this.data?.id}/userPermicoes/`, params: {} })
+        )
+
+        setStorage('l', 'userPermicoes', JSON.stringify(res.data), 365)
+
+        this.Permicoes = new Set(
+          (res.data || [])
+            .map(p => p?.codename)
+            .filter(Boolean)
+        )
+
+        return res
       }
     },
-    
-
-    isAuthorized (permission) {
-      let result = false
-      if (Array.isArray(this.Permicoes)) {
-        this.Permicoes.forEach(element => {
-          if (element.nome === permission) {
-            result = true
-          } else {
-
-          }
-        })
-      }
-      return true
-      // return result
-    },
+  
 
     perfilSplint (txt) {
       if (!txt) return null

@@ -245,7 +245,7 @@ export default defineComponent({
             .then(res => {
               setStorage('l', 'userPermicoes', JSON.stringify(res.data), 365)
 
-              if (this.User) this.User.Permicoes = res.data
+              if (this.User) this.User.Permicoes = new Set(res.data)
             })
             .catch(err => console.log(err))
         } catch (error) {

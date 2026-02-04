@@ -1,6 +1,12 @@
 
 import { getActivePinia } from 'pinia'
-import { LanguageStore } from '../stores/AuthStore'
+import { LanguageStore, UserStore } from '../stores/AuthStore'
+
+export const hasPermission = (texto = '') => {
+  if (!getActivePinia()) return false
+  const User = UserStore()
+  return User.Permicoes.has(texto)
+}
 
 export const traducao = (texto = '') => {
   if (!getActivePinia()) return texto

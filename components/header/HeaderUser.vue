@@ -204,7 +204,7 @@ export default defineComponent({
     this.User.Sucursal = this.User.safeParse(getStorage('c', 'userSucursal'))
     this.User.Grupo   = this.User.safeParse(getStorage('c', 'userGrupo'))
     this.User.Grupos   = this.User.safeParse(getStorage('c', 'userGrupos'))
-    this.User.Permicoes = this.User.safeParse(getStorage('l', 'userPermicoes'))
+    this.User.Permicoes = new Set(this.User.safeParse(getStorage('l', 'userPermicoes')))
 
     this.User.data   = this.User.safeParse(getStorage('c', 'user'))
     this.User.access   = getStorage('c', 'access')

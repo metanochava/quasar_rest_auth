@@ -1,37 +1,59 @@
 <template>
   <q-page padding>
 
+    <!-- ============================= -->
     <!-- HEADER -->
+    <!-- ============================= -->
     <div class="text-h5 q-mb-lg">
       🔧 {{ tdc('Scaffold Wizard') }}
     </div>
 
-    <q-stepper v-model="step" flat animated>
 
-      <!-- ========================= -->
-      <!-- STEP 1 -->
-      <!-- ========================= -->
-       {{}}
-      <q-step :name="1" :title="tdc('Module')" icon="folder">
+    <!-- ============================= -->
+    <!-- SEM PERMISSÃO -->
+    <!-- ============================= -->
+    <q-banner
+      v-if="!User.can('add_scaffold')"
+      class="bg-warning text-black"
+      rounded
+    >
+      {{ tdc('You do not have permission to access this feature') }}
+    </q-banner>
+
+
+    <!-- ============================= -->
+    <!-- STEPPER -->
+    <!-- ============================= -->
+    <q-stepper
+      v-else
+      v-model="step"
+      flat
+      animated
+    >
+
+      <!-- ====================================================== -->
+      <!-- STEP 1 — MODULE -->
+      <!-- ====================================================== -->
+      <q-step :name="1" icon="folder" :title="tdc('Module')">
 
         <q-select
           v-model="form.modulo"
           :options="apps"
-          :label="tdc('Select module')"
-          outlined
-          option-label="name"
-          option-value="name"
           emit-value
           map-options
+          option-label="name"
+          option-value="name"
+          :label="tdc('Select module')"
+          outlined
         />
 
       </q-step>
 
 
-      <!-- ========================= -->
-      <!-- STEP 2 -->
-      <!-- ========================= -->
-      <q-step :name="2" :title="tdc('Model')" icon="schema">
+      <!-- ====================================================== -->
+      <!-- STEP 2 — MODEL -->
+      <!-- ====================================================== -->
+      <q-step :name="2" icon="schema" :title="tdc('Model')">
 
         <q-input
           v-model="form.modelo"
@@ -40,6 +62,7 @@
         />
 
         <div v-if="existingModels.length" class="q-mt-md">
+
           <div class="text-caption text-grey">
             {{ tdc('Existing models') }}
           </div>
@@ -48,33 +71,38 @@
             v-for="m in existingModels"
             :key="m"
             dense
-            outlined
+            outline
           >
             {{ m }}
           </q-chip>
+
         </div>
 
       </q-step>
 
 
-      <!-- ========================= -->
-      <!-- STEP 3 — DRAG -->
-      <!-- ========================= -->
-      <q-step :name="3" :title="tdc('Fields')" icon="list">
+      <!-- ====================================================== -->
+      <!-- STEP 3 — FIELDS -->
+      <!-- ====================================================== -->
+      <q-step :name="3" icon="list" :title="tdc('Fields')">
 
         <VueDraggable
           v-model="form.fields"
-          handle=".drag"
           item-key="id"
-          class="column"
+          handle=".drag"
         >
 
           <template #item="{ element, index }">
 
-            <div class="row q-col-gutter-sm q-mb-sm items-center">
+            <div class="row q-col-gutter-sm items-center q-mb-sm">
 
-              <q-icon name="drag_indicator" class="drag cursor-pointer" />
+              <!-- drag -->
+              <q-icon
+                name="drag_indicator"
+                class="drag cursor-pointer"
+              />
 
+              <!-- name -->
               <div class="col-3">
                 <q-input
                   v-model="element.name"
@@ -83,6 +111,7 @@
                 />
               </div>
 
+              <!-- type -->
               <div class="col-3">
                 <q-select
                   v-model="element.type"
@@ -96,7 +125,11 @@
                 />
               </div>
 
-              <div class="col-3" v-if="isRelation(element.type)">
+              <!-- relation -->
+              <div
+                v-if="isRelation(element.type)"
+                class="col-3"
+              >
                 <q-input
                   v-model="element.relation"
                   :label="tdc('Relation app.Model')"
@@ -104,7 +137,9 @@
                 />
               </div>
 
+              <!-- delete -->
               <q-btn
+                v-if="User.can('change_scaffold')"
                 flat
                 icon="delete"
                 color="negative"
@@ -117,10 +152,13 @@
 
         </VueDraggable>
 
+
+        <!-- add field -->
         <q-btn
-          class="q-mt-md"
+          v-if="User.can('change_scaffold')"
           icon="add"
           outlined
+          class="q-mt-md"
           :label="tdc('Add field')"
           @click="addField"
         />
@@ -128,10 +166,10 @@
       </q-step>
 
 
-      <!-- ========================= -->
-      <!-- STEP 4 -->
-      <!-- ========================= -->
-      <q-step :name="4" :title="tdc('Preview')" icon="code">
+      <!-- ====================================================== -->
+      <!-- STEP 4 — PREVIEW -->
+      <!-- ====================================================== -->
+      <q-step :name="4" icon="code" :title="tdc('Preview')">
 
         <q-tabs v-model="tab">
           <q-tab name="model" :label="tdc('Model')" />
@@ -142,22 +180,42 @@
         <q-separator />
 
         <q-tab-panels v-model="tab">
-          <q-tab-panel name="model"><pre>{{ preview.model }}</pre></q-tab-panel>
-          <q-tab-panel name="serializer"><pre>{{ preview.serializer }}</pre></q-tab-panel>
-          <q-tab-panel name="view"><pre>{{ preview.view }}</pre></q-tab-panel>
+
+          <q-tab-panel name="model">
+            <pre>{{ preview.model }}</pre>
+          </q-tab-panel>
+
+          <q-tab-panel name="serializer">
+            <pre>{{ preview.serializer }}</pre>
+          </q-tab-panel>
+
+          <q-tab-panel name="view">
+            <pre>{{ preview.view }}</pre>
+          </q-tab-panel>
+
         </q-tab-panels>
 
       </q-step>
 
 
-      <!-- ========================= -->
-      <!-- NAV -->
-      <!-- ========================= -->
+      <!-- ====================================================== -->
+      <!-- NAVIGATION -->
+      <!-- ====================================================== -->
       <template #navigation>
 
-        <q-btn flat :label="tdc('Back')" @click="step--" :disable="step===1" />
+        <q-btn
+          flat
+          :label="tdc('Back')"
+          @click="step--"
+          :disable="step===1"
+        />
 
-        <q-btn v-if="step<4" color="primary" :label="tdc('Next')" @click="step++" />
+        <q-btn
+          v-if="step < 4"
+          color="primary"
+          :label="tdc('Next')"
+          @click="step++"
+        />
 
         <q-btn
           v-else
@@ -165,7 +223,7 @@
           icon="rocket_launch"
           :label="tdc('Create')"
           :loading="loading"
-          :disable="!canSubmit"
+          :disable="!canSubmit || !User.can('add_scaffold')"
           @click="submit"
         />
 
@@ -175,17 +233,21 @@
 
   </q-page>
 </template>
-
-
-
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { VueDraggable } from 'vue-draggable-plus'
 import { Notify } from 'quasar'
+import { VueDraggable } from 'vue-draggable-plus'
+import { useRoute } from 'vue-router'
 
-import { HTTPAuth, tdc, autoLabel } from '@metano/quasar_rest_auth'
+import {
+  HTTPAuth,
+  tdc,
+  autoLabel,
+  UserStore
+} from './../../index'
 
+const User = UserStore()
+const route = useRoute()
 
 const step = ref(1)
 const tab = ref('model')
@@ -209,20 +271,28 @@ const preview = ref({
 
 const rawTypes = [
   'CharField','TextField','IntegerField','DecimalField','BooleanField',
-  'ForeignKey','OneToOneField','ManyToManyField',
-  'FileField','ImageField','JSONField','MoneyField'
+  'ForeignKey','ManyToManyField','FileField','ImageField','JSONField','MoneyField'
 ]
 
 const typeOptions = computed(() =>
-  rawTypes.map(t => ({ label: tdc(t), value: t }))
+  rawTypes.map(t => ({
+    label: tdc(t),
+    value: t
+  }))
 )
 
 const canSubmit = computed(() =>
-  form.value.modulo && form.value.modelo && form.value.fields.length
+  form.value.modulo &&
+  form.value.modelo &&
+  form.value.fields.length
 )
 
 function addField() {
-  form.value.fields.push({ id: Date.now(), name: '', type: 'CharField' })
+  form.value.fields.push({
+    id: Date.now(),
+    name: '',
+    type: 'CharField'
+  })
 }
 
 function removeField(i) {
@@ -230,13 +300,18 @@ function removeField(i) {
 }
 
 function isRelation(t) {
-  return ['ForeignKey','OneToOneField','ManyToManyField'].includes(t)
+  return ['ForeignKey','ManyToManyField'].includes(t)
 }
 
 function notifyFromApi(data) {
-  if (data?.alert_success) Notify.create({ type:'positive', message:data.alert_success })
-  if (data?.alert_error) Notify.create({ type:'negative', message:data.alert_error })
-  if (data?.alert_warning) Notify.create({ type:'warning', message:data.alert_warning })
+  if (data?.alert_success)
+    Notify.create({ type:'positive', message:data.alert_success })
+
+  if (data?.alert_error)
+    Notify.create({ type:'negative', message:data.alert_error })
+
+  if (data?.alert_warning)
+    Notify.create({ type:'warning', message:data.alert_warning })
 }
 
 async function loadApps() {
@@ -244,34 +319,29 @@ async function loadApps() {
   apps.value = data.apps || []
 }
 
-watch(() => form.value.modulo, async (m) => {
+watch(() => form.value.modulo, async m => {
   if (!m) return
   const { data } = await HTTPAuth.get(`/saas/modulos/${m}/`)
   existingModels.value = data.models || []
 })
 
-watch(form, async () => {
-  if (!form.value.modelo) return
-  const { data } = await HTTPAuth.post('/saas/scaffold-preview/', form.value)
-  preview.value = data
-}, { deep:true })
-
 async function submit() {
   loading.value = true
+
   try {
     const { data } = await HTTPAuth.post('/saas/scaffold/', form.value)
     notifyFromApi(data)
     step.value = 1
     form.value = { modulo:'', modelo:'', fields:[] }
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
 
-const route = useRoute()
-
 onMounted(() => {
   loadApps()
-  if (route.query.module) form.value.modulo = route.query.module
+  if (route.query.module)
+    form.value.modulo = route.query.module
 })
 </script>
