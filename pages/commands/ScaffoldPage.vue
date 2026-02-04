@@ -126,7 +126,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { Notify } from 'quasar'
-import { HTTPAuth, tdc, UserStore } from '@/index'
+import { HTTPAuth, tdc, UserStore } from './../../index'
 
 const User = UserStore()
 
