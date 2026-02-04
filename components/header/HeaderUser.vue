@@ -196,26 +196,10 @@ export default defineComponent({
   async mounted () {
 
     this.sucursalClosed = false
-
     /* ---------- LEITURA SEGURA ---------- */
-    this.User.Entidade = this.User.safeParse(getStorage('c', 'userEntidade'))
-    this.User.Sucursals = this.User.safeParse(getStorage('c', 'userSucursals'))
-    this.User.Entidades = this.User.safeParse(getStorage('c', 'userEntidades'))
-    this.User.Sucursal = this.User.safeParse(getStorage('c', 'userSucursal'))
-    this.User.Grupo   = this.User.safeParse(getStorage('c', 'userGrupo'))
-    this.User.Grupos   = this.User.safeParse(getStorage('c', 'userGrupos'))
-    this.User.Permicoes = new Set(this.User.safeParse(getStorage('l', 'userPermicoes')))
-
-    this.User.data   = this.User.safeParse(getStorage('c', 'user'))
-    this.User.access   = getStorage('c', 'access')
-    this.User.refresh   = getStorage('c', 'refresh')
-
-    this.User.RightTop   = ('' + getStorage('c', 'right_top')).toLowerCase() === 'true'
-    this.User.LeftTop   = ('' + getStorage('c', 'left_top')).toLowerCase() === 'true'
-    
+    this.User.loadFromStorage()
     await this.User.getEntidades()
-
     this.startSessionWatcher()
-  }
+  } 
 })
 </script>

@@ -510,25 +510,46 @@ export const UserStore = defineStore("user", {
         return rsp 
       }
     },
-    
-   async getPermicoes () {
+    async getPermicoes () {
       if (getStorage('c', 'userSucursal') !== null) {
 
         const res = await HTTPAuth.get(
           url({ type: 'u', url: `saas/users/${this.data?.id}/userPermicoes/`, params: {} })
         )
 
-        this.Permicoes = new Set(
-          (res.data || [])
-            .map(p => p?.codename)
-            .filter(Boolean)
-        )
-        setStorage('l', 'userPermicoes', JSON.stringify(this.Permicoes), 365)
+        const perms = (res.data || [])
+          .map(p => p?.codename?.toLowerCase())
+          .filter(Boolean)
+
+        // ⭐ store usa Set
+        this.Permicoes = new Set(perms)
+
+        // ⭐ storage usa ARRAY
+        setStorage('l', 'userPermicoes', JSON.stringify(perms), 365)
 
         return res
       }
     },
-  
+
+    loadFromStorage () {
+      this.Entidade = this.safeParse(getStorage('c', 'userEntidade'))
+      this.Sucursals = this.safeParse(getStorage('c', 'userSucursals'))
+      this.Entidades = this.safeParse(getStorage('c', 'userEntidades'))
+      this.Sucursal = this.safeParse(getStorage('c', 'userSucursal'))
+      this.Grupo   = this.safeParse(getStorage('c', 'userGrupo'))
+      this.Grupos   = this.safeParse(getStorage('c', 'userGrupos'))
+
+      this.data   = this.safeParse(getStorage('c', 'user'))
+      this.access   = getStorage('c', 'access')
+      this.refresh   = getStorage('c', 'refresh')
+
+      this.RightTop   = ('' + getStorage('c', 'right_top')).toLowerCase() === 'true'
+      this.LeftTop   = ('' + getStorage('c', 'left_top')).toLowerCase() === 'true'
+
+      const perms = this.safeParse(getStorage('l', 'userPermicoes'))
+      this.Permicoes = new Set(Array.isArray(perms) ? perms : [])
+    },
+      
 
     perfilSplint (txt) {
       if (!txt) return null
