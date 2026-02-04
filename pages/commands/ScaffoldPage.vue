@@ -293,7 +293,7 @@ watch(()=>form.value.modulo, async m=>{
 /* LOAD FIELDS SE EXISTIR */
 async function nextStep(){
   if(step.value===2 && modelExists.value){
-    const {data} = await HTTPAuth.get(`/saas/modulos/${form.value.modulo}/${form.value.modelo}/`)
+    const {data} = await HTTPAuth.get(`/saas/modulos/${form.value.modulo}/${form.value.modelo}/schema/`)
     form.value.fields = data.fields.map(f=>({ id:Date.now()+Math.random(), ...f }))
   }
   step.value++
