@@ -9,7 +9,7 @@
       <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
     </div>
 
-
+{{ form }}
     <div class="row q-col-gutter-md">
 
       <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
