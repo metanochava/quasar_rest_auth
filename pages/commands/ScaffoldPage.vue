@@ -9,11 +9,10 @@
       <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
     </div>
 
-{{ form }}
     <div class="row q-col-gutter-md">
 
       <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
-      <div class="col-5">
+      <div class="col-3">
 
         <q-card flat bordered class="">
 
@@ -38,7 +37,7 @@
 
             />
 
-            <q-input
+            <q-input dense
               v-model="form.modelo"
               label="Model Name"
               class="q-mt-sm"
@@ -73,9 +72,10 @@
 
               <div class="q-pa-sm column q-gutter-sm">
 
-                <q-input v-model="f.name" label="name" outlined />
+                <q-input dense v-model="f.name" label="name" outlined />
 
                 <q-select
+                  dense
                   v-model="f.type"
                   :options="rawTypes"
                   label="type"
@@ -85,18 +85,18 @@
                 <q-toggle v-model="f.required" label="required"/>
                 <q-toggle v-model="f.unique" label="unique"/>
 
-                <q-input v-model="f.default" label="default" outlined/>
+                <q-input dense v-model="f.default" label="default" outlined/>
 
                 <!-- CHAR -->
                 <div v-if="isChar(f)">
-                  <q-input v-model.number="f.max_length" type="number" label="max_length" outlined/>
-                  <q-input v-model.number="f.min_length" type="number" label="min_length" outlined/>
+                  <q-input  dense v-model.number="f.max_length" type="number" label="max_length" outlined/>
+                  <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
                 </div>
 
                 <!-- NUMERIC -->
                 <div v-if="isNumeric(f)">
-                  <q-input v-model.number="f.min" label="min" outlined/>
-                  <q-input v-model.number="f.max" label="max" outlined/>
+                  <q-input dense v-model.number="f.min" label="min" outlined/>
+                  <q-input dense v-model.number="f.max" label="max" outlined/>
                 </div>
 
                 <!-- RELATION -->
@@ -120,7 +120,6 @@
                     label="model"
                     outlined
                     dense 
-                    
                   />
 
                   <q-select
@@ -128,17 +127,16 @@
                     v-model="f.on_delete"
                     :options="onDeletes"
                     label="on_delete"
-                    
-                    
+                    dense
                   />
                 </div>
 
                 <!-- FILE -->
                 <div v-if="isFile(f)">
-                  <q-input v-model="f.upload_to" label="upload_to" outlined/>
+                  <q-input v-model="f.upload_to" label="upload_to" outlined dense/>
                 </div>
 
-                <q-btn flat color="negative" label="remove" @click="removeField(i)"/>
+                <q-btn flat color="negative" label="remove" @click="removeField(i)" dense/>
 
               </div>
 
@@ -153,7 +151,7 @@
         <q-card flat bordered class=" q-mt-md">
           <q-card-section>
             🔐 Extra Permissions
-            <q-input v-model="permInput" @keyup.enter="addPerm"/>
+            <q-input dense v-model="permInput" @keyup.enter="addPerm"/>
             <q-chip
               v-for="(p,i) in form.permissions"
               :key="i"
@@ -170,7 +168,7 @@
 
 
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
-      <div class="col-7">
+      <div class="col-9">
 
         <q-tabs v-model="tab" dense >
 
