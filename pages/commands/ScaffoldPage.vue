@@ -205,7 +205,11 @@
 
 
 <script>
-import api from 'boot/axios'
+
+import { ref, computed, watch, onMounted } from 'vue'
+import { HTTPAuth, tdc, UserStore } from './../../index'
+
+const User = UserStore()
 
 export default {
 
@@ -284,13 +288,13 @@ export default {
 
 
     async generatePreview () {
-      const { data } = await api.post('/saas/scaffold/preview/', this.form)
+      const { data } = await HTTPAuth.post('/saas/scaffold/preview/', this.form)
       this.preview = data.data
     },
 
 
     async submit () {
-      await api.post('/saas/scaffold/', this.form)
+      await HTTPAuth.post('/saas/scaffold/', this.form)
     }
 
   }
