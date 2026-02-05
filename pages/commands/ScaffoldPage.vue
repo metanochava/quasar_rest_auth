@@ -304,7 +304,7 @@ export default {
 
 
 <style scoped>
-.code{
+/* .code{
   background:#111;
   padding:16px;
   border-radius:8px;
@@ -316,5 +316,5 @@ export default {
   top:0;
   z-index:5;
   background:#121212;
-}
+} */
 </style>
