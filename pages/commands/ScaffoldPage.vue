@@ -15,7 +15,7 @@
       <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
       <div class="col-5">
 
-        <q-card flat bordered class="bg-grey-10">
+        <q-card flat bordered class="">
 
           <q-card-section class="text-subtitle1">
             🧠 Setup
@@ -51,7 +51,7 @@
 
 
         <!-- ================= FIELDS ================= -->
-        <q-card flat bordered class="bg-grey-10 q-mt-md">
+        <q-card flat bordered class=" q-mt-md">
 
           <q-card-section class="row items-center">
             <div class="text-subtitle1">📋 Fields</div>
@@ -150,7 +150,7 @@
 
 
         <!-- ================= PERMISSIONS ================= -->
-        <q-card flat bordered class="bg-grey-10 q-mt-md">
+        <q-card flat bordered class=" q-mt-md">
           <q-card-section>
             🔐 Extra Permissions
             <q-input v-model="permInput" @keyup.enter="addPerm"/>
@@ -315,7 +315,7 @@ export default {
 
     async loadModels(f) {
       const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
-      f.models = data.apps
+      f.models = data.models
     },
   }
 }
