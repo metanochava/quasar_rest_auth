@@ -128,8 +128,8 @@
                     v-model="f.on_delete"
                     :options="onDeletes"
                     label="on_delete"
-                    dark
-                    filled
+                    
+                    
                   />
                 </div>
 
@@ -172,7 +172,7 @@
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       <div class="col-7">
 
-        <q-tabs v-model="tab" dense dark>
+        <q-tabs v-model="tab" dense >
 
           <q-tab name="model" label="Model"/>
           <q-tab name="serializer" label="Serializer"/>
@@ -335,6 +335,6 @@ export default {
   position:sticky;
   top:0;
   z-index:5;
-  background:#121212;
+  /* background:#121212; */
 } 
 </style>
