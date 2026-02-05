@@ -29,16 +29,20 @@
               v-model="form.modulo"
               :options="modules"
               label="Module"
-              dark
-              filled
+              outlined
+              dense 
+              map-options
+              emit-value
+              option-value="name"
+              option-label="name"
+
             />
 
             <q-input
               v-model="form.modelo"
               label="Model Name"
-              dark
-              filled
               class="q-mt-sm"
+              outlined
             />
 
           </q-card-section>
@@ -63,37 +67,36 @@
               v-for="(f,i) in form.fields"
               :key="i"
               :label="f.name || 'new_field'"
-              dark
+              
               expand-separator
             >
 
               <div class="q-pa-sm column q-gutter-sm">
 
-                <q-input v-model="f.name" label="name" dark filled />
+                <q-input v-model="f.name" label="name" outlined />
 
                 <q-select
                   v-model="f.type"
                   :options="rawTypes"
                   label="type"
-                  dark
-                  filled
+                  outlined
                 />
 
                 <q-toggle v-model="f.required" label="required"/>
                 <q-toggle v-model="f.unique" label="unique"/>
 
-                <q-input v-model="f.default" label="default" dark filled/>
+                <q-input v-model="f.default" label="default" outlined/>
 
                 <!-- CHAR -->
                 <div v-if="isChar(f)">
-                  <q-input v-model.number="f.max_length" type="number" label="max_length" dark filled/>
-                  <q-input v-model.number="f.min_length" type="number" label="min_length" dark filled/>
+                  <q-input v-model.number="f.max_length" type="number" label="max_length" outlined/>
+                  <q-input v-model.number="f.min_length" type="number" label="min_length" outlined/>
                 </div>
 
                 <!-- NUMERIC -->
                 <div v-if="isNumeric(f)">
-                  <q-input v-model.number="f.min" label="min" dark filled/>
-                  <q-input v-model.number="f.max" label="max" dark filled/>
+                  <q-input v-model.number="f.min" label="min" outlined/>
+                  <q-input v-model.number="f.max" label="max" outlined/>
                 </div>
 
                 <!-- RELATION -->
@@ -102,8 +105,12 @@
                     v-model="f.relModule"
                     :options="modules"
                     label="module"
-                    dark
-                    filled
+                    outlined
+                    dense 
+                    map-options
+                    emit-value
+                    option-value="name"
+                    option-label="name"
                     @update:model-value="loadModels(f)"
                   />
 
@@ -111,8 +118,9 @@
                     v-model="f.relation"
                     :options="f.models"
                     label="model"
-                    dark
-                    filled
+                    outlined
+                    dense 
+                    
                   />
 
                   <q-select
@@ -127,7 +135,7 @@
 
                 <!-- FILE -->
                 <div v-if="isFile(f)">
-                  <q-input v-model="f.upload_to" label="upload_to" dark filled/>
+                  <q-input v-model="f.upload_to" label="upload_to" outlined/>
                 </div>
 
                 <q-btn flat color="negative" label="remove" @click="removeField(i)"/>
