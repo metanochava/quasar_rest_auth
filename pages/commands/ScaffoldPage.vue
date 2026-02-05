@@ -306,7 +306,7 @@ export default {
     },
 
     async loadModels(f) {
-      const {data} = await HTTPAuth.get('/saas/modulos/')
+      const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
       f.models = data.apps
     },
   }
