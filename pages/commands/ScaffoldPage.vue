@@ -1,414 +1,316 @@
 <template>
-<q-page padding class="bg-grey-2">
+  <q-page class="bg-dark text-white q-pa-md">
 
-  <!-- ===================================================== -->
-  <!-- HEADER STICKY -->
-  <!-- ===================================================== -->
-  <div class="wizard-header bg-primary text-white q-pa-md">
-
-    <div class="row items-center justify-between">
-
-      <div class="text-h6">
-        🔧 {{ tdc('Scaffold IDE') }}
-      </div>
-
-      <div class="row q-gutter-sm">
-
-        <q-btn
-          v-if="User.can('delete_scaffold') && modelExists"
-          color="negative"
-          icon="delete"
-          @click="deleteModel"
-        />
-
-        <q-btn
-          v-if="User.can('change_scaffold')"
-          color="positive"
-          icon="save"
-          :loading="loading"
-          :label="modelExists ? tdc('Update') : tdc('Create')"
-          @click="submit"
-        />
-
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- ===================================================== -->
-  <!-- MODULE / MODEL -->
-  <!-- ===================================================== -->
-  <div class="row q-col-gutter-md q-mt-md">
-
-    <div class="col-3">
-      <q-select
-        v-model="form.modulo"
-        :options="apps"
-        option-label="name"
-        option-value="name"
-        emit-value
-        outlined
-        :label="tdc('Module')"
-      />
+    <!-- HEADER -->
+    <div class="row items-center q-mb-md sticky-header">
+      <div class="text-h6">⚡ Scaffold Command Wizard</div>
+      <q-space/>
+      <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
+      <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
     </div>
 
-    <div class="col-3">
-      <q-input
-        v-model="form.modelo"
-        outlined
-        :error="modelExists"
-        :error-message="tdc('Edit mode')"
-        :label="tdc('Model')"
-      />
-    </div>
 
-  </div>
+    <div class="row q-col-gutter-md">
 
+      <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
+      <div class="col-5">
 
-  <!-- ===================================================== -->
-  <!-- FIELDS -->
-  <!-- ===================================================== -->
-  <div class="q-mt-lg">
+        <q-card flat bordered class="bg-grey-10">
 
-    <div
-      v-for="(f,i) in form.fields"
-      :key="f.id"
-      class="q-mb-md"
-    >
-
-      <q-card flat bordered>
-
-        <!-- HEADER -->
-        <q-card-section
-          class="row items-center cursor-pointer"
-          @click="f.open=!f.open"
-        >
-
-          <q-icon :name="f.open?'expand_more':'chevron_right'" />
-          <div class="q-ml-sm text-subtitle2">{{ f.name || 'field_'+(i+1) }}</div>
-
-          <q-space/>
-
-          <q-chip dense outline>{{ f.type }}</q-chip>
-
-          <q-btn flat dense icon="arrow_upward" @click.stop="moveUp(i)" :disable="i===0"/>
-          <q-btn flat dense icon="arrow_downward" @click.stop="moveDown(i)" :disable="i===form.fields.length-1"/>
-
-          <q-btn
-            flat dense icon="delete"
-            color="negative"
-            v-if="User.can('delete_scaffold')"
-            @click.stop="removeField(i)"
-          />
-
-        </q-card-section>
-
-
-        <!-- BODY -->
-        <q-slide-transition>
-        <div v-show="f.open">
+          <q-card-section class="text-subtitle1">
+            🧠 Setup
+          </q-card-section>
 
           <q-separator/>
 
           <q-card-section>
 
-            <div class="row q-col-gutter-sm">
+            <q-select
+              v-model="form.modulo"
+              :options="modules"
+              label="Module"
+              dark
+              filled
+            />
 
-              <div class="col-3">
-                <q-input v-model="f.name" dense outlined
-                  :error="!f.name"
-                  :label="tdc('Name')" />
-              </div>
-
-              <div class="col-3">
-                <q-select v-model="f.type"
-                  :options="typeOptions"
-                  dense outlined
-                  :label="tdc('Type')" />
-              </div>
-
-              <q-toggle v-model="f.required" :label="tdc('Required')" />
-              <q-toggle v-model="f.unique" :label="tdc('Unique')" />
-
-              <div class="col-2">
-                <q-input v-model="f.default" dense outlined label="default"/>
-              </div>
-
-              <div class="col-2">
-                <q-input v-model="f.verbose_name" dense outlined label="verbose_name"/>
-              </div>
-
-              <div class="col-2">
-                <q-input v-model="f.help_text" dense outlined label="help_text"/>
-              </div>
-
-            </div>
-
-
-            <!-- RELATION -->
-            <div v-if="isRelation(f.type)" class="row q-col-gutter-sm q-mt-sm">
-
-              <div class="col-3">
-                <q-select
-                  v-model="f.relModule"
-                  :options="apps"
-                  option-label="name"
-                  option-value="name"
-                  outlined dense
-                  label="module"
-                  @update:model-value="loadRelationModels(f)"
-                />
-              </div>
-
-              <div class="col-3">
-                <q-select
-                  v-model="f.relation"
-                  :options="f.relModels"
-                  outlined dense
-                  label="model"
-                />
-              </div>
-
-              <div class="col-2">
-                <q-select
-                  v-model="f.on_delete"
-                  :options="onDeleteOptions"
-                  outlined dense
-                  label="on_delete"
-                />
-              </div>
-
-            </div>
-
-
-            <!-- FILE -->
-            <div v-if="isFile(f.type)" class="row q-col-gutter-sm q-mt-sm">
-
-              <div class="col-3">
-                <q-input v-model="f.upload_to" dense outlined label="upload_to"/>
-              </div>
-
-              <q-toggle
-                v-model="f.upload_mode_func"
-                label="file_path()"
-              />
-
-            </div>
-
-
-            <!-- NUMERIC -->
-            <div v-if="isNumeric(f.type)" class="row q-col-gutter-sm q-mt-sm">
-
-              <q-input v-model="f.min" dense outlined label="min"/>
-              <q-input v-model="f.max" dense outlined label="max"/>
-
-            </div>
-
-
-            <!-- CHAR -->
-            <div v-if="isChar(f.type)" class="row q-col-gutter-sm q-mt-sm">
-
-              <q-input v-model="f.max_length" dense outlined label="max_length"/>
-              <q-input v-model="f.min_length" dense outlined label="min_length"/>
-
-            </div>
-
-
-            <!-- DECIMAL -->
-            <div v-if="f.type==='DecimalField'" class="row q-col-gutter-sm q-mt-sm">
-
-              <q-input v-model="f.max_digits" dense outlined label="max_digits"/>
-              <q-input v-model="f.decimal_places" dense outlined label="decimal_places"/>
-
-            </div>
-
-
-            <!-- CHOICES -->
-            <div class="q-mt-sm">
-
-              <div class="text-caption">Choices</div>
-
-              <div
-                v-for="(c,ci) in f.choices"
-                :key="ci"
-                class="row q-col-gutter-xs"
-              >
-                <q-input dense v-model="c[0]" class="col"/>
-                <q-input dense v-model="c[1]" class="col"/>
-                <q-btn flat icon="delete" @click="f.choices.splice(ci,1)"/>
-              </div>
-
-              <q-btn flat icon="add" @click="f.choices.push(['',''])"/>
-
-            </div>
+            <q-input
+              v-model="form.modelo"
+              label="Model Name"
+              dark
+              filled
+              class="q-mt-sm"
+            />
 
           </q-card-section>
+        </q-card>
 
-        </div>
-        </q-slide-transition>
 
-      </q-card>
+
+        <!-- ================= FIELDS ================= -->
+        <q-card flat bordered class="bg-grey-10 q-mt-md">
+
+          <q-card-section class="row items-center">
+            <div class="text-subtitle1">📋 Fields</div>
+            <q-space/>
+            <q-btn dense icon="add" @click="addField" />
+          </q-card-section>
+
+          <q-separator/>
+
+          <q-list bordered>
+
+            <q-expansion-item
+              v-for="(f,i) in form.fields"
+              :key="i"
+              :label="f.name || 'new_field'"
+              dark
+              expand-separator
+            >
+
+              <div class="q-pa-sm column q-gutter-sm">
+
+                <q-input v-model="f.name" label="name" dark filled />
+
+                <q-select
+                  v-model="f.type"
+                  :options="rawTypes"
+                  label="type"
+                  dark
+                  filled
+                />
+
+                <q-toggle v-model="f.required" label="required"/>
+                <q-toggle v-model="f.unique" label="unique"/>
+
+                <q-input v-model="f.default" label="default" dark filled/>
+
+                <!-- CHAR -->
+                <div v-if="isChar(f)">
+                  <q-input v-model.number="f.max_length" type="number" label="max_length" dark filled/>
+                  <q-input v-model.number="f.min_length" type="number" label="min_length" dark filled/>
+                </div>
+
+                <!-- NUMERIC -->
+                <div v-if="isNumeric(f)">
+                  <q-input v-model.number="f.min" label="min" dark filled/>
+                  <q-input v-model.number="f.max" label="max" dark filled/>
+                </div>
+
+                <!-- RELATION -->
+                <div v-if="isRelation(f)">
+                  <q-select
+                    v-model="f.relModule"
+                    :options="modules"
+                    label="module"
+                    dark
+                    filled
+                    @update:model-value="loadModels(f)"
+                  />
+
+                  <q-select
+                    v-model="f.relation"
+                    :options="f.models"
+                    label="model"
+                    dark
+                    filled
+                  />
+
+                  <q-select
+                    v-if="f.type !== 'ManyToManyField'"
+                    v-model="f.on_delete"
+                    :options="onDeletes"
+                    label="on_delete"
+                    dark
+                    filled
+                  />
+                </div>
+
+                <!-- FILE -->
+                <div v-if="isFile(f)">
+                  <q-input v-model="f.upload_to" label="upload_to" dark filled/>
+                </div>
+
+                <q-btn flat color="negative" label="remove" @click="removeField(i)"/>
+
+              </div>
+
+            </q-expansion-item>
+
+          </q-list>
+        </q-card>
+
+
+
+        <!-- ================= PERMISSIONS ================= -->
+        <q-card flat bordered class="bg-grey-10 q-mt-md">
+          <q-card-section>
+            🔐 Extra Permissions
+            <q-input v-model="permInput" @keyup.enter="addPerm"/>
+            <q-chip
+              v-for="(p,i) in form.permissions"
+              :key="i"
+              removable
+              @remove="form.permissions.splice(i,1)"
+            >
+              {{ p }}
+            </q-chip>
+          </q-card-section>
+        </q-card>
+
+      </div>
+
+
+
+      <!-- ================= RIGHT (PREVIEW CODE) ================= -->
+      <div class="col-7">
+
+        <q-tabs v-model="tab" dense dark>
+
+          <q-tab name="model" label="Model"/>
+          <q-tab name="serializer" label="Serializer"/>
+          <q-tab name="view" label="View"/>
+          <q-tab name="service" label="Service"/>
+
+        </q-tabs>
+
+        <q-separator/>
+
+        <q-tab-panels v-model="tab" animated>
+
+          <q-tab-panel name="model">
+            <pre class="code">{{ preview.model }}</pre>
+          </q-tab-panel>
+
+          <q-tab-panel name="serializer">
+            <pre class="code">{{ preview.serializer }}</pre>
+          </q-tab-panel>
+
+          <q-tab-panel name="view">
+            <pre class="code">{{ preview.view }}</pre>
+          </q-tab-panel>
+
+          <q-tab-panel name="service">
+            <pre class="code">{{ preview.service }}</pre>
+          </q-tab-panel>
+
+        </q-tab-panels>
+
+      </div>
 
     </div>
 
-
-    <q-btn
-      v-if="User.can('change_scaffold')"
-      color="primary"
-      icon="add"
-      label="Add field"
-      @click="addField"
-    />
-
-  </div>
-
-
-
-  <!-- ===================================================== -->
-  <!-- PREVIEW -->
-  <!-- ===================================================== -->
-  <q-card class="q-mt-xl">
-
-    <q-tabs v-model="tab">
-      <q-tab name="model" label="Model"/>
-      <q-tab name="serializer" label="Serializer"/>
-      <q-tab name="view" label="View"/>
-    </q-tabs>
-
-    <q-tab-panels v-model="tab">
-
-      <q-tab-panel name="model"><pre class="code">{{ preview.model }}</pre></q-tab-panel>
-      <q-tab-panel name="serializer"><pre class="code">{{ preview.serializer }}</pre></q-tab-panel>
-      <q-tab-panel name="view"><pre class="code">{{ preview.view }}</pre></q-tab-panel>
-
-    </q-tab-panels>
-
-  </q-card>
-
-</q-page>
+  </q-page>
 </template>
 
 
 
-<script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { HTTPAuth, tdc, UserStore } from './../../index'
+<script>
+import api from 'boot/axios'
 
-const User = UserStore()
+export default {
 
-const loading = ref(false)
-const apps = ref([])
-const existingModels = ref([])
-const tab = ref('model')
+  name: 'ScaffoldCommandWizard',
 
-const form = ref({
-  modulo:'',
-  modelo:'',
-  fields:[],
-  permissions:[]
-})
+  data () {
+    return {
+
+      tab: 'model',
+
+      permInput: '',
+
+      modules: window.APP_MODULES || [],
+
+      rawTypes: [
+        'CharField','TextField','IntegerField','DecimalField','BooleanField',
+        'ForeignKey','OneToOneField','ManyToManyField',
+        'FileField','ImageField','JSONField','MoneyField'
+      ],
+
+      onDeletes: ['CASCADE','PROTECT','SET_NULL','SET_DEFAULT','DO_NOTHING','RESTRICT'],
+
+      form: {
+        modulo: '',
+        modelo: '',
+        fields: [],
+        permissions: []
+      },
+
+      preview: {
+        model: '',
+        serializer: '',
+        view: '',
+        service: ''
+      }
+
+    }
+  },
 
 
-/* ===================== */
+  methods: {
 
-const rawTypes = [
-  'CharField','TextField','SlugField','EmailField','URLField','UUIDField',
-  'IntegerField','BigIntegerField','SmallIntegerField','FloatField','DecimalField',
-  'BooleanField','DateField','DateTimeField','TimeField',
-  'FileField','ImageField','JSONField',
-  'ForeignKey','OneToOneField','ManyToManyField'
-]
+    addField () {
+      this.form.fields.push({
+        name: '',
+        type: 'CharField',
+        required: true
+      })
+    },
 
-const typeOptions = rawTypes.map(t=>({label:t,value:t}))
-const onDeleteOptions = ['CASCADE','SET_NULL','PROTECT','RESTRICT','SET_DEFAULT']
+    removeField (i) {
+      this.form.fields.splice(i,1)
+    },
 
-/* ===================== */
+    addPerm () {
+      if (!this.permInput) return
+      this.form.permissions.push(this.permInput)
+      this.permInput=''
+    },
 
-function addField(){
-  form.value.fields.push({
-    id:Date.now()+Math.random(),
-    open:true,
-    name:'',
-    type:'CharField',
-    required:true,
-    unique:false,
-    choices:[],
-    relModels:[]
-  })
+    isRelation (f) {
+      return ['ForeignKey','OneToOneField','ManyToManyField'].includes(f.type)
+    },
+
+    isFile (f) {
+      return ['FileField','ImageField'].includes(f.type)
+    },
+
+    isChar (f) {
+      return f.type === 'CharField'
+    },
+
+    isNumeric (f) {
+      return ['IntegerField','DecimalField'].includes(f.type)
+    },
+
+
+    async generatePreview () {
+      const { data } = await api.post('/saas/scaffold/preview/', this.form)
+      this.preview = data.data
+    },
+
+
+    async submit () {
+      await api.post('/saas/scaffold/', this.form)
+    }
+
+  }
 }
-
-function removeField(i){ form.value.fields.splice(i,1) }
-function moveUp(i){ const a=form.value.fields;[a[i-1],a[i]]=[a[i],a[i-1]] }
-function moveDown(i){ const a=form.value.fields;[a[i+1],a[i]]=[a[i],a[i+1]] }
-
-/* ===================== */
-
-const modelExists = computed(()=> existingModels.value.includes(form.value.modelo))
-
-const preview = ref({model:'',serializer:'',view:''})
-
-watch(form, async ()=>{
-  const {data} = await HTTPAuth.post('/saas/scaffold/preview/', form.value)
-  preview.value = data
-},{deep:true})
-
-/* ===================== */
-
-async function loadApps(){
-  const {data} = await HTTPAuth.get('/saas/modulos/')
-  apps.value = data.apps
-}
-
-async function loadRelationModels(f){
-  const {data} = await HTTPAuth.get(`/saas/modulos/${f.relModule}/`)
-  f.relModels = data.models
-}
-
-watch(()=>form.value.modulo, async m=>{
-  if(!m) return
-  const {data} = await HTTPAuth.get(`/saas/modulos/${m}/`)
-  existingModels.value = data.models
-})
-
-async function submit(){
-  loading.value=true
-
-  if(modelExists.value)
-    await HTTPAuth.put(`/saas/scaffold/${form.value.modulo}.${form.value.modelo}/`, form.value)
-  else
-    await HTTPAuth.post('/saas/scaffold/', form.value)
-
-  loading.value=false
-}
-
-async function deleteModel(){
-  await HTTPAuth.delete(`/saas/scaffold/${form.value.modulo}.${form.value.modelo}/`)
-}
-
-/* ===================== */
-
-function isRelation(t){return ['ForeignKey','OneToOneField','ManyToManyField'].includes(t)}
-function isFile(t){return ['FileField','ImageField'].includes(t)}
-function isChar(t){return ['CharField','SlugField','EmailField','URLField'].includes(t)}
-function isNumeric(t){return ['IntegerField','FloatField','DecimalField'].includes(t)}
-
-onMounted(loadApps)
 </script>
 
 
 
 <style scoped>
-.wizard-header{
+.code{
+  background:#111;
+  padding:16px;
+  border-radius:8px;
+  font-size:12px;
+  overflow:auto;
+}
+.sticky-header{
   position:sticky;
   top:0;
-  z-index:10;
-}
-.code{
-  background:#1e1e1e;
-  color:#9cdcfe;
-  padding:12px;
-  border-radius:8px;
-  font-family:monospace;
+  z-index:5;
+  background:#121212;
 }
 </style>
