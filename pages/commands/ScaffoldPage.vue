@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-dark text-white q-pa-md">
+  <q-page class=" q-pa-md">
 
     <!-- HEADER -->
     <div class="row items-center q-mb-md sticky-header">
@@ -222,7 +222,7 @@ export default {
 
       permInput: '',
 
-      modules: window.APP_MODULES || [],
+      modules: [],
 
       rawTypes: [
         'CharField','TextField','IntegerField','DecimalField','BooleanField',
@@ -249,6 +249,9 @@ export default {
     }
   },
 
+  mounted(){
+    this.loadApps()
+  },
 
   methods: {
 
@@ -295,8 +298,17 @@ export default {
 
     async submit () {
       await HTTPAuth.post('/saas/scaffold/', this.form)
-    }
+    },
 
+    async loadApps() {
+      const {data} = await HTTPAuth.get('/saas/modulos/')
+      this.modules = data.apps
+    },
+
+    async loadModels(f) {
+      const {data} = await HTTPAuth.get('/saas/modulos/')
+      f.models = data.apps
+    },
   }
 }
 </script>
@@ -304,7 +316,7 @@ export default {
 
 
 <style scoped>
-/* .code{
+.code{
   background:#111;
   padding:16px;
   border-radius:8px;
@@ -316,5 +328,5 @@ export default {
   top:0;
   z-index:5;
   background:#121212;
-} */
+} 
 </style>
