@@ -32,7 +32,8 @@
 
 import TopMenuSegundo from './TopMenuSegundo.vue'
 import { defineComponent } from 'vue'
-import { tdc, UserStore} from './../index'
+import { tdc } from '../boot/base'
+import { UserStore } from '../stores/AuthStore'
 import SearchMenu from './SearchMenu.vue';
 
 export default defineComponent({

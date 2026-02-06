@@ -10,8 +10,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { tdc, getStorage, setStorage  } from './../../index'
-
+import { tdc, getStorage, setStorage } from '../../boot/base'
 export default defineComponent({
   components: {
 

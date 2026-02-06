@@ -21,7 +21,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import {  UserStore, LanguageStore} from './../../index'
+import {  UserStore, LanguageStore} from '../../stores/AuthStore'
 
 
 export default defineComponent({

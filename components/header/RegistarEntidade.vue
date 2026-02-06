@@ -130,7 +130,9 @@
 <script>
 
 import { defineComponent } from 'vue'
-import { tdc,  HTTPAuth, url, getStorage, setStorage, UserStore  } from './../../index'
+import { HTTPAuth, url } from '../../boot/api'
+import { tdc, getStorage, setStorage } from '../../boot/base'
+import { UserStore } from '../../stores/AuthStore'
 
 export default defineComponent({
   name: 'RegistarEntidade',
