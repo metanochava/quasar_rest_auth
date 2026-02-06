@@ -16,7 +16,7 @@
 
         <q-card flat bordered class="">
 
-          <q-card-section class="text-subtitle1">
+          <q-card-section class="text-subtitle1" dense>
             🧠 Setup
           </q-card-section>
 
@@ -50,19 +50,20 @@
 
 
         <!-- ================= FIELDS ================= -->
-        <q-card flat bordered class=" q-mt-md">
+        <q-card flat bordered class=" q-mt-md" dense>
 
-          <q-card-section class="row items-center">
-            <div class="text-subtitle1">📋 Fields</div>
+          <q-card-section class="row items-center" dense>
+            <div class="text-subtitle1" dense>📋 Fields</div>
             <q-space/>
             <q-btn dense icon="add" @click="addField" />
           </q-card-section>
 
           <q-separator/>
 
-          <q-list bordered>
+          <q-list bordered dense>
 
-            <q-expansion-item
+            <q-expansion-item 
+              dense
               v-for="(f,i) in form.fields"
               :key="i"
               :label="f.name || 'new_field'"
@@ -82,10 +83,87 @@
                   outlined
                 />
 
-                <q-toggle v-model="f.required" label="required"/>
-                <q-toggle v-model="f.unique" label="unique"/>
+                <div class="row q-col-gutter-md">
+                  <div class="col">
+                    <q-toggle v-model="f.required" label="required" />
+                  </div>
+                  <div class="col">
+                    <q-toggle v-model="f.unique" label="unique" />
+                  </div>
+                </div>
+
 
                 <q-input dense v-model="f.default" label="default" outlined/>
+
+                <q-card class="q-pa-md" style="max-width: 500px">
+                  <q-card-section>
+                    <div class="text-h6">Choices</div>
+                  </q-card-section>
+
+                  <q-card-section class="q-gutter-md">
+                    <div class="row q-col-gutter-sm">
+  <div class="col">
+    <q-input
+      v-model="newChoice.label"
+      label="Label"
+      outlined
+      dense
+    />
+  </div>
+
+  <div class="col">
+    <q-input
+      v-model="newChoice.value"
+      label="Value"
+      outlined
+      dense
+    />
+  </div>
+</div>
+
+
+                    <q-btn
+                      label="Adicionar choice"
+                      color="primary"
+                      @click="addChoice(f)"
+                      :disable="!newChoice.label || !newChoice.value"
+                    />
+                  </q-card-section>
+
+                  <q-separator />
+
+                  <q-card-section>
+                    <div v-if="f.choices.length === 0" class="text-grey">
+                      Nenhum choice adicionado
+                    </div>
+
+                    <q-list bordered v-else>
+                      <q-item
+                        v-for="(choice, index) in f.choices"
+                        :key="index"
+                      >
+                        <q-item-section>
+                          <q-item-label>
+                            {{ choice.label }}
+                          </q-item-label>
+                          <q-item-label caption>
+                            value: {{ choice.value }}
+                          </q-item-label>
+                        </q-item-section>
+
+                        <q-item-section side>
+                          <q-btn
+                            icon="delete"
+                            color="negative"
+                            flat
+                            round
+                            @click="removeChoice(index)"
+                          />
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-card-section>
+                </q-card>
 
                 <!-- CHAR -->
                 <div v-if="isChar(f)">
@@ -228,6 +306,11 @@ export default {
 
       permInput: '',
 
+      newChoice :{
+        label: '',
+        value: ''
+      },
+
       modules: [],
 
       rawTypes: [
@@ -315,6 +398,20 @@ export default {
       const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
       f.models = data.models
     },
+
+
+
+
+    addChoice(f){
+      f.choices.push({ ...newChoice })
+
+      newChoice.label = ''
+      newChoice.value = ''
+    },
+
+    removeChoice (f, index){
+      f.choices.splice(index, 1)
+    }
   }
 }
 </script>
@@ -336,3 +433,6 @@ export default {
   /* background:#121212; */
 } 
 </style>
+
+
+

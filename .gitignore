@@ -10,6 +10,7 @@
 # Don't sync user-specific files
 .project/complete_drafts.txt
 .project/localProjectSettings.json
+.project/localProjectSwap.json
 copilot-messages.log
 
 # Archive formats
