@@ -134,7 +134,6 @@
 <script>
 import { defineComponent } from 'vue'
 import { tdc } from '../../boot/base'
-import { getStorage } from '../../boot/base'
 import { UserStore } from '../../stores/AuthStore'
 import RegistarEntidade from './RegistarEntidade.vue'
 
@@ -179,8 +178,9 @@ export default defineComponent({
       if (!val) return
       if (this.User.Entidade){
         this.$router.push({ name: 'login' , query: { entidade: this.User.Entidade.id}})
+      }else{
+        this.$router.push({ name: 'login' })
       }
-      this.$router.push({ name: 'login' })
     }
   },
 
