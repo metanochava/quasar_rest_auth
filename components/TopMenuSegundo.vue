@@ -19,7 +19,7 @@
 <script >
 
 import { defineComponent } from 'vue'
-import { tdc, UserStore, AuthStore } from './../../index'
+import { tdc, UserStore, AuthStore } from './../index'
 import SubMenu from './SubMenu.vue'
 
 

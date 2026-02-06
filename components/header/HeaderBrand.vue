@@ -26,8 +26,8 @@
 <script>
 
 import { defineComponent } from 'vue'
-import { AuthStore, UserStore } from '../../stores/AuthStore'
-import { tdc } from '../../boot/app';
+
+import { tdc, AuthStore, UserStore } from './../../index'
 
 
 export default defineComponent({

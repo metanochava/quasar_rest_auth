@@ -39,7 +39,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { tdc } from './../../index'
+import { tdc } from './../index'
 
 export default defineComponent({
   name: 'SubMenu',

@@ -133,9 +133,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { tdc } from '../../boot/app'
-import { getStorage } from '../../boot/base'
-import { UserStore } from '../../stores/AuthStore'
+import { tdc, UserStore } from './../../index'
 import RegistarEntidade from './RegistarEntidade.vue'
 
 export default defineComponent({

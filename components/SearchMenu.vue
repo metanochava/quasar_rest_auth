@@ -11,7 +11,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { tdc, UserStore } from './../../index'
+import { tdc, UserStore } from './../index'
 
 
 export default defineComponent({
