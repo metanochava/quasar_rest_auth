@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import { tdc,  getStorage, setStorage, deleteStorage, HTTPAuth, HTTPClient, url } from './../index'
+import { getStorage, setStorage, deleteStorage } from '../boot/storage'
+import { HTTPAuth, HTTPClient, url } from '../boot/api'
+import { tdc } from '../boot/app'
 
 
 
