@@ -131,7 +131,7 @@
                       >
                         <q-item-section>
                           <q-item-label>
-                            {{ choice.label }}
+                            Vabel{{ choice.label }}
                           </q-item-label>
                           <q-item-label caption>
                             value: {{ choice.value }}
@@ -144,7 +144,7 @@
                             color="negative"
                             flat
                             round
-                            @click="removeChoice(index)"
+                            @click="removeChoice(f, index)"
                           />
                         </q-item-section>
                       </q-item>
