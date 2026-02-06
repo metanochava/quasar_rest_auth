@@ -6,7 +6,7 @@
 <script >
 
 import { defineComponent } from 'vue'
-import { tdc } from '../boot/app'
+import { tdc } from './../../index'
 
 
 export default defineComponent({
