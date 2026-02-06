@@ -132,7 +132,7 @@
 import { defineComponent } from 'vue'
 import { HTTPAuth, url } from '../../boot/api'
 import { tdc } from '../../boot/base'
-import { deleteStorage, getStorage, setStorage } from '../../boot/base'
+import { deleteStorage, getStorage, setStorage } from '../../boot/storage'
 import { UserStore } from '../../stores/AuthStore'
 
 export default defineComponent({
