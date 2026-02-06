@@ -6,6 +6,8 @@ export * from './utils/autoForm.js'
 export * from './boot/alerts.js'
 export * from './boot/api.js'
 export * from './boot/app.js'
+export * from './boot/base.js'
+export * from './boot/data.js'
 export * from './boot/storage.js'
 
 
