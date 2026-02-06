@@ -28,7 +28,8 @@
   </q-page>
 </template>
 
-<script setup></script>
+<script setup>
+</script>
 
 <style scoped>
 .welcome-card {
