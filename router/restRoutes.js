@@ -1,4 +1,4 @@
-import { tdc } from '../boot/app'
+import { tdc } from '../boot/base'
 
 export let restRoutes = [
   { 
