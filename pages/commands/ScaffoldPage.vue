@@ -8,7 +8,7 @@
       <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
       <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
     </div>
-
+{{form}}
     <div class="row q-col-gutter-md">
 
       <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
@@ -95,31 +95,31 @@
 
                 <q-input dense v-model="f.default" label="default" outlined/>
 
-                <q-card class="q-pa-md" style="max-width: 500px">
+                <q-card class="q-pa-md" >
                   <q-card-section>
                     <div class="text-h6">Choices</div>
                   </q-card-section>
 
                   <q-card-section class="q-gutter-md">
                     <div class="row q-col-gutter-sm">
-  <div class="col">
-    <q-input
-      v-model="newChoice.label"
-      label="Label"
-      outlined
-      dense
-    />
-  </div>
+                      <div class="col">
+                        <q-input
+                          v-model="newChoice.label"
+                          label="Label"
+                          outlined
+                          dense
+                        />
+                      </div>
 
-  <div class="col">
-    <q-input
-      v-model="newChoice.value"
-      label="Value"
-      outlined
-      dense
-    />
-  </div>
-</div>
+                      <div class="col">
+                        <q-input
+                          v-model="newChoice.value"
+                          label="Value"
+                          outlined
+                          dense
+                        />
+                      </div>
+                    </div>
 
 
                     <q-btn
@@ -356,6 +356,17 @@ export default {
       this.form.fields.splice(i,1)
     },
 
+    addChoice(f){
+      f.choices.push({ ...newChoice })
+
+      newChoice.label = ''
+      newChoice.value = ''
+    },
+
+    removeChoice (f, index){
+      f.choices.splice(index, 1)
+    },
+
     addPerm () {
       if (!this.permInput) return
       this.form.permissions.push(this.permInput)
@@ -398,20 +409,6 @@ export default {
       const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
       f.models = data.models
     },
-
-
-
-
-    addChoice(f){
-      f.choices.push({ ...newChoice })
-
-      newChoice.label = ''
-      newChoice.value = ''
-    },
-
-    removeChoice (f, index){
-      f.choices.splice(index, 1)
-    }
   }
 }
 </script>
