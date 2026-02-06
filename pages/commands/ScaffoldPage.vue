@@ -101,8 +101,8 @@
                     <div class="row q-col-gutter-sm q-pa-0">
                       <div class="col">
                         <q-input
-                          v-model="newChoice.label"
-                          label="Label"
+                          v-model="newChoice.key"
+                          label="Key"
                           outlined
                           dense
                           @keyup.enter="addChoice(f)"
@@ -111,8 +111,8 @@
 
                       <div class="col">
                         <q-input
-                          v-model="newChoice.value"
-                          label="Value"
+                          v-model="newChoice.label"
+                          label="Label"
                           outlined
                           dense
                           @keyup.enter="addChoice(f)"
@@ -131,10 +131,10 @@
                       >
                         <q-item-section>
                           <q-item-label>
-                            Vabel{{ choice.label }}
+                            Key:{{ choice.key }}
                           </q-item-label>
                           <q-item-label caption>
-                            value: {{ choice.value }}
+                            Label: {{ choice.label }}
                           </q-item-label>
                         </q-item-section>
 
@@ -305,7 +305,7 @@ export default {
 
       newChoice :{
         label: '',
-        value: ''
+        key: ''
       },
 
       modules: [],
@@ -356,12 +356,12 @@ export default {
     },
 
     addChoice(f){
-      if (this.newChoice.label!== '' && this.newChoice.value !== '' ){
+      if (this.newChoice.key!== '' && this.newChoice.label !== '' ){
         f.choices.push({ ...this.newChoice })
         this.newChoice.label = ''
-        this.newChoice.value = ''
+        this.newChoice.key = ''
       }else{
-        AlertError('Label, Value ou ambos estao vazios!')
+        AlertError('Label, Key ou ambos estao vazios!')
       }
    
     },
