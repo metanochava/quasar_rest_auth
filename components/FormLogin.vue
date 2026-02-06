@@ -73,9 +73,7 @@
 <script >
 
 import { defineComponent } from 'vue'
-import { tdc } from './../../index'
-import { AuthStore, UserStore } from '../stores/AuthStore'
-import { setStorage, getStorage } from '../boot/storage';
+import { tdc, AuthStore, UserStore, setStorage, getStorage  } from './../../index'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 

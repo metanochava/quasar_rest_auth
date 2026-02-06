@@ -11,8 +11,8 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { tdc } from './../../index'
-import { UserStore } from '../stores/AuthStore'
+import { tdc, UserStore } from './../../index'
+
 
 export default defineComponent({
   name: 'SearchMenu',

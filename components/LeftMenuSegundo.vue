@@ -40,8 +40,7 @@
 
 
 import { defineComponent } from 'vue'
-import { tdc } from './../../index'
-import { AuthStore, UserStore } from '../stores/AuthStore'
+import { tdc, UserStore, AuthStore  } from './../../index'
 import SearchMenu from './SearchMenu.vue'
 import SubMenu from './SubMenu.vue'
 

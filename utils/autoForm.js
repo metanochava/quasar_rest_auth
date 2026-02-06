@@ -1,5 +1,5 @@
-import { tdc } from './../../index'
-import { HTTPAuth } from '../boot/api'
+import { tdc, HTTPAuth } from './../../index'
+
 
 
 function toPluralEndpoint(modelName) {
