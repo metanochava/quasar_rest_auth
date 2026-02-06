@@ -1,4 +1,4 @@
-export const dateSplit = function (dataString = '') {
+export const ds = function (dataString = '') {
   try {
     dataString = dataString.replace('T', ' ')
   } catch (error) {

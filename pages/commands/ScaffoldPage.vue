@@ -280,13 +280,20 @@
 <script>
 
 import { ref, computed, watch, onMounted } from 'vue'
-import { HTTPAuth, tdc, UserStore } from './../../index'
+import { HTTPAuth, tdc, UserStore , AlertError} from './../../index'
 
-const User = UserStore()
+
 
 export default {
 
   name: 'ScaffoldCommandWizard',
+
+  setup () {
+    const User = UserStore()
+    return {
+      User
+    }
+  },
 
   data () {
     return {
@@ -331,6 +338,7 @@ export default {
     this.loadApps()
   },
 
+
   methods: {
 
     addField () {
@@ -347,10 +355,14 @@ export default {
     },
 
     addChoice(f){
-      f.choices.push({ ...this.newChoice })
-
-      newChoice.label = ''
-      newChoice.value = ''
+      if (this.newChoice.label!== '' && this.newChoice.value !== '' ){
+        f.choices.push({ ...this.newChoice })
+        this.newChoice.label = ''
+        this.newChoice.value = ''
+      }else{
+        AlertError('Label, Value ou ambos estao vazios!')
+      }
+   
     },
 
     removeChoice (f, index){

@@ -1,9 +1,7 @@
-import { traducao } from './base'
-import { dateSplit } from './data'
 
-let result = false
 
-export const api = 'api'
+
+export const apiBaseUrl =  process.env.API_BASE_URL
 export const thumbStyle = {
   right: '5px',
   borderRadius: '8px',
@@ -33,9 +31,6 @@ export const pegaDominio = function () {
 }
 
 
-export const tdc = traducao
-export const ds = dateSplit
-
 export const autoLabel = function (name) {
   if (!name) return ''
   
@@ -57,11 +52,6 @@ export const IsTipoEntidade = {
   }
 }
 
-export const isTipoEntidadeMe = function (x) {
-  const ite = decrypt(localStorage.getItem(('tipo_entidade_nome')) + '')
-  if (x === ite) { return true } else { return false }
-}
-
 export const urlBase = (url = '') => {
   if (url === '') {
     return process.env.API
@@ -77,10 +67,7 @@ export const urlBase = (url = '') => {
   }
 }
 
-
-
-
-export const MeIsTipoEntidade = (nome) => {
+export const isTipoEntidade = (nome) => {
   let result = false
   if (JSON.parse(getStorage('c', 'tipoEntidade'))?.nome === nome) {
     result = true

@@ -2,13 +2,7 @@
 import { getActivePinia } from 'pinia'
 import { LanguageStore, UserStore } from '../stores/AuthStore'
 
-export const hasPermission = (texto = '') => {
-  if (!getActivePinia()) return false
-  const User = UserStore()
-  return User.Permicoes.has(texto)
-}
-
-export const traducao = (texto = '') => {
+export const tdc = (texto = '') => {
   if (!getActivePinia()) return texto
 
   const store = LanguageStore()
@@ -16,8 +10,6 @@ export const traducao = (texto = '') => {
 
   return store.TraducaoMap[chave] || texto
 }
-
-
 
 let result = false
 export const localStorageSetItem = (key, value) => {
@@ -29,16 +21,12 @@ export const localStorageSetItem = (key, value) => {
   localStorage.setItem(encrypt(key), (value))
 }
 
-
-
 export const pegaDominio = function () {
   let pagelocalurl = location.href // pega endereço que esta no navegador
   pagelocalurl = pagelocalurl.split('/') // quebra o endeço de acordo com a / (barra)
   const dominiourl = pagelocalurl[0] + '//' + pagelocalurl[2]
   return dominiourl // retorna a parte www.endereco.com.brs@
 }
-
-
 
 
 function captura (texto = '') {
@@ -60,17 +48,6 @@ function replaceTraducao (texto = '', textDeTraducao = '') {
         : ''
     }
   )
-}
-
-
-export const MeIsTipoEntidade = function (entidade, permission) {
-  let result = false
-  // console.log(entidade.nome, permission)
-  if (entidade.nome === permission) {
-    result = true
-  }
-
-  return result
 }
 
 // Initialize the annoying-background directive.
