@@ -1,5 +1,5 @@
 import { Notify } from 'quasar'
-import { tdc } from './app'
+import { tdc } from './base'
 import { AlertStore } from '../stores/AuthStore'
 
 /* =========================
