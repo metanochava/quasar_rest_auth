@@ -143,6 +143,7 @@
                             icon="delete"
                             color="negative"
                             flat
+                            dense
                             round
                             @click="removeChoice(f, index)"
                           />
