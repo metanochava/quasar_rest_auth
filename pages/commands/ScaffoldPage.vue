@@ -95,19 +95,17 @@
 
                 <q-input dense v-model="f.default" label="default" outlined/>
 
-                <q-card class="q-pa-md" >
+                <q-card flat bordered class=" q-mt-md">
                   <q-card-section>
-                    <div class="text-h6">Choices</div>
-                  </q-card-section>
-
-                  <q-card-section class="q-gutter-md">
-                    <div class="row q-col-gutter-sm">
+                    ♋️ Choices
+                    <div class="row q-col-gutter-sm q-pa-0">
                       <div class="col">
                         <q-input
                           v-model="newChoice.label"
                           label="Label"
                           outlined
                           dense
+                          @keyup.enter="addChoice(f)"
                         />
                       </div>
 
@@ -117,22 +115,11 @@
                           label="Value"
                           outlined
                           dense
+                          @keyup.enter="addChoice(f)"
                         />
                       </div>
                     </div>
 
-
-                    <q-btn
-                      label="Adicionar choice"
-                      color="primary"
-                      @click="addChoice(f)"
-                      :disable="!newChoice.label || !newChoice.value"
-                    />
-                  </q-card-section>
-
-                  <q-separator />
-
-                  <q-card-section>
                     <div v-if="f.choices.length === 0" class="text-grey">
                       Nenhum choice adicionado
                     </div>
@@ -164,6 +151,8 @@
                     </q-list>
                   </q-card-section>
                 </q-card>
+
+                
 
                 <!-- CHAR -->
                 <div v-if="isChar(f)">
@@ -358,7 +347,7 @@ export default {
     },
 
     addChoice(f){
-      f.choices.push({ ...newChoice })
+      f.choices.push({ ...this.newChoice })
 
       newChoice.label = ''
       newChoice.value = ''
