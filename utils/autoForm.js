@@ -1,4 +1,4 @@
-import { tdc, HTTPAuth } from './../../index'
+import { tdc, HTTPAuth } from './../index'
 
 
 
