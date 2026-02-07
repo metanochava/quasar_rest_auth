@@ -77,6 +77,10 @@
                   <div class="col">
                     <q-input dense v-model="f.name" label="name" outlined />
                   </div>
+
+                  <div class="col">
+                    <q-input dense v-model="f.verbose_name" label="Verbose name" outlined />
+                  </div>
                   <div class="col">
                     <q-select
                       dense
@@ -85,6 +89,10 @@
                       label="type"
                       outlined
                     />
+                  </div>
+
+                  <div class="col">
+                    <q-input dense v-model="f.help_text" label="Help text" outlined />
                   </div>
                 </div>
 
