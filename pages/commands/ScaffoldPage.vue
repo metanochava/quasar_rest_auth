@@ -93,8 +93,8 @@
                     />
                   </div>
 
-                  <div class="col-12 q-mr-sm">
-                    <q-input dense v-model="f.help_text" label="Help text" outlined /> 
+                  <div class="col-12 q-pr-sm">
+                    <q-input dense v-model="f.help_text" label="Help text" outlined />
                   </div>
                 </div>
 
@@ -118,8 +118,6 @@
                     <q-input  dense v-model.number="f.max_length" type="number" label="max length" outlined/>
                   </div>
                 </div>
-
-
               
                 <q-card flat bordered class=" q-mt-md"  v-if="!(['ForeignKey','OneToOneField','ManyToManyField','FileField', 'ImageField', 'TextField'].includes(f.type))" >
                   <q-card-section>
