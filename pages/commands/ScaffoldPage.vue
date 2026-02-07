@@ -91,7 +91,7 @@
                     />
                   </div>
 
-                  <div class="col">
+                  <div class="col-12">
                     <q-input dense v-model="f.help_text" label="Help text" outlined />
                   </div>
                 </div>
@@ -108,7 +108,7 @@
                   </div>
                 </div>
 
-                <div  v-if="isChar(f) || isNumeric(f)" class="row q-gutter-sm q-col-gutter-sm q-mt-md">
+                <div  v-if="isChar(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
                   <div class="col">
                     <q-input dense v-model.number="f.min_length" type="number" label="min length" outlined/>
                   </div>
@@ -119,7 +119,7 @@
 
 
               
-                <q-card flat bordered class=" q-mt-md">
+                <q-card flat bordered class=" q-mt-md"  v-if="!(['ForeignKey','OneToOneField','ManyToManyField'].includes(f.type))" >
                   <q-card-section>
                     ♋️ Choices
                     <div class="row q-col-gutter-sm q-pa-0">
