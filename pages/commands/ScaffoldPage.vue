@@ -8,7 +8,6 @@
       <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
       <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
     </div>
-{{form}}
     <div class="row q-col-gutter-md">
 
       <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
@@ -252,19 +251,19 @@
         <q-tab-panels v-model="tab" animated>
 
           <q-tab-panel name="model">
-            <pre class="code">{{ preview.model }}</pre>
+            <pre class="code">{{ preview?.model }}</pre>
           </q-tab-panel>
 
           <q-tab-panel name="serializer">
-            <pre class="code">{{ preview.serializer }}</pre>
+            <pre class="code">{{ preview?.serializer }}</pre>
           </q-tab-panel>
 
           <q-tab-panel name="view">
-            <pre class="code">{{ preview.view }}</pre>
+            <pre class="code">{{ preview?.view }}</pre>
           </q-tab-panel>
 
           <q-tab-panel name="service">
-            <pre class="code">{{ preview.service }}</pre>
+            <pre class="code">{{ preview?.service }}</pre>
           </q-tab-panel>
 
         </q-tab-panels>
