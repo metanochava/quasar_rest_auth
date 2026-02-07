@@ -4,7 +4,7 @@
     <!-- HEADER -->
     
     <div class="row">
-      <q-card flat bordered class="">
+      <q-card flat bordered class="col">
 
         <q-card-section class="text-subtitle1" dense>
           <div class="row items-center q-mb-md sticky-header">
@@ -73,7 +73,7 @@
               expand-separator
             >
 
-              <div class="q-pa-sm column q-gutter-sm">
+              <div class="q-pa-sm  q-gutter-sm">
 
                 <div class="row q-col-gutter-md">
                   <div class="col">
@@ -102,9 +102,17 @@
                   </div>
                 </div>
 
+                <div  v-if="isChar(f) || isNumeric(f)" class="row q-col-gutter-md">
+                  <div class="col">
+                    <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
+                  </div>
+                  <div class="col">
+                    <q-input  dense v-model.number="f.max_length" type="number" label="max_length" outlined/>
+                  </div>
+                </div>
 
-                
 
+              
                 <q-card flat bordered class=" q-mt-md">
                   <q-card-section>
                     ♋️ Choices
@@ -162,19 +170,6 @@
                     </q-list>
                   </q-card-section>
                 </q-card>
-
-                
-
-                <!-- CHAR -->
-
-                <div  v-if="isChar(f) || isNumeric(f)" class="row q-col-gutter-md">
-                  <div class="col">
-                    <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
-                  </div>
-                  <div class="col">
-                    <q-input  dense v-model.number="f.max_length" type="number" label="max_length" outlined/>
-                  </div>
-                </div>
                 
                 <!-- RELATION -->
                 <div v-if="isRelation(f)">
