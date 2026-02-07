@@ -19,7 +19,7 @@
 
         <q-card-section>
 
-          <div class="row q-col-gutter-sm q-pa-0">
+          <div class="row q-pa-0">
             <div class="col">
               <q-select
                 v-model="form.modulo"
@@ -50,7 +50,7 @@
     <div class="row q-col-gutter-md">
 
       <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
-      <div class="col-3">
+      <div class="col-4">
         <!-- ================= FIELDS ================= -->
         <q-card flat bordered class=" q-mt-md" dense>
 
@@ -75,15 +75,20 @@
 
               <div class="q-pa-sm column q-gutter-sm">
 
-                <q-input dense v-model="f.name" label="name" outlined />
-
-                <q-select
-                  dense
-                  v-model="f.type"
-                  :options="rawTypes"
-                  label="type"
-                  outlined
-                />
+                <div class="row q-col-gutter-md">
+                  <div class="col">
+                    <q-input dense v-model="f.name" label="name" outlined />
+                  </div>
+                  <div class="col">
+                    <q-select
+                      dense
+                      v-model="f.type"
+                      :options="rawTypes"
+                      label="type"
+                      outlined
+                    />
+                  </div>
+                </div>
 
                 <div class="row q-col-gutter-md">
                   <div class="col">
@@ -92,10 +97,13 @@
                   <div class="col">
                     <q-toggle v-model="f.unique" label="unique" />
                   </div>
+                  <div class="col">
+                    <q-input dense v-model="f.default" label="default" outlined/>
+                  </div>
                 </div>
 
 
-                <q-input dense v-model="f.default" label="default" outlined/>
+                
 
                 <q-card flat bordered class=" q-mt-md">
                   <q-card-section>
@@ -158,17 +166,16 @@
                 
 
                 <!-- CHAR -->
-                <div v-if="isChar(f)">
-                  <q-input  dense v-model.number="f.max_length" type="number" label="max_length" outlined/>
-                  <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
-                </div>
 
-                <!-- NUMERIC -->
-                <div v-if="isNumeric(f)">
-                  <q-input dense v-model.number="f.min" label="min" outlined/>
-                  <q-input dense v-model.number="f.max" label="max" outlined/>
+                <div  v-if="isChar(f) || isNumeric(f)" class="row q-col-gutter-md">
+                  <div class="col">
+                    <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
+                  </div>
+                  <div class="col"></div>
+                    <q-input  dense v-model.number="f.max_length" type="number" label="max_length" outlined/>
+                  </div>
                 </div>
-
+                
                 <!-- RELATION -->
                 <div v-if="isRelation(f)">
                   <q-select
@@ -238,7 +245,7 @@
 
 
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
-      <div class="col-9">
+      <div class="col-8">
 
         <q-tabs v-model="tab" dense >
 
