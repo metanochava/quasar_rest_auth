@@ -429,7 +429,6 @@ export default {
 
 <style scoped>
 .code{
-  /* background:#111; */
   padding:16px;
   border-radius:8px;
   font-size:12px;
