@@ -73,7 +73,7 @@
 
               <div class="q-pa-sm  q-gutter-sm">
 
-                <div class="row q-col-gutter-md">
+                <div class="row q-col-gutter-md q-mt-md">
                   <div class="col">
                     <q-input dense v-model="f.name" label="name" outlined />
                   </div>
@@ -108,8 +108,6 @@
                     <q-input  dense v-model.number="f.max_length" type="number" label="max length" outlined/>
                   </div>
                 </div>
-
-
               
                 <q-card flat bordered class=" q-mt-md">
                   <q-card-section>
@@ -204,6 +202,7 @@
                         :options="onDeletes"
                         label="on_delete"
                         dense
+                        outlined
                       />
                     </div>
                   </div>
