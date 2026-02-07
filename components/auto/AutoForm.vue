@@ -16,7 +16,7 @@
 
 <script setup>
 import { reactive } from 'vue'
-import { tdc } from './../../index'
+import { tdc } from './../../boot/base'
 
 const props = defineProps({
   fields: { type: Array, default: () => [] },

@@ -96,8 +96,9 @@
 
 <script setup>
 import { ref, computed, reactive } from 'vue'
+import { HTTPAuth } from './../../boot/api'
 import { exportFile } from 'quasar'
-import { tdc, HTTPAuth } from './../../index'
+import { tdc } from './../../boot/base'
 
 
 const props = defineProps({
