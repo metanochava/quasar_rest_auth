@@ -1,25 +1,20 @@
 <template>
   <q-page class=" q-pa-md">
-
-    <!-- HEADER -->
-    <div class="row items-center q-mb-md sticky-header">
-      <div class="text-h6">⚡ Scaffold Command Wizard</div>
-      <q-space/>
-      <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
-      <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
-    </div>
-    <div class="ro">
+    <div class="row">
       <q-card flat bordered class="">
 
         <q-card-section class="text-subtitle1" dense>
-          🧠 Setup
+          <div class="text-h6">⚡ Scaffold Command Wizard</div>
+          <q-space/>
+          <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
+          <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
         </q-card-section>
 
         <q-separator/>
 
         <q-card-section>
 
-          <div class="row q-pa-0">
+          <div class="row q-pa-sm">
             <div class="col">
               <q-select
                 v-model="form.modulo"
@@ -62,7 +57,7 @@
 
           <q-separator/>
 
-          <q-list bordered dense>
+          <q-list bordered dense class="q-pa-sm">
 
             <q-expansion-item 
               dense
@@ -73,8 +68,7 @@
               expand-separator
             >
 
-              <div class="q-pa-sm column q-gutter-sm">
-
+              <div class="q-pa-sm  q-gutter-sm">
                 <div class="row q-col-gutter-md">
                   <div class="col">
                     <q-input dense v-model="f.name" label="name" outlined />
@@ -108,7 +102,7 @@
                 <q-card flat bordered class=" q-mt-md">
                   <q-card-section>
                     ♋️ Choices
-                    <div class="row q-col-gutter-sm q-pa-0">
+                    <div class="row q-col-gutter-sm ">
                       <div class="col">
                         <q-input
                           v-model="newChoice.key"
@@ -167,7 +161,7 @@
 
                 <!-- CHAR -->
 
-                <div  v-if="isChar(f) || isNumeric(f)" class="row q-col-gutter-md">
+                <div  v-if="isChar(f) || isNumeric(f)" class="row q-pa-sm q-col-gutter-md">
                   <div class="col">
                     <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
                   </div>
@@ -212,7 +206,6 @@
                 <div v-if="isFile(f)">
                   <q-input v-model="f.upload_to" label="upload_to" outlined dense/>
                 </div>
-
                 <q-btn flat color="negative" label="remove" @click="removeField(i)" dense/>
 
               </div>
@@ -221,8 +214,6 @@
 
           </q-list>
         </q-card>
-
-
 
         <!-- ================= PERMISSIONS ================= -->
         <q-card flat bordered class=" q-mt-md">
