@@ -62,14 +62,16 @@
           <q-separator/>
 
           <q-list bordered dense >
-            <q-expansion-item 
+            <q-expansion-item
               dense
-              v-for="(f,i) in form.fields"
+              v-for="(f, i) in form.fields"
               :key="i"
               :label="f.name || 'new_field'"
-              
+              group="fields"
+              :model-value="i === form.fields.length - 1"
               expand-separator
             >
+
 
               <div class="q-pa-sm  q-gutter-sm">
 
@@ -119,7 +121,7 @@
 
 
               
-                <q-card flat bordered class=" q-mt-md"  v-if="!(['ForeignKey','OneToOneField','ManyToManyField','FileField', 'ImageField'].includes(f.type))" >
+                <q-card flat bordered class=" q-mt-md"  v-if="!(['ForeignKey','OneToOneField','ManyToManyField','FileField', 'ImageField', 'TextField'].includes(f.type))" >
                   <q-card-section>
                     ♋️ Choices
                     <div class="row q-col-gutter-sm q-pa-0">
