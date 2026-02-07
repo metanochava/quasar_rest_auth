@@ -61,8 +61,7 @@
 
           <q-separator/>
 
-          <q-list bordered dense>
-
+          <q-list bordered dense >
             <q-expansion-item 
               dense
               v-for="(f,i) in form.fields"
@@ -97,7 +96,7 @@
                     <q-toggle v-model="f.unique" label="unique" />
                   </div>
                   <div class="col">
-                    <q-input dense v-model="f.default" label="default" outlined/>
+                    <q-input dense v-model="f.default" label="default" outlined />
                   </div>
                 </div>
 
@@ -189,7 +188,7 @@
                       />
                     </div>
 
-                    <div class="col"></div>
+                    <div class="col">
                       <q-select
                         v-model="f.relation"
                         :options="f.models"
