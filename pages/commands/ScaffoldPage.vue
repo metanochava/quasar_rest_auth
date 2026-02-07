@@ -171,7 +171,7 @@
                   <div class="col">
                     <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
                   </div>
-                  <div class="col"></div>
+                  <div class="col">
                     <q-input  dense v-model.number="f.max_length" type="number" label="max_length" outlined/>
                   </div>
                 </div>
