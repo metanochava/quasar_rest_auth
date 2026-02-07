@@ -8,46 +8,44 @@
       <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
       <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
     </div>
+    <div class="ro">
+      <q-card flat bordered class="">
+
+        <q-card-section class="text-subtitle1" dense>
+          🧠 Setup
+        </q-card-section>
+
+        <q-separator/>
+
+        <q-card-section>
+
+          <q-select
+            v-model="form.modulo"
+            :options="modules"
+            label="Module"
+            outlined
+            dense 
+            map-options
+            emit-value
+            option-value="name"
+            option-label="name"
+
+          />
+
+          <q-input dense
+            v-model="form.modelo"
+            label="Model Name"
+            class="q-mt-sm"
+            outlined
+          />
+
+        </q-card-section>
+      </q-card>
+    </div>
     <div class="row q-col-gutter-md">
 
       <!-- ================= LEFT (COMMAND STYLE FORM) ================= -->
       <div class="col-3">
-
-        <q-card flat bordered class="">
-
-          <q-card-section class="text-subtitle1" dense>
-            🧠 Setup
-          </q-card-section>
-
-          <q-separator/>
-
-          <q-card-section>
-
-            <q-select
-              v-model="form.modulo"
-              :options="modules"
-              label="Module"
-              outlined
-              dense 
-              map-options
-              emit-value
-              option-value="name"
-              option-label="name"
-
-            />
-
-            <q-input dense
-              v-model="form.modelo"
-              label="Model Name"
-              class="q-mt-sm"
-              outlined
-            />
-
-          </q-card-section>
-        </q-card>
-
-
-
         <!-- ================= FIELDS ================= -->
         <q-card flat bordered class=" q-mt-md" dense>
 
@@ -395,7 +393,13 @@ export default {
 
     async generatePreview () {
       const { data } = await HTTPAuth.post('/saas/scaffold/preview/', this.form)
-      this.preview = data
+
+      this.preview = data.data || data || {
+        model:'',
+        serializer:'',
+        view:'',
+        service:''
+      }
     },
 
 
