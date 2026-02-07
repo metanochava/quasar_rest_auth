@@ -217,11 +217,7 @@
                     </div>
                   </div>
                 </div>
-
-                <!-- FILE -->
-                <div v-if="isFile(f)">
-                  <q-input v-model="f.upload_to" label="upload_to" outlined dense/>
-                </div>
+                
                 <q-btn flat color="negative" label="remove" @click="removeField(i)" dense/>
 
               </div>
@@ -426,8 +422,6 @@ export default {
         if (f.relModule && f.relation) {
           field.relation = `${f.relModule}.${f.relation}`
         }
-
-        if (f.upload_to) field.upload_to = f.upload_to
 
         return field
       })
