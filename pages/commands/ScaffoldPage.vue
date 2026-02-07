@@ -91,8 +91,8 @@
                     />
                   </div>
 
-                  <div class="col-12">
-                    <q-input dense v-model="f.help_text" label="Help text" outlined />
+                  <div class="col-12 q-mr-sm">
+                    <q-input dense v-model="f.help_text" label="Help text" outlined /> 
                   </div>
                 </div>
 
@@ -103,7 +103,7 @@
                   <div class="col">
                     <q-toggle v-model="f.unique" label="unique" />
                   </div>
-                  <div class="col">
+                  <div class="col" v-if="!(['ForeignKey','OneToOneField','ManyToManyField'].includes(f.type))">
                     <q-input dense v-model="f.default" label="default" outlined />
                   </div>
                 </div>
@@ -119,7 +119,7 @@
 
 
               
-                <q-card flat bordered class=" q-mt-md"  v-if="!(['ForeignKey','OneToOneField','ManyToManyField'].includes(f.type))" >
+                <q-card flat bordered class=" q-mt-md"  v-if="!(['ForeignKey','OneToOneField','ManyToManyField','FileField', 'ImageField'].includes(f.type))" >
                   <q-card-section>
                     ♋️ Choices
                     <div class="row q-col-gutter-sm q-pa-0">
