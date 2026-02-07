@@ -423,12 +423,10 @@ export default {
         }
 
         // RELAÇÃO
-        if (f.relModule && f.relModel) {
-          field.relation = `${f.relModule}.${f.relModel}`
+        if (f.relModule && f.relation) {
+          field.relation = `${f.relModule}.${f.relation}`
         }
 
-        // upload
-        if (f.upload_func) field.upload_func = true
         if (f.upload_to) field.upload_to = f.upload_to
 
         return field
