@@ -7,7 +7,7 @@
       <q-card flat bordered class="col">
 
         <q-card-section class="text-subtitle1" dense>
-          <div class="row items-center q-mb-md sticky-header">
+          <div class="row items-center  sticky-header">
             <div class="text-h6">⚡ Scaffold Command Wizard</div>
             <q-space/>
             <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
@@ -19,7 +19,7 @@
 
         <q-card-section>
 
-          <div class="row items-center q-col-gutter-md q-pa-0">
+          <div class="row  q-col-gutter-md ">
             <div class="col">
               <q-select
                 v-model="form.modulo"
@@ -39,7 +39,6 @@
               <q-input dense
                 v-model="form.modelo"
                 label="Model Name"
-                class="q-mt-sm"
                 outlined
               />
             </div>
@@ -90,7 +89,7 @@
                   </div>
                 </div>
 
-                <div class="row q-col-gutter-md">
+                <div class="row q-col-gutter-md q-mt-md">
                   <div class="col">
                     <q-toggle v-model="f.required" label="required" />
                   </div>
@@ -102,12 +101,12 @@
                   </div>
                 </div>
 
-                <div  v-if="isChar(f) || isNumeric(f)" class="row q-col-gutter-md">
+                <div  v-if="isChar(f) || isNumeric(f)" class="row q-col-gutter-md q-mt-md">
                   <div class="col">
-                    <q-input dense v-model.number="f.min_length" type="number" label="min_length" outlined/>
+                    <q-input dense v-model.number="f.min_length" type="number" label="min length" outlined/>
                   </div>
                   <div class="col">
-                    <q-input  dense v-model.number="f.max_length" type="number" label="max_length" outlined/>
+                    <q-input  dense v-model.number="f.max_length" type="number" label="max length" outlined/>
                   </div>
                 </div>
 
@@ -173,34 +172,42 @@
                 
                 <!-- RELATION -->
                 <div v-if="isRelation(f)">
-                  <q-select
-                    v-model="f.relModule"
-                    :options="modules"
-                    label="module"
-                    outlined
-                    dense 
-                    map-options
-                    emit-value
-                    option-value="name"
-                    option-label="name"
-                    @update:model-value="loadModels(f)"
-                  />
 
-                  <q-select
-                    v-model="f.relation"
-                    :options="f.models"
-                    label="model"
-                    outlined
-                    dense 
-                  />
+                  <div class="row q-col-gutter-sm q-pa-0">
+                    <div class="col">
+                      <q-select
+                        v-model="f.relModule"
+                        :options="modules"
+                        label="module"
+                        outlined
+                        dense 
+                        map-options
+                        emit-value
+                        option-value="name"
+                        option-label="name"
+                        @update:model-value="loadModels(f)"
+                      />
+                    </div>
 
-                  <q-select
-                    v-if="f.type !== 'ManyToManyField'"
-                    v-model="f.on_delete"
-                    :options="onDeletes"
-                    label="on_delete"
-                    dense
-                  />
+                    <div class="col"></div>
+                      <q-select
+                        v-model="f.relation"
+                        :options="f.models"
+                        label="model"
+                        outlined
+                        dense 
+                      />
+                    </div>
+
+                    <div class="col" v-if="f.type !== 'ManyToManyField'">
+                      <q-select
+                        v-model="f.on_delete"
+                        :options="onDeletes"
+                        label="on_delete"
+                        dense
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <!-- FILE -->
