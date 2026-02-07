@@ -268,6 +268,7 @@
 
         </q-tab-panels>
 
+
       </div>
 
     </div>
@@ -394,7 +395,7 @@ export default {
 
     async generatePreview () {
       const { data } = await HTTPAuth.post('/saas/scaffold/preview/', this.form)
-      this.preview = data.data
+      this.preview = data
     },
 
 
