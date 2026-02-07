@@ -409,9 +409,39 @@ export default {
       return ['IntegerField','DecimalField'].includes(f.type)
     },
 
+    normalizeFields(fields) {
+      return fields.map(f => {
+        const field = {
+          name: f.name,
+          type: f.type,
+          verbose: f.verbose,
+          null: f.null,
+          blank: f.blank,
+          default: f.default,
+          choices: f.choices,
+          on_delete: f.on_delete,
+        }
+
+        // RELAÇÃO
+        if (f.relModule && f.relModel) {
+          field.relation = `${f.relModule}.${f.relModel}`
+        }
+
+        // upload
+        if (f.upload_func) field.upload_func = true
+        if (f.upload_to) field.upload_to = f.upload_to
+
+        return field
+      })
+    },
+
 
     async generatePreview () {
-      const { data } = await HTTPAuth.post('/saas/scaffold/preview/', this.form)
+      const payload = {
+        ...this.form,
+        fields: this.normalizeFields(this.form.fields)
+      }
+      const { data } = await HTTPAuth.post('/saas/scaffold/preview/', payload)
 
       this.preview = data.data || data || {
         model:'',
@@ -423,7 +453,11 @@ export default {
 
 
     async submit () {
-      await HTTPAuth.post('/saas/scaffold/', this.form)
+      const payload = {
+        ...this.form,
+        fields: this.normalizeFields(this.form.fields)
+      }
+      await HTTPAuth.post('/saas/scaffold/', payload)
     },
 
     async loadApps() {
