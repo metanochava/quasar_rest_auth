@@ -19,26 +19,31 @@
 
         <q-card-section>
 
-          <q-select
-            v-model="form.modulo"
-            :options="modules"
-            label="Module"
-            outlined
-            dense 
-            map-options
-            emit-value
-            option-value="name"
-            option-label="name"
+          <div class="row q-col-gutter-sm q-pa-0">
+            <div class="col">
+              <q-select
+                v-model="form.modulo"
+                :options="modules"
+                label="Module"
+                outlined
+                dense 
+                map-options
+                emit-value
+                option-value="name"
+                option-label="name"
 
-          />
+              />
+            </div>
 
-          <q-input dense
-            v-model="form.modelo"
-            label="Model Name"
-            class="q-mt-sm"
-            outlined
-          />
-
+            <div class="col">
+              <q-input dense
+                v-model="form.modelo"
+                label="Model Name"
+                class="q-mt-sm"
+                outlined
+              />
+            </div>
+          </div>
         </q-card-section>
       </q-card>
     </div>
@@ -424,7 +429,7 @@ export default {
 
 <style scoped>
 .code{
-  background:#111;
+  /* background:#111; */
   padding:16px;
   border-radius:8px;
   font-size:12px;
