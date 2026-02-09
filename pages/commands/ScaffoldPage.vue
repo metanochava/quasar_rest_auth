@@ -118,6 +118,26 @@
                     <q-input  dense v-model.number="f.max_length" type="number" label="max length" outlined/>
                   </div>
                 </div>
+
+
+                <div  v-if="isDecimal(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
+                  <div class="col">
+                    <q-input dense v-model.number="f.max_digits" type="number" label="max digits" outlined/>
+                  </div>
+                  <div class="col">
+                    <q-input  dense v-model.number="f.decimal_places" type="number" label="decimal_places" outlined/>
+                  </div>
+                </div>
+
+                <div  v-if="isInteger(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
+                  <div class="col">
+                    <q-input dense v-model.number="f.min" type="number" label="min" outlined/>
+                  </div>
+                  <div class="col">
+                    <q-input  dense v-model.number="f.max" type="number" label="max" outlined/>
+                  </div>
+                </div>
+                
               
                 <q-card flat bordered class=" q-mt-md"  v-if="!(['ForeignKey','OneToOneField','ManyToManyField','FileField', 'ImageField', 'TextField'].includes(f.type))" >
                   <q-card-section>
@@ -248,7 +268,10 @@
 
 
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
-      <div class="col-8">
+      <div class="col-8" v-if="out">
+        <pre class="code">{{ out }}</pre>
+      </div>
+      <div class="col-8" v-else>
 
         <q-tabs v-model="tab" dense >
 
@@ -314,6 +337,7 @@ export default {
 
       tab: 'model',
 
+      out: null,
       permInput: '',
 
       newChoice :{
@@ -401,8 +425,12 @@ export default {
       return f.type === 'CharField'
     },
 
-    isNumeric (f) {
-      return ['IntegerField','DecimalField'].includes(f.type)
+    isInteger (f) {
+      return f.type === 'IntegerField'
+    },
+
+    isDecimal (f) {
+      return f.type === 'DecimalField'
     },
 
     normalizeFields(fields) {
@@ -429,6 +457,7 @@ export default {
 
 
     async generatePreview () {
+      this.out=null
       const payload = {
         ...this.form,
         fields: this.normalizeFields(this.form.fields)
@@ -445,11 +474,13 @@ export default {
 
 
     async submit () {
+      this.out = 'response...'
       const payload = {
         ...this.form,
         fields: this.normalizeFields(this.form.fields)
       }
-      await HTTPAuth.post('/saas/scaffold/', payload)
+      const {data} = await HTTPAuth.post('/saas/scaffold/', payload)
+      this.out = data.out
     },
 
     async loadApps() {
