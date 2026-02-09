@@ -112,29 +112,29 @@
 
                 <div  v-if="isChar(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
                   <div class="col">
-                    <q-input dense v-model.number="f.min_length" type="number" label="min length" outlined/>
+                    <q-input dense v-model="f.min_length" type="number" label="min length" outlined/>
                   </div>
                   <div class="col">
-                    <q-input  dense v-model.number="f.max_length" type="number" label="max length" outlined/>
+                    <q-input  dense v-model="f.max_length" type="number" label="max length" outlined/>
                   </div>
                 </div>
 
 
                 <div  v-if="isDecimal(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
                   <div class="col">
-                    <q-input dense v-model.number="f.max_digits" type="number" label="max digits" outlined/>
+                    <q-input dense v-model="f.max_digits" type="number" label="max digits" outlined/>
                   </div>
                   <div class="col">
-                    <q-input  dense v-model.number="f.decimal_places" type="number" label="decimal_places" outlined/>
+                    <q-input  dense v-model="f.decimal_places" type="number" label="decimal places" outlined/>
                   </div>
                 </div>
 
                 <div  v-if="isInteger(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
                   <div class="col">
-                    <q-input dense v-model.number="f.min" type="number" label="min" outlined/>
+                    <q-input dense v-model="f.min" type="number" label="min" outlined/>
                   </div>
                   <div class="col">
-                    <q-input  dense v-model.number="f.max" type="number" label="max" outlined/>
+                    <q-input  dense v-model="f.max" type="number" label="max" outlined/>
                   </div>
                 </div>
                 
