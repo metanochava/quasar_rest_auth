@@ -131,14 +131,14 @@ async function createModule () {
   loading.value = true
   const moduleName = name.value.trim()
 
-  apps.value.push(moduleName)
+  apps.value.push({name: moduleName, models: []})
   name.value = ''
 
   try {
     await HTTPAuth.post('/saas/modulos/', { name: moduleName })
   } catch (e) {
     // rollback
-    apps.value = apps.value.filter(a => a !== moduleName)
+    apps.value = apps.value.filter(a => a.name !== moduleName)
     console.error(e)
   } finally {
     loading.value = false
@@ -163,7 +163,7 @@ function confirmDelete(app) {
 async function deleteModule(app) {
   const old = [...apps.value]
 
-  apps.value = apps.value.filter(a => a !== app)
+  apps.value = apps.value.filter(a => a.name !== app)
 
   try {
     await HTTPAuth.delete(`/saas/modulos/${app}/`)
