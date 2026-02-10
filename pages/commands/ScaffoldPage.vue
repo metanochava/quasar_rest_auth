@@ -444,6 +444,12 @@ export default {
           default: f.default,
           choices: f.choices,
           on_delete: f.on_delete,
+          min: f.min,
+          max: f.max,
+          min_length: f.min_length,
+          max_length: f.max_length,
+          max_digits: f.max_digits,
+          decimal_places: f.decimal_places
         }
 
         // RELAÇÃO
