@@ -126,22 +126,25 @@ async function loadApps () {
 // ----------------------------------
 
 async function createModule () {
-
-  if (!name.value) return
+  if (!name.value?.trim()) return
 
   loading.value = true
+  const moduleName = name.value.trim()
+
+  apps.value.push(moduleName)
+  name.value = ''
 
   try {
-
-    await HTTPAuth.post('/saas/modulos/', { name: name.value })
-
-    name.value = ''
-    await loadApps()
-
+    await HTTPAuth.post('/saas/modulos/', { name: moduleName })
+  } catch (e) {
+    // rollback
+    apps.value = apps.value.filter(a => a !== moduleName)
+    console.error(e)
   } finally {
     loading.value = false
   }
 }
+
 
 // ----------------------------------
 // DELETE
@@ -158,11 +161,17 @@ function confirmDelete(app) {
 }
 
 async function deleteModule(app) {
+  const old = [...apps.value]
 
-  await HTTPAuth.delete(`/saas/modulos/${app}/`).then( async res => {
-      await loadApps()
-  })
+  apps.value = apps.value.filter(a => a !== app)
+
+  try {
+    await HTTPAuth.delete(`/saas/modulos/${app}/`)
+  } catch (e) {
+    apps.value = old
+  }
 }
+
 
 // ----------------------------------
 // OPEN SCAFFOLD
