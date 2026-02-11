@@ -31,7 +31,7 @@
                 emit-value
                 option-value="name"
                 option-label="name"
-
+                @update:model-value="loadModelsSchema(f)"
               />
             </div>
 
@@ -43,7 +43,7 @@
               />
             </div>
             <div class="col" v-if="form.modelo in modules">
-              <q-btn color="primary" icon="save" label="Reload Model" @click="reloadModel" />
+              <q-btn color="primary" icon="reload" label="Reload Model" @click="reloadModelShema" />
             </div>
           </div>
         </q-card-section>
@@ -215,7 +215,7 @@
                         emit-value
                         option-value="name"
                         option-label="name"
-                        @update:model-value="loadModels(f)"
+                        @update:model-value="loadModelsRelation(f)"
                       />
                     </div>
 
@@ -481,7 +481,7 @@ export default {
       }
     },
 
-    async reloadModel(){
+    async reloadModelShema(){
       this.form.fields = await buildFormFromSchema(this.modules, this.form.modelo)
     },
 
@@ -500,9 +500,17 @@ export default {
       this.modules = data.apps
     },
 
+    async loadModelsRelation(f){
+      this.f.models = this.loadModels(f)
+    },
+
+    async loadModelsSchema(f){
+      this.modules = this.loadModels(f)
+    },
+
     async loadModels(f) {
       const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
-      f.models = data.models
+      return data.models
     },
   }
 }
