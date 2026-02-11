@@ -1,16 +1,7 @@
 import { tdc } from '../boot/base'
 
 export let restRoutes = [
-  { 
-    path: '/Teste', 
-    name: 'list_test', 
-    component: () => import('../components/MyTest.vue'), 
-    meta: { 
-      title: tdc('Lista de') + ' ' + tdc('Tests'), 
-      requiresAuth: true, 
-      requiredRole: 'list_test' 
-    } 
-  },
+
   { 
     path: '/view_scaffold', 
     name: 'view_scaffold', 
