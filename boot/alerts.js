@@ -57,12 +57,12 @@ const AlertSuccess = (data) => {
 
     // backend messages
     if (data?.data?.alert_success) {
-      sms = data.data.alert_success
+      sms = data?.data?.alert_success
       go = true
     }
 
     if (data?.data?.alert_info) {
-      sms = data.data.alert_info
+      sms = data?.data?.alert_info
       tipo = 'info'
       go = true
     }
@@ -90,28 +90,28 @@ const AlertError = (error) => {
 
   if (data?.status) {
 
-    if ([400,401,403].includes(data.status)) {
+    if ([400,401,403].includes(data?.status)) {
       sms = data?.data || 'Erro de autenticação'
       go = true
     }
 
-    if (data.status === 404) {
+    if (data?.status === 404) {
       sms = data?.data?.detail || 'Recurso não encontrado'
       go = true
     }
 
-    if (data.status === 413) {
+    if (data?.status === 413) {
       sms = 'Request Entity Too Large'
       go = true
     }
 
-    if (data.status === 500) {
+    if (data?.status === 500) {
       sms = 'Erro interno do servidor'
       go = true
     }
 
     if (data?.data?.alert_error) {
-      sms = data.data.alert_error
+      sms = data?.data?.alert_error
       go = true
     }
   }

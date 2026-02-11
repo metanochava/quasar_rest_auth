@@ -45,7 +45,7 @@
               :key="app.name"
               class="col-12 col-sm-3"
             >
-              <q-card bordered class="module-card">
+              <q-card bordered flat class="module-card">
 
                 <q-card-section class="row items-center">
 
@@ -131,7 +131,7 @@ async function createModule () {
   loading.value = true
   const moduleName = name.value.trim()
 
-  apps.value.push({name: moduleName, models: []})
+  apps.value.push({name: moduleName, models: 0})
   name.value = ''
 
   try {

@@ -143,8 +143,8 @@ HTTPAuth.interceptors.response.use(
     const Load = LoadStore()
     Load.dec()
     
-    Alert(error.response)
-    const status = error.response.status
+    Alert(error?.response)
+    const status = error.response?.status
 
     if (status === 401 || status === 403) {
       User.logout('N')
@@ -194,8 +194,8 @@ HTTPClient.interceptors.response.use(
     const Load = LoadStore()
     Load.dec()
     
-    Alert(error.response)
-    const status = error.response.status
+    Alert(error?.response)
+    const status = error?.response?.status
 
     if (status === 401 || status === 403) {
       User.logout('N')
