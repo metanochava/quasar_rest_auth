@@ -31,7 +31,7 @@
                 emit-value
                 option-value="name"
                 option-label="name"
-                @update:model-value="loadModelsSchema(f)"
+                @update:model-value="loadModelsSchema(form.modulo)"
               />
             </div>
 
@@ -215,7 +215,7 @@
                         emit-value
                         option-value="name"
                         option-label="name"
-                        @update:model-value="loadModelsRelation(f)"
+                        @update:model-value="loadModelsRelation(relModule)"
                       />
                     </div>
 
@@ -508,8 +508,8 @@ export default {
       this.modules = this.loadModels(f)
     },
 
-    async loadModels(f) {
-      const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
+    async loadModels(modulo) {
+      const {data} = await HTTPAuth.get('/saas/modulos/'+ modulo)
       return data.models
     },
   }
