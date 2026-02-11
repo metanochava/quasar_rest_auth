@@ -1,7 +1,7 @@
 <template>
   <q-page class=" q-pa-md">
 
-    <!-- HEADER -->
+    <!-- HEADER -->{{ form.fields }}
     
     <div class="row">
       <q-card flat bordered class="col">
@@ -41,6 +41,9 @@
                 label="Model Name"
                 outlined
               />
+            </div>
+            <div class="col" v-if="form.modelo in modules">
+              <q-btn color="primary" icon="save" label="Reload Model" @click="reloadModel" />
             </div>
           </div>
         </q-card-section>
@@ -317,7 +320,7 @@
 <script>
 
 import { ref, computed, watch, onMounted } from 'vue'
-import { HTTPAuth, tdc, UserStore , AlertError} from './../../index'
+import { HTTPAuth, tdc, UserStore , AlertError, buildFormFromSchema} from './../../index'
 
 
 
@@ -478,6 +481,9 @@ export default {
       }
     },
 
+    async reloadModel(){
+      this.form.fields = await buildFormFromSchema(this.modules, this.form.modelo)
+    },
 
     async submit () {
       this.out = 'response...'
