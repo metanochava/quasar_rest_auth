@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center col-md-6">
+  <div class="text-center col-md-4">
 
     <!-- LOADING -->
     <div v-if="loading" class="q-pa-md">
@@ -10,21 +10,21 @@
     <img
       v-else-if="User.Entidade?.logo?.url"
       :src="User.Entidade.logo.url"
-      style="width:25%"
+      style="width:40%"
     />
 
     <!-- FALLBACK TIPO ENTIDADE -->
     <img
       v-else-if="User.TipoEntidade?.icon?.url"
       :src="User.TipoEntidade.icon.url"
-      style="width:25%"
+      style="width:40%"
     />
 
     <!-- FALLBACK FINAL -->
     <img
       v-else
       src="https://placehold.co/400x300/png"
-      style="width:25%"
+      style="width:40%"
     />
 
     
