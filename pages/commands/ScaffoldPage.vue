@@ -42,8 +42,7 @@
                 outlined
               />
             </div>
-            {{form.modelo}} | {{models}}
-            <div class="col" v-if="form.modelo in models">
+            <div class="col" v-if="models.includes(form.modelo)">
               <q-btn color="primary" icon="reload" label="Reload Model" @click="reloadModelShema" />
             </div>
           </div>
@@ -216,7 +215,7 @@
                         emit-value
                         option-value="name"
                         option-label="name"
-                        @update:model-value="loadModelsRelation(f.relModule)"
+                        @update:model-value="loadModelsRelation(f)"
                       />
                     </div>
 
@@ -503,7 +502,7 @@ export default {
     },
 
     async loadModelsRelation(f){
-      const {data} = await HTTPAuth.get('/saas/modulos/'+ f)
+      const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
       this.f.models = data.models
     },
 
