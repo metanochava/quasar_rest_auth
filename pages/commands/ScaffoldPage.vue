@@ -503,16 +503,13 @@ export default {
     },
 
     async loadModelsRelation(f){
-      this.f.models = this.loadModels(f)
+      const {data} = await HTTPAuth.get('/saas/modulos/'+ f)
+      this.f.models = data.models
     },
 
     async loadModelsSchema(f){
-      this.models = this.loadModels(f)
-    },
-
-    async loadModels(modulo) {
-      const {data} = await HTTPAuth.get('/saas/modulos/'+ modulo)
-      return data.models
+      const {data} = await HTTPAuth.get('/saas/modulos/'+ f)
+      this.models = data.models
     },
   }
 }
