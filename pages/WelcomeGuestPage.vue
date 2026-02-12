@@ -1,9 +1,10 @@
 <template>
   <q-page class="flex flex-center bg-grey-1">
     <q-card class="welcome-card shadow-10">
+      <AllLogo />
       <q-card-section class="text-center">
         <q-icon name="rocket_launch" size="80px" color="primary" />
-
+         <AllLogo />
         <div class="text-h4 q-mt-md text-weight-bold">Welcome to MyTech SaaS</div>
 
         <div class="text-subtitle1 text-grey-7 q-mt-sm">
@@ -29,6 +30,7 @@
 </template>
 
 <script setup>
+  import AllLogo from './../components/AllLogo.vue';
 </script>
 
 <style scoped>

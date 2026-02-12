@@ -346,11 +346,52 @@ export default {
       modules: [],
       models: [],
 
-      rawTypes: [
-        'CharField','TextField','IntegerField','DecimalField','BooleanField',
-        'ForeignKey','OneToOneField','ManyToManyField',
-        'FileField','ImageField','JSONField','MoneyField'
+      rawTypes : [
+
+        //  # TEXT
+        'CharField',
+        'TextField',
+        'EmailField',
+        'SlugField',
+        'URLField',
+        'UUIDField',
+
+        //  # NUMBERS
+        'IntegerField',
+        'BigIntegerField',
+        'SmallIntegerField',
+        'PositiveIntegerField',
+        'PositiveBigIntegerField',
+        'FloatField',
+        'DecimalField',
+
+        //  # BOOLEAN
+        'BooleanField',
+
+        //  # DATE
+        'DateField',
+        'DateTimeField',
+        'TimeField',
+        'DurationField',
+
+        //  # FILES
+        'FileField',
+        'ImageField',
+
+        //  # DATA
+        'JSONField',
+        'BinaryField',
+
+        //  # RELATIONS
+        'ForeignKey',
+        'OneToOneField',
+        'ManyToManyField',
+
+        //  # MONEY
+        'MoneyField',
+
       ],
+
 
       onDeletes: ['CASCADE','PROTECT','SET_NULL','SET_DEFAULT','DO_NOTHING','RESTRICT'],
 

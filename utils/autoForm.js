@@ -256,7 +256,7 @@ function buildRulesFromSchemaField(f) {
 }
 
 // relation loader (ajusta ao teu endpoint real)
-async function defaultFetchRelationOptions(HTTPAuth, relationStr, search = '') {
+async function defaultFetchRelationOptions(relationStr, search = '') {
   // relationStr no schema: "app.Model"
   // Sugestão de endpoint padrão:
   // GET /saas/relations/?model=app.Model&search=...
@@ -274,7 +274,6 @@ async function defaultFetchRelationOptions(HTTPAuth, relationStr, search = '') {
 }
 
 export async function buildFormFromSchemaPRO({
-  HTTPAuth,
   module,
   model,
   fetchRelationOptions = null, // opcional: injeta a tua função
@@ -282,7 +281,7 @@ export async function buildFormFromSchemaPRO({
   ignoreFields = ['id','created_at','updated_at'],
   moneyMask = '#.##0,00',       // se usares mask monetária custom
 } = {}) {
-  if (!HTTPAuth) throw new Error('HTTPAuth required')
+
   if (!module || !model) throw new Error('module/model required')
 
   const { data } = await HTTPAuth.get(`/saas/modulos/${module}/${model}/schema/`)
@@ -297,7 +296,7 @@ export async function buildFormFromSchemaPRO({
 
   const relFetcher = fetchRelationOptions
     ? (relation, search) => fetchRelationOptions(relation, search)
-    : (relation, search) => defaultFetchRelationOptions(HTTPAuth, relation, search)
+    : (relation, search) => defaultFetchRelationOptions(relation, search)
 
   const relFetcherDebounced = debounceAsync(relFetcher, 350)
 
