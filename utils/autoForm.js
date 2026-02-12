@@ -175,7 +175,7 @@ export async function buildFormFromSchema(module, model) {
 // ✅ Date/DateTime -> input types corretos
 // ⚠️ Ajusta 1 linha: SCHEMA_PATH se o teu backend retornar data.fields vs data.data.fields
 
-import { tdc } from './../../index' // ou onde estiver o teu tdc
+
 
 // cache global simples p/ relations (por módulo/modelo + query)
 const __relationCache = new Map()
