@@ -2,6 +2,7 @@
 <template>
   <q-page-container>
   <q-page class=" row items-center justify-evenly">
+    <AllLogo />
     <div class="row">
       <q-card square  flat class="text-center">
         <q-card-section class="text-left justify-evenly">
@@ -76,6 +77,7 @@ import { defineComponent } from 'vue'
 import { tdc } from '../boot/base'
 import { AuthStore, UserStore } from '../stores/AuthStore'
 import { setStorage, getStorage } from '../boot/storage';
+import { AllLogo } from './../components/AllLogo.vue';
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 
@@ -88,7 +90,7 @@ export default defineComponent({
   },
 
   components: {
-
+    AllLogo
   },
   setup () {
     const Auth = AuthStore()
