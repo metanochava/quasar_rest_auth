@@ -10,21 +10,21 @@
     <img
       v-else-if="User.Entidade?.logo?.url"
       :src="User.Entidade.logo.url"
-      style="width:40%"
+      style="width:25%"
     />
 
     <!-- FALLBACK TIPO ENTIDADE -->
     <img
       v-else-if="User.TipoEntidade?.icon?.url"
       :src="User.TipoEntidade.icon.url"
-      style="width:40%"
+      style="width:25%"
     />
 
     <!-- FALLBACK FINAL -->
     <img
       v-else
       src="https://placehold.co/400x300/png"
-      style="width:40%"
+      style="width:25%"
     />
 
     
