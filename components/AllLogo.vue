@@ -34,14 +34,14 @@
       v-if="User.Entidade?.nome"
       class="text-grey-6 text-h4"
     >
-      {{ st(User.Entidade.nome) }}
+      {{ tdc(User.Entidade.nome) }}
     </label>
 
     <label
       v-else
       class="text-grey-6 text-h4"
     >
-      {{ st(User.TipoEntidade?.nome) }}
+      {{ tdc(User.TipoEntidade?.nome) }}
     </label>
 
   </div>
@@ -52,6 +52,8 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { HTTPClient, url } from './../boot/api'
 import { UserStore } from './../stores/AuthStore'
+import { tdc } from '../boot/base'
+
 
 const User = UserStore()
 const route = useRoute()
