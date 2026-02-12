@@ -68,7 +68,7 @@ async function loadEntidade(id) {
 
   try {
     const { data } = await HTTPClient.get(
-      url({ type: 'u', url: 'entidades/' + id })
+      url({ type: 'u', url: 'saas/entidades/' + id, params:{} })
     )
 
     User.Entidade = data
