@@ -483,7 +483,7 @@ export default {
     },
 
     async reloadModelShema(){
-      this.form.fields = await buildFormFromSchema(this.modulo, this.form.modelo)
+      this.form.fields = await buildFormFromSchema(this.form.modulo, this.form.modelo)
     },
 
     async submit () {
@@ -503,8 +503,7 @@ export default {
 
     async loadModelsRelation(f){
       const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
-      console.log(data.models)
-      this.f.models = data.models
+      f.models = data.models
     },
 
     async loadModelsSchema(f){
