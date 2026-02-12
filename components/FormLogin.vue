@@ -76,8 +76,8 @@
 import { defineComponent } from 'vue'
 import { tdc } from '../boot/base'
 import { AuthStore, UserStore } from '../stores/AuthStore'
-import { setStorage, getStorage } from '../boot/storage';
-import { AllLogo } from './../components/AllLogo.vue';
+import { setStorage, getStorage } from '../boot/storage'
+import AllLogo  from './../components/AllLogo.vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 
