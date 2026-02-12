@@ -1,7 +1,7 @@
 <template>
   <q-page class=" q-pa-md">
 
-    <!-- HEADER -->{{ form }}
+    <!-- HEADER -->
     
     <div class="row">
       <q-card flat bordered class="col">
@@ -483,7 +483,7 @@ export default {
     },
 
     async reloadModelShema(){
-      this.form.fields = await buildFormFromSchema(this.modules, this.form.modelo)
+      this.form.fields = await buildFormFromSchema(this.modulo, this.form.modelo)
     },
 
     async submit () {
@@ -503,6 +503,7 @@ export default {
 
     async loadModelsRelation(f){
       const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
+      console.log(data.models)
       this.f.models = data.models
     },
 
