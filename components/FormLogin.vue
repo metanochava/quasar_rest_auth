@@ -2,9 +2,9 @@
 <template>
   <q-page-container>
   <q-page class=" row items-center justify-evenly">
-    <AllLogo />
     <div class="row">
       <q-card square  flat class="text-center">
+        <AllLogo />
         <q-card-section class="text-left justify-evenly">
           <q-card  v-if="incorrectAuth" class="my-card bg-red text-white">
             <q-card-section>
@@ -178,7 +178,11 @@ export default defineComponent({
       await this.User.login({
         identifier: this.identifier,
         password: this.password,
-      }, this.q)
+      }, this.q).then(res => {
+        this.correctAuth = true
+      }).catch(err => {
+        this.incorrectAuth = true
+      })
     }
   }
 })

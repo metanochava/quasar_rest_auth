@@ -27,9 +27,10 @@
       style="width:40%"
     />
 
-    <br />
+    
 
     <!-- NOME -->
+    <!-- <br />
     <label
       v-if="User.Entidade?.nome"
       class="text-grey-6 text-h4"
@@ -42,7 +43,7 @@
       class="text-grey-6 text-h4"
     >
       {{ tdc(User.TipoEntidade?.nome) }}
-    </label>
+    </label> -->
 
   </div>
 </template>
