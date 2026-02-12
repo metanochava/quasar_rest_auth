@@ -42,7 +42,8 @@
                 outlined
               />
             </div>
-            <div class="col" v-if="form.modelo in modules">
+            {{form.modelo}} | {{models}}
+            <div class="col" v-if="form.modelo in models">
               <q-btn color="primary" icon="reload" label="Reload Model" @click="reloadModelShema" />
             </div>
           </div>
@@ -215,7 +216,7 @@
                         emit-value
                         option-value="name"
                         option-label="name"
-                        @update:model-value="loadModelsRelation(relModule)"
+                        @update:model-value="loadModelsRelation(f.relModule)"
                       />
                     </div>
 
@@ -349,6 +350,7 @@ export default {
       },
 
       modules: [],
+      models: [],
 
       rawTypes: [
         'CharField','TextField','IntegerField','DecimalField','BooleanField',
@@ -505,7 +507,7 @@ export default {
     },
 
     async loadModelsSchema(f){
-      this.modules = this.loadModels(f)
+      this.models = this.loadModels(f)
     },
 
     async loadModels(modulo) {
