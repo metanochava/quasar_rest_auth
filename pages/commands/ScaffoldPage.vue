@@ -93,6 +93,11 @@
                       :options="rawTypes"
                       label="type"
                       outlined
+
+                      use-input
+                      fill-input
+                      input-debounce="0"
+                      behavior="menu"
                     />
                   </div>
 
