@@ -1,7 +1,7 @@
 <template>
   <q-page class=" q-pa-md">
 
-    <!-- HEADER -->{{ form.fields }}
+    <!-- HEADER -->{{ form }}
     
     <div class="row">
       <q-card flat bordered class="col">
@@ -43,7 +43,7 @@
               />
             </div>
             <div class="col" v-if="models.includes(form.modelo)">
-              <q-btn color="primary" icon="reload" label="Reload Model" @click="reloadModelShema" />
+              <q-btn class="full-width" color="primary" icon="refresh"  label="Reload Model" @click="reloadModelShema" />
             </div>
           </div>
         </q-card-section>
