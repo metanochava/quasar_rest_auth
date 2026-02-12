@@ -6,13 +6,13 @@
       <q-card square  flat class="text-center">
         <AllLogo />
         <q-card-section class="text-left justify-evenly">
-          <q-card  v-if="incorrectAuth" class="my-card bg-red text-white">
+          <q-card  v-if="User.loginMsg" class="my-card bg-red text-white">
             <q-card-section>
               <div class="text-subtitle2">{{ tdc('Incorrect username or password entered') }} <br> {{ tdc('please try again') }}</div>
             </q-card-section>
 
           </q-card>
-          <q-card  v-if="correctAuth" class="my-card bg-green text-white">
+          <q-card  v-if="User.access == 'error'" class="my-card bg-green text-white">
             <q-card-section>
               <div class="text-subtitle2"> {{ tdc('Login successfuly') }} <br>
                 {{ tdc('Redirect to home page') }} ...</div>

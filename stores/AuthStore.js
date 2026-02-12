@@ -154,7 +154,7 @@ export const UserStore = defineStore("user", {
     isLogout: false,
     manterLogado: false,
     redirect: '',
-    
+    loginMsg: ''
   }),
 
   getters: {
@@ -227,7 +227,8 @@ export const UserStore = defineStore("user", {
     },
 
     async login(data, q) {
-
+      this.loginMsg  = ''
+      this.access = ''
       const rsp = await HTTPClient.post(url({type: "u", url: "saas/login/", params: {}}), data )
       .then(async res => {
         this.access = res.data.tokens.access
@@ -242,11 +243,12 @@ export const UserStore = defineStore("user", {
           deleteStorage('c', 'username')
           deleteStorage('c', 'password')
         }
-        
+        this.loginMsg = 'good'
         await this.me()
         await this.getEntidades_(q)
       }).catch(err => {
         console.log(err)
+        this.loginMsg = 'error'
         
       })
       return rsp
