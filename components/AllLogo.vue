@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center col-md-4">
+  <div class="text-center col-md-4 col-sm-12">
 
     <!-- LOADING -->
     <div v-if="loading" class="q-pa-md">
