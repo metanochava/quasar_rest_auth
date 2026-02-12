@@ -167,21 +167,21 @@
                       </div>
                     </div>
 
-                    <div v-if="f.choices.length === 0" class="text-grey">
+                    <div v-if="f?.choices?.length === 0" class="text-grey">
                       Nenhum choice adicionado
                     </div>
 
                     <q-list bordered v-else>
                       <q-item
-                        v-for="(choice, index) in f.choices"
+                        v-for="(choice, index) in f?.choices"
                         :key="index"
                       >
                         <q-item-section>
                           <q-item-label>
-                            Key:{{ choice.key }}
+                            Key:{{ choice?.key }}
                           </q-item-label>
                           <q-item-label caption>
-                            Label: {{ choice.label }}
+                            Label: {{ choice?.label }}
                           </q-item-label>
                         </q-item-section>
 
@@ -222,7 +222,7 @@
                     <div class="col">
                       <q-select
                         v-model="f.relation"
-                        :options="f.models"
+                        :options="f?.models"
                         label="model"
                         outlined
                         dense 
@@ -256,10 +256,10 @@
             🔐 Extra Permissions
             <q-input dense v-model="permInput" @keyup.enter="addPerm"/>
             <q-chip
-              v-for="(p,i) in form.permissions"
+              v-for="(p,i) in form?.permissions"
               :key="i"
               removable
-              @remove="form.permissions.splice(i,1)"
+              @remove="form?.permissions.splice(i,1)"
             >
               {{ p }}
             </q-chip>
@@ -281,7 +281,6 @@
           <q-tab name="model" label="Model"/>
           <q-tab name="serializer" label="Serializer"/>
           <q-tab name="view" label="View"/>
-          <q-tab name="service" label="Service"/>
 
         </q-tabs>
 
@@ -299,10 +298,6 @@
 
           <q-tab-panel name="view">
             <pre class="code">{{ preview?.view }}</pre>
-          </q-tab-panel>
-
-          <q-tab-panel name="service">
-            <pre class="code">{{ preview?.service }}</pre>
           </q-tab-panel>
 
         </q-tab-panels>
