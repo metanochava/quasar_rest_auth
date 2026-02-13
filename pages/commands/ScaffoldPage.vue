@@ -435,12 +435,18 @@ export default {
 
   methods: {
 
-    filterTypes (val, update) {
+     filterTypes (val, update) {
+      if (val === '') {
+        update(() => {
+          this.filteredTypess = this.rawTypes
+        })
+        return
+      }
+
       update(() => {
         const needle = val.toLowerCase()
-        this.filteredTypes = this.rawTypes.filter(v =>
-          v.toLowerCase().includes(needle)
-        )
+        this.filteredTypes = this.rawTypes
+          .filter((v) => v.toLowerCase().indexOf(needle) > -1)
       })
     },
 
