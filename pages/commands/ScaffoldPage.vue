@@ -285,7 +285,9 @@
 
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       <div class="col-8" v-if="out">
-        <pre class="code">{{ out }}</pre>
+        <q-btn v-if="out == 'migrate'" flat icon="visibility" label="Migrate" @click="generateMigrate" />
+        <pre v-else class="code">{{ out }}</pre>
+
       </div>
       <div class="col-8" v-else>
 
@@ -421,7 +423,6 @@ export default {
         model: '',
         serializer: '',
         view: '',
-        service: ''
       }
 
     }
@@ -544,8 +545,18 @@ export default {
         model:'',
         serializer:'',
         view:'',
-        service:''
       }
+    },
+
+    async generateMigrate () {
+      this.out=null
+      const payload = {
+        ...this.form,
+        fields: this.normalizeFields(this.form.fields)
+      }
+      const { data } = await HTTPAuth.post('/saas/scaffold/migrate/', payload)
+
+      this.out = data.data.out || data.out 
     },
 
     async reloadModelShema(){
