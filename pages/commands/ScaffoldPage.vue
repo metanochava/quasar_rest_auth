@@ -438,7 +438,7 @@ export default {
      filterTypes (val, update) {
       if (val === '') {
         update(() => {
-          this.filteredTypess = this.rawTypes
+          this.filteredTypes = this.rawTypes
         })
         return
       }
