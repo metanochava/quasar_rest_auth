@@ -286,7 +286,9 @@
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       <div class="col-8" v-if="out">
         <q-btn v-if="out == 'migrate'" flat icon="refresh" color="accent" label="Migrate" @click="generateMigrate" />
-        <pre v-else class="code">{{ out }}</pre>
+       <div class="col" v-else>
+         <pre  class="code">{{ out }}</pre>
+       </div>
       </div>
       <div class="col-8" v-else>
 
