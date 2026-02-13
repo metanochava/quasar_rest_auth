@@ -94,10 +94,20 @@
                       label="type"
                       outlined
                       use-input
-                      fill-input
-                      input-debounce="0"
+            
                       @filter="filterTypes"
-                    />
+
+      
+                      behavior="menu"
+                    >
+                      <template v-slot:no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                        {{st('Sem resultados')}}
+                        </q-item-section>
+                      </q-item>
+                      </template>
+                    </q-select>
 
                   </div>
 
