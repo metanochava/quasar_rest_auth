@@ -79,10 +79,10 @@
               <div class="q-pa-sm  q-gutter-sm">
 
                 <div class="row q-gutter-sm q-col-gutter-sm">
-                  <div class="col">
+                  <div class="col-5">
                     <q-input dense v-model="f.name" label="name" outlined />
                   </div>
-                  <div class="col-9">
+                  <div class="col-7">
                     <q-select
                       dense
                       v-model="f.type"
@@ -101,13 +101,15 @@
                       </template>
                     </q-select>
 
-                  </div>
+                  </div> 
+                </div>
 
-                  <div class="col-3">
+                <div class="row q-gutter-sm q-col-gutter-sm">
+                  <div class="col-5">
                     <q-input dense v-model="f.verbose_name" label="Verbose name" outlined />
                   </div>
 
-                  <div class="col-9 q-pr-sm">
+                  <div class="col-7 q-pr-sm">
                     <q-input dense v-model="f.help_text" label="Help text" outlined />
                   </div>
                 </div>
