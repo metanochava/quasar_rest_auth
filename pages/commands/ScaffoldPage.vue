@@ -453,9 +453,8 @@ export default {
     addField () {
       this.form.fields.push({
         name: '',
-        type: 'CharField',
+        type: '',
         required: true, 
-        choices: []
       })
     },
 
