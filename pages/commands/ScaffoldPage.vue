@@ -94,11 +94,9 @@
                       label="type"
                       outlined
                       use-input
-            
+                      fill-input
+                      input-debounce="0"
                       @filter="filterTypes"
-
-      
-                      behavior="menu"
                     >
                       <template v-slot:no-option>
                       <q-item>
