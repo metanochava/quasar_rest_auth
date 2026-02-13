@@ -281,13 +281,13 @@
 
       </div>
 
-
-
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       <div class="col-8" v-if="out">
         <q-btn v-if="out == 'migrate'" flat icon="refresh" color="accent" label="Migrate" @click="generateMigrate" />
        <div class="col" v-else>
-         <pre  class="code">{{ out }}</pre>
+        <br>
+        <br>
+        <pre  class="code">{{ out }}</pre>
        </div>
       </div>
       <div class="col-8" v-else>
@@ -317,16 +317,10 @@
           </q-tab-panel>
 
         </q-tab-panels>
-
-
       </div>
-
     </div>
-
   </q-page>
 </template>
-
-
 
 <script>
 
