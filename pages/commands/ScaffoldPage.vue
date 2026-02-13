@@ -94,8 +94,6 @@
                       label="type"
                       outlined
                       use-input
-                      fill-input
-                      input-debounce="0"
                       @filter="filterTypes"
                     >
                       <template v-slot:no-option>
