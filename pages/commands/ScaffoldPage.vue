@@ -79,7 +79,7 @@
               <div class="q-pa-sm  q-gutter-sm">
 
                 <div class="row q-gutter-sm q-col-gutter-sm">
-                  <div class="col-5">
+                  <div class="col">
                     <q-input dense v-model="f.name" label="name" outlined />
                   </div>
                   <div class="col-7">
@@ -105,7 +105,7 @@
                 </div>
 
                 <div class="row q-gutter-sm q-col-gutter-sm">
-                  <div class="col-5">
+                  <div class="col">
                     <q-input dense v-model="f.verbose_name" label="Verbose name" outlined />
                   </div>
 
