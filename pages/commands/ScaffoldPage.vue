@@ -90,15 +90,15 @@
                     <q-select
                       dense
                       v-model="f.type"
-                      :options="rawTypes"
+                      :options="filteredTypes"
                       label="type"
                       outlined
-
                       use-input
                       fill-input
                       input-debounce="0"
-                      behavior="menu"
+                      @filter="filterTypes"
                     />
+
                   </div>
 
                   <div class="col-12 q-pr-sm">
@@ -350,6 +350,8 @@ export default {
 
       modules: [],
       models: [],
+      filteredTypes: [],
+
 
       rawTypes : [
 
@@ -419,10 +421,20 @@ export default {
 
   mounted(){
     this.loadApps()
+    this.filteredTypes = this.rawTypes
   },
 
 
   methods: {
+
+    filterTypes (val, update) {
+      update(() => {
+        const needle = val.toLowerCase()
+        this.filteredTypes = this.rawTypes.filter(v =>
+          v.toLowerCase().includes(needle)
+        )
+      })
+    },
 
     addField () {
       this.form.fields.push({
