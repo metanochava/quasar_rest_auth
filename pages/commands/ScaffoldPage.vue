@@ -559,7 +559,7 @@ export default {
         fields: this.normalizeFields(this.form.fields)
       }
       const { data } = await HTTPAuth.post('/saas/scaffold/migrate/', payload)
-      this.out = data.data.out || data.out 
+      this.out = data.out 
     },
 
     async reloadModelShema(){
