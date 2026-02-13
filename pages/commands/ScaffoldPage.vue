@@ -290,6 +290,8 @@
 
         <br> {{out.out}} .jk
 
+        <br> {{out}} out
+
       </div>
       <div class="col-8" v-else>
 
@@ -557,7 +559,6 @@ export default {
         fields: this.normalizeFields(this.form.fields)
       }
       const { data } = await HTTPAuth.post('/saas/scaffold/migrate/', payload)
-
       this.out = data.data.out || data.out 
     },
 
