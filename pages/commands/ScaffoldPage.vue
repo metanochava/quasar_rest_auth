@@ -283,12 +283,12 @@
 
 
 
-      <!-- ================= RIGHT (PREVIEW CODE) ================= -->
+      <!-- ================= RIGHT (PREVIEW CODE) ================= -->{{out}}
       <div class="col-8" v-if="out">
         <q-btn v-if="out == 'migrate'" flat icon="refresh" color="accent" label="Migrate" @click="generateMigrate" />
         <pre v-else class="code">{{ out }}</pre>
 
-        <br> {{out.out}} .jk
+        <br> {{out.out}} .
 
         <br> {{out}} out
 
