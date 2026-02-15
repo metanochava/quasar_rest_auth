@@ -8,7 +8,7 @@
 
         <q-card-section class="text-subtitle1" dense>
           <div class="row items-center  sticky-header">
-            <div class="text-h6">⚡ Scaffold Command Wizard</div>
+            <div class="text-h5">⚡ Scaffold Command Wizard</div>
             <q-space/>
             <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
             <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
@@ -308,7 +308,7 @@
             <q-select
               class="col"
               v-model="permMethod"
-              :options="['GET', 'POST', 'PUT', 'DELETE']"
+              :options="['get', 'post', 'put', 'delete']"
               label="model"
               outlined
               dense 
@@ -326,10 +326,10 @@
 
             <q-chip
               :class="{
-                'bg-green text-white': p.method === 'GET',
-                'bg-blue text-white': p.method === 'POST',
-                'bg-orange text-white': p.method ==='PUT',
-                'bg-red text-white': p.method === 'DELETE'
+                'bg-green text-white': p.method === 'get',
+                'bg-blue text-white': p.method === 'post',
+                'bg-orange text-white': p.method ==='put',
+                'bg-red text-white': p.method === 'delete'
               }"
               v-for="(p,i) in form?.actions"
               :key="i"
@@ -410,7 +410,7 @@ export default {
 
       out: null,
       permInput: '',
-      permMethod: 'GET',
+      permMethod: 'get',
       permDetails: false,
       permUrl: '',
 
