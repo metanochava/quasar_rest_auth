@@ -302,19 +302,33 @@
 
         <!-- ================= PERMISSIONS ================= -->
         <q-card flat bordered class="q-mt-md">
-          <q-card-section class="row">
+          <q-card-section class="row q-col-gutter-sm">
             🔐 Extra Permissions
             <q-select
-              class="col-4"
-              v-model="f.method"
-              :options="['GET', 'POST']"
+              class="col-3"
+              v-model="permMethod"
+              :options="['GET', 'POST', 'PUT', 'DELETE']"
               label="model"
               outlined
               dense 
             />
-            <q-input class="col-8" dense v-model="f.permInput" @keyup.enter="addPerm(f)"/>
+            <q-input class="col-6" dense v-model="permInput" @keyup.enter="addPerm()"/>
+            <q-toggle
+              class="col-3"
+              v-model="permDetails"
+              label="model"
+              outlined
+              dense 
+            />
+             <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()"/>
+
             <q-chip
-              :class="p.starts('GET')? 'success' : 'accent'"
+              :class="{
+                'bg-green text-white': p.startsWith('GET'),
+                'bg-blue text-white': p.startsWith('POST'),
+                'bg-orange text-white': p.startsWith('PUT'),
+                'bg-red text-white': p.startsWith('DELETE')
+              }"
               v-for="(p,i) in form?.permissions"
               :key="i"
               removable
@@ -394,6 +408,8 @@ export default {
       out: null,
       permInput: '',
       permMethod: 'GET',
+      permDetails: false,
+      permUrl: '',
 
       newChoice :{
         label: '',
@@ -548,6 +564,9 @@ export default {
       this.form.permissions.push(this.permMethod+'_'+this.permInput)
       this.permInput=''
       this.permMethod=''
+      this.permMethod=''
+      this.permUrl=''
+      this.permDetails=''
     },
 
     isRelation (f) {
