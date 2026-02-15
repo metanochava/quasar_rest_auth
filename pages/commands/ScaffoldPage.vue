@@ -320,7 +320,7 @@
               outlined
               dense 
             />
-             <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()"/>
+            <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'"/>
 
             <q-chip
               :class="{
@@ -337,6 +337,11 @@
               {{ p }}
             </q-chip>
           </q-card-section>
+          <pre>
+    @action(detail=True, methods=["get"], url_path=r"(?P<model>[^/.]+)/schema")
+    def model_schema(self, request, pk=None, model=None):
+        print(pk, model)
+          </pre>
         </q-card>
 
       </div>
@@ -561,7 +566,7 @@ export default {
     addPerm () {
       if (!this.permInput) return
       if (!this.permMethod) return
-      this.form.permissions.push(this.permMethod+'_'+this.permInput)
+      this.form.permissions.push({'method' :this.permMethod, 'permition': this.permInput,  'url' : this.permUrl, 'details' : this.permDetails})
       this.permInput=''
       this.permMethod=''
       this.permMethod=''
