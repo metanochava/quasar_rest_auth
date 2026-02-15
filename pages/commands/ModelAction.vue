@@ -3,7 +3,7 @@
 
     <q-card>
         <q-bar :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
-        &nbsp; {{tdc('')}} {{ modulo }}  | {{ modelo }} |  {{ mothod }}  | {{ permission }} | {{ details }}
+        &nbsp; {{tdc('')}} {{ modulo }}  | {{ modelo }} 
         <q-space />
         <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip>{{tdc('Fechar')}}</q-tooltip>
@@ -15,14 +15,14 @@
                 v-model="text_text"
                 class=""
                 dense
-                :placeholder="tdc('Tem algum feedback? Adoraríamos ouvir; mas não compartilhe informações confidenciais. Tem perguntas? Tente ajuda ou suporte.')"
+                :placeholder="tdc('Escreve aqui o codigo da accao')"
                 type="textarea"
                 :rules="[ val => val && val.length > 0 || tdc('Este campo e obrigatório.')]"
                 />
         </q-card-section>
 
         <q-card-section >
-        {{tdc('Cria a Accao.')}}
+        {{accao}}
         </q-card-section>
         <q-separator />
 
