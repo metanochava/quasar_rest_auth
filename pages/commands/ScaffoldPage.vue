@@ -320,7 +320,7 @@
               outlined
               dense 
             />
-            <q-input class="col" dense v-model="permInput" @keyup.enter="addPerm()" outlined/>
+            <q-input class="col" dense v-model="permPermission" @keyup.enter="addPerm()" outlined label="Permission" placeholder="Permission"/>
 
             <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
 
@@ -409,7 +409,7 @@ export default {
       tab: 'model',
 
       out: null,
-      permInput: '',
+      permPermission: '',
       permMethod: 'get',
       permDetails: true,
       permUrl: '',
@@ -562,10 +562,10 @@ export default {
     },
 
     addPerm () {
-      if (!this.permInput) return
+      if (!this.permPermission) return
       if (!this.permMethod) return
-      this.form.actions.push({'method' :this.permMethod, 'permition': this.permInput,  'url' : this.permUrl, 'details' : this.permDetails})
-      this.permInput=''
+      this.form.actions.push({'method' :this.permMethod, 'permition': this.permPermission,  'url' : this.permUrl, 'details' : this.permDetails})
+      this.permPermission=''
       this.permMethod=''
       this.permMethod=''
       this.permUrl=''
