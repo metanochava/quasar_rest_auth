@@ -338,8 +338,8 @@
             </q-chip>
           </q-card-section>
           <pre>
-    @action(detail=True, methods=["get"], url_path=r"(?P<model>[^/.]+)/schema")
-    def model_schema(self, request, pk=None, model=None):
+    @action(detail=True, methods=["get"], url_path=r"url com parametros")
+    def metodo_accao(self, request, pk=None, model=None):
         print(pk, model)
           </pre>
         </q-card>
