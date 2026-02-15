@@ -1,6 +1,7 @@
 
 import { getActivePinia } from 'pinia'
 import { LanguageStore, UserStore } from '../stores/AuthStore'
+import figlet from 'figlet'
 
 export const tdc = (texto = '') => {
   if (!getActivePinia()) return texto
@@ -114,6 +115,10 @@ export const createToken = (data, secret = 'se') => {
   return signedToken
 }
 
+
+export function ascii(text, font = 'Standard') {
+  return figlet.textSync(text, { font })
+}
 
 
 
