@@ -1,6 +1,10 @@
 <template>
   <q-page class=" q-pa-md">
 
+    <q-dialog v-model="model_action" persistent full-width full-height>
+      <ModelAction :modulo="form.modulo" :modelo="form.modelo"  :mothod="permMethod" :permission="permPermission" :details="permDetails"/>
+    </q-dialog>
+
     <!-- HEADER -->
     
     <div class="row">
@@ -301,9 +305,9 @@
         </q-card>
 
         <!-- ================= actions ================= -->
-        <q-card flat bordered class="q-mt-md">
+        <q-card flat bordered class="q-mt-md" v-if="form.modulo || form.modelo">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
-            <div class="text-h6 text-grey col-12">🔐 Extra actions</div>
+            <div class="text-h6 text-grey col-12">🔐 Extra actions of {{ form.modulo }}.{{form.modelo}}</div>
 
             <q-select
               class="col"
@@ -325,6 +329,7 @@
             <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
 
             <q-chip
+              @dblclick="model_action = true"
               :class="{
                 'bg-green text-white': p.method === 'get',
                 'bg-blue text-white': p.method === 'post',
@@ -389,12 +394,18 @@
 
 import { ref, computed, watch, onMounted } from 'vue'
 import { HTTPAuth, tdc, UserStore , AlertError, buildFormFromSchema} from './../../index'
+import ModelAction from './ModelAction.vue';
+
 
 
 
 export default {
 
   name: 'ScaffoldCommandWizard',
+
+  components:{
+    ModelAction
+  },
 
   setup () {
     const User = UserStore()
@@ -407,7 +418,7 @@ export default {
     return {
 
       tab: 'model',
-
+      model_action: false,
       out: null,
       permPermission: '',
       permMethod: 'get',
