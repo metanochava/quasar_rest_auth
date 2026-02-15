@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.283",
+  "version": "1.0.284",
   "description": "Rest em quasar para autenticacao",
   "keywords": [
     "rest",

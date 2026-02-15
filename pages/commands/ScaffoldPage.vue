@@ -44,6 +44,8 @@
                 v-model="form.modelo"
                 label="Model Name"
                 outlined
+
+                @keyup="accaoTeste = false"
               />
             </div>
             <div class="col" v-if="models.includes(form.modelo)">
@@ -305,7 +307,7 @@
         </q-card>
 
         <!-- ================= actions ================= -->
-        <q-card flat bordered class="q-mt-md" v-if="form.modulo && form.modelo">
+        <q-card flat bordered class="q-mt-md" v-if="accaoTeste">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
             <div class="text-h6 text-grey col-12">🔐 Extra actions of {{ form.modulo }}.{{form.modelo}}</div>
 
@@ -420,6 +422,8 @@ export default {
       tab: 'model',
       model_action: false,
       out: null,
+
+      accaoTeste: false,
 
       accao:{
         Permission: '',
@@ -592,7 +596,7 @@ export default {
       this.model_action = true
       this.accao = p
     },
-    
+
     isRelation (f) {
       return ['ForeignKey','OneToOneField','ManyToManyField'].includes(f.type)
     },
@@ -677,7 +681,9 @@ export default {
     },
 
     async reloadModelShema(){
+      this.accaoTeste = false
       this.form.fields = await buildFormFromSchema(this.form.modulo, this.form.modelo)
+      this.accaoTeste = true
     },
 
     async submit () {
@@ -703,6 +709,7 @@ export default {
     async loadModelsSchema(f){
       const {data} = await HTTPAuth.get('/saas/modulos/'+ f)
       this.models = data.models
+      this.accaoTeste = false
     },
   }
 }
