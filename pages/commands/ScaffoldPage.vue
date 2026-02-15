@@ -300,10 +300,10 @@
           </q-list>
         </q-card>
 
-        <!-- ================= PERMISSIONS ================= -->
+        <!-- ================= actions ================= -->
         <q-card flat bordered class="q-mt-md">
           <q-card-section class="row q-col-gutter-sm">
-            🔐 Extra Permissions
+            🔐 Extra actions
             <q-select
               class="col-3"
               v-model="permMethod"
@@ -329,10 +329,10 @@
                 'bg-orange text-white': p.startsWith('PUT'),
                 'bg-red text-white': p.startsWith('DELETE')
               }"
-              v-for="(p,i) in form?.permissions"
+              v-for="(p,i) in form?.actions"
               :key="i"
               removable
-              @remove="form?.permissions.splice(i,1)"
+              @remove="form?.actions.splice(i,1)"
             >
               {{ p }}
             </q-chip>
@@ -484,7 +484,7 @@ export default {
         modulo: '',
         modelo: '',
         fields: [],
-        permissions: []
+        actions: []
       },
 
       preview: {
@@ -566,7 +566,7 @@ export default {
     addPerm () {
       if (!this.permInput) return
       if (!this.permMethod) return
-      this.form.permissions.push({'method' :this.permMethod, 'permition': this.permInput,  'url' : this.permUrl, 'details' : this.permDetails})
+      this.form.actions.push({'method' :this.permMethod, 'permition': this.permInput,  'url' : this.permUrl, 'details' : this.permDetails})
       this.permInput=''
       this.permMethod=''
       this.permMethod=''
@@ -636,7 +636,7 @@ export default {
       this.out=null
       const payload = {
         ...this.form,
-        fields: this.normalizeFields(this.form.fields)
+        fields: this.normalizeFields(this.form.fields),
       }
       const { data } = await HTTPAuth.post('/saas/scaffold/preview/', payload)
 
