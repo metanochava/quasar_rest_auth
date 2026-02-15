@@ -136,12 +136,31 @@
                 </div>
 
 
-                <div  v-if="isDecimal(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
+                <div  v-if="isDecimalOrMoney(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
                   <div class="col">
                     <q-input dense v-model="f.max_digits" type="number" label="max digits" outlined/>
                   </div>
                   <div class="col">
                     <q-input  dense v-model="f.decimal_places" type="number" label="decimal places" outlined/>
+                  </div>
+                  <div class="col">
+                    <q-select
+                      dense
+                      v-model="f.default_currency"
+                      :options="filteredMoneys"
+                      label="type"
+                      outlined
+                      use-input
+                      @filter="filterMoneys"
+                    >
+                      <template v-slot:no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                        {{st('Sem resultados')}}
+                        </q-item-section>
+                      </q-item>
+                      </template>
+                    </q-select>
                   </div>
                 </div>
 
@@ -151,6 +170,24 @@
                   </div>
                   <div class="col">
                     <q-input  dense v-model="f.max" type="number" label="max" outlined/>
+                  </div>
+                </div>
+
+                <div  v-if="isFile(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
+                  <div class="col">
+                    <q-input dense v-model="f.width_field" type="number" label="width_field" outlined/>
+                  </div>
+                  <div class="col">
+                    <q-input  dense v-model="f.height_field" type="number" label="height_field" outlined/>
+                  </div>
+                </div>
+
+                <div  v-if="isDate(f) " class="row q-gutter-sm q-col-gutter-sm q-mt-md">
+                  <div class="col">
+                    <q-toggle dense v-model="f.auto_now_add"  label="Auto Now Add" outlined/>
+                  </div>
+                  <div class="col">
+                    <q-toggle  dense v-model="f.auto_now"  label="Auto Now" outlined/>
                   </div>
                 </div>
                 
@@ -356,7 +393,12 @@ export default {
       modules: [],
       models: [],
       filteredTypes: [],
-
+      filteredMoneys: [],
+      rawMonys : [
+        'MZN',
+        'USD',
+        '...',
+      ],
 
       rawTypes : [
 
@@ -426,6 +468,7 @@ export default {
   mounted(){
     this.loadApps()
     this.filteredTypes = this.rawTypes
+    this.filteredMoneys = this.rawMoneys
   },
 
 
@@ -445,6 +488,22 @@ export default {
           .filter((v) => v.toLowerCase().indexOf(needle) > -1)
       })
     },
+
+    filterMoneys (val, update) {
+      if (val === '') {
+        update(() => {
+          this.filteredMoneys = this.rawMoneys
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.filteredMoneys = this.rawMoneys
+          .filter((v) => v.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+
 
     addField () {
       this.form.fields.push({
@@ -487,6 +546,10 @@ export default {
       return ['FileField','ImageField'].includes(f.type)
     },
 
+    isDate (f) {
+      return ['DateField', 'DuractionField','DateTimeField'].includes(f.type)
+    },
+
     isChar (f) {
       return f.type === 'CharField'
     },
@@ -495,8 +558,8 @@ export default {
       return f.type === 'IntegerField'
     },
 
-    isDecimal (f) {
-      return f.type === 'DecimalField'
+    isDecimalOrMoney (f) {
+      return ['MoneyField', 'DecimalField'].includes(f.type)
     },
 
     normalizeFields(fields) {
