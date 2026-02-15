@@ -301,11 +301,20 @@
         </q-card>
 
         <!-- ================= PERMISSIONS ================= -->
-        <q-card flat bordered class=" q-mt-md">
-          <q-card-section>
+        <q-card flat bordered class="q-mt-md">
+          <q-card-section class="row">
             🔐 Extra Permissions
-            <q-input dense v-model="permInput" @keyup.enter="addPerm"/>
+            <q-select
+              class="col-4"
+              v-model="f.method"
+              :options="['GET', 'POST']"
+              label="model"
+              outlined
+              dense 
+            />
+            <q-input class="col-8" dense v-model="f.permInput" @keyup.enter="addPerm(f)"/>
             <q-chip
+              :class="p.starts('GET')? 'success' : 'accent'"
               v-for="(p,i) in form?.permissions"
               :key="i"
               removable
@@ -384,6 +393,7 @@ export default {
 
       out: null,
       permInput: '',
+      permMethod: 'GET',
 
       newChoice :{
         label: '',
@@ -534,8 +544,10 @@ export default {
 
     addPerm () {
       if (!this.permInput) return
-      this.form.permissions.push(this.permInput)
+      if (!this.permMethod) return
+      this.form.permissions.push(this.permMethod+'_'+this.permInput)
       this.permInput=''
+      this.permMethod=''
     },
 
     isRelation (f) {
