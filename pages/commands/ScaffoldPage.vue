@@ -559,6 +559,7 @@ export default {
         name: '',
         type: '',
         required: true, 
+        unique: false, 
       })
     },
 

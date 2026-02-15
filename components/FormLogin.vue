@@ -1,6 +1,6 @@
 
 <template>
-  <q-page class=" row items-center justify-evenly">
+  <q-page class=" row items-center justify-evenly" style="max-width: 300px">
       <q-card square  flat class="text-center">
         <AllLogo />
         <q-card-section class="text-left justify-evenly">
