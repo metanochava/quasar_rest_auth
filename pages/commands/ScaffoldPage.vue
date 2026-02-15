@@ -394,7 +394,7 @@ export default {
       models: [],
       filteredTypes: [],
       filteredMoneys: [],
-      rawMonys : [
+      rawMoneys : [
         'MZN',
         'USD',
         '...',
@@ -578,7 +578,12 @@ export default {
           min_length: f.min_length,
           max_length: f.max_length,
           max_digits: f.max_digits,
-          decimal_places: f.decimal_places
+          decimal_places: f.decimal_places,
+          default_currency: f.default_currency,
+          auto_now_add: f.auto_now_add,
+          auto_now: f.auto_now,
+          width_field: f.width_field,
+          height_field: fheight_field,
         }
 
         // RELAÇÃO
