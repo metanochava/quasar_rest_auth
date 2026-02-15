@@ -28,7 +28,7 @@
 
         <q-card-actions align="right">
         <q-btn  v-close-popup   :color="$q.dark.isActive ? '' : 'dark'" >{{tdc('Cancelar')}}</q-btn>
-        <q-btn   :color="$q.dark.isActive ? 'primary' : 'primary'" type="submit" @click="save_text" > {{tdc('Enviar')}}</q-btn>
+        <q-btn  :color="$q.dark.isActive ? 'primary' : 'primary'" type="submit" @click="save_text" > {{tdc('Enviar')}}</q-btn>
         </q-card-actions>
     </q-card>
 

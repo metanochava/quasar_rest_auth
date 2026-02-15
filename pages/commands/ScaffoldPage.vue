@@ -305,7 +305,7 @@
         </q-card>
 
         <!-- ================= actions ================= -->
-        <q-card flat bordered class="q-mt-md" v-if="form.modulo || form.modelo">
+        <q-card flat bordered class="q-mt-md" v-if="form.modulo && form.modelo">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
             <div class="text-h6 text-grey col-12">🔐 Extra actions of {{ form.modulo }}.{{form.modelo}}</div>
 
@@ -329,7 +329,7 @@
             <q-input class="col-12" dense v-model="accao.Url" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
 
             <q-chip
-              @dblclick="model_action = true"
+              @dblclick="accaoMetodo(p)"
               :class="{
                 'bg-green text-white': p.method === 'get',
                 'bg-blue text-white': p.method === 'post',
@@ -422,10 +422,10 @@ export default {
       out: null,
 
       accao:{
-        permPermission: '',
-        permMethod: 'get',
-        permDetails: true,
-        permUrl: '',
+        Permission: '',
+        Method: 'get',
+        Details: true,
+        Url: '',
       },
 
 
@@ -588,6 +588,11 @@ export default {
       this.accao.Details=true
     },
 
+    accaoMetodo (p) {
+      this.model_action = true
+      this.accao = p
+    },
+    
     isRelation (f) {
       return ['ForeignKey','OneToOneField','ManyToManyField'].includes(f.type)
     },
