@@ -1,7 +1,7 @@
 
 <template>
-  <q-page class=" row items-center justify-evenly" style="max-width: 300px">
-      <q-card square  flat class="text-center">
+  <q-page class=" row items-center justify-evenly" >
+      <q-card square  flat class="text-center" style="max-width: 300px">
         <AllLogo />
         <q-card-section class="text-left justify-evenly">
           <q-card  v-if="User.loginMsg == 'error'" class="my-card bg-red text-white">
