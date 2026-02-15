@@ -303,13 +303,13 @@
         <!-- ================= actions ================= -->
         <q-card flat bordered class="q-mt-md">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
-            <div class="text-h6 text-grey-3 col-12">🔐 Extra actions</div>
+            <div class="text-h6 text-grey col-12">🔐 Extra actions</div>
 
             <q-select
               class="col"
               v-model="permMethod"
               :options="['get', 'post', 'put', 'delete']"
-              label="model"
+              label="method"
               outlined
               dense 
             />
@@ -320,9 +320,9 @@
               outlined
               dense 
             />
-            <q-input class="col" dense v-model="permInput" @keyup.enter="addPerm()"/>
+            <q-input class="col" dense v-model="permInput" @keyup.enter="addPerm()" outlined/>
 
-            <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'"/>
+            <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
 
             <q-chip
               :class="{
@@ -411,7 +411,7 @@ export default {
       out: null,
       permInput: '',
       permMethod: 'get',
-      permDetails: false,
+      permDetails: true,
       permUrl: '',
 
       newChoice :{
@@ -569,7 +569,7 @@ export default {
       this.permMethod=''
       this.permMethod=''
       this.permUrl=''
-      this.permDetails=''
+      this.permDetails=true
     },
 
     isRelation (f) {
