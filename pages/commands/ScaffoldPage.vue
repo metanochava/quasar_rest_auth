@@ -302,46 +302,43 @@
 
         <!-- ================= actions ================= -->
         <q-card flat bordered class="q-mt-md">
-          <q-card-section class="row q-col-gutter-sm">
+          <q-card-section class="row q-col-gutter-sm q-gutter-s">
             🔐 Extra actions
             <q-select
-              class="col-3"
+              class="col"
               v-model="permMethod"
               :options="['GET', 'POST', 'PUT', 'DELETE']"
               label="model"
               outlined
               dense 
             />
-            <q-input class="col-6" dense v-model="permInput" @keyup.enter="addPerm()"/>
             <q-toggle
-              class="col-3"
+              class="col"
               v-model="permDetails"
-              label="model"
+              label="Details"
               outlined
               dense 
             />
+            <q-input class="col" dense v-model="permInput" @keyup.enter="addPerm()"/>
+
             <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'"/>
 
             <q-chip
               :class="{
-                'bg-green text-white': p.startsWith('GET'),
-                'bg-blue text-white': p.startsWith('POST'),
-                'bg-orange text-white': p.startsWith('PUT'),
-                'bg-red text-white': p.startsWith('DELETE')
+                'bg-green text-white': p.method === 'GET',
+                'bg-blue text-white': p.method === 'POST',
+                'bg-orange text-white': p.method ==='PUT',
+                'bg-red text-white': p.method === 'DELETE'
               }"
               v-for="(p,i) in form?.actions"
               :key="i"
               removable
               @remove="form?.actions.splice(i,1)"
             >
-              {{ p }}
+              {{ p.permition }}
             </q-chip>
           </q-card-section>
-          <pre>
-    @action(detail=True, methods=["get"], url_path=r"url com parametros")
-    def metodo_accao(self, request, pk=None, model=None):
-        print(pk, model)
-          </pre>
+          
         </q-card>
 
       </div>

@@ -1,8 +1,6 @@
 
 <template>
-  <q-page-container>
   <q-page class=" row items-center justify-evenly">
-    <div class="row">
       <q-card square  flat class="text-center">
         <AllLogo />
         <q-card-section class="text-left justify-evenly">
@@ -64,9 +62,7 @@
           <q-btn flat :to="{name:'registarUser'}"  size="md" color="primary" class="" :label="tdc('Registar')" />
         </q-card-actions>
       </q-card>
-    </div>
   </q-page>
-  </q-page-container>
 </template>
 <style scoped>
 
