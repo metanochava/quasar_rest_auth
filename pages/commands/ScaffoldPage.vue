@@ -2,7 +2,7 @@
   <q-page class=" q-pa-md">
 
     <q-dialog v-model="model_action" persistent full-width full-height>
-      <ModelAction :modulo="form.modulo" :modelo="form.modelo"  :mothod="permMethod" :permission="permPermission" :details="permDetails"/>
+      <ModelAction :modulo="form.modulo" :modelo="form.modelo"  :accao="accao" />
     </q-dialog>
 
     <!-- HEADER -->
@@ -311,7 +311,7 @@
 
             <q-select
               class="col"
-              v-model="permMethod"
+              v-model="accao.Method"
               :options="['get', 'post', 'put', 'delete']"
               label="method"
               outlined
@@ -319,14 +319,14 @@
             />
             <q-toggle
               class="col"
-              v-model="permDetails"
+              v-model="accao.Details"
               label="Details"
               outlined
               dense 
             />
-            <q-input class="col" dense v-model="permPermission" @keyup.enter="addPerm()" outlined label="Permission" placeholder="Permission"/>
+            <q-input class="col" dense v-model="accao.Permission" @keyup.enter="addPerm()" outlined label="Permission" placeholder="Permission"/>
 
-            <q-input class="col-12" dense v-model="permUrl" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
+            <q-input class="col-12" dense v-model="accao.Url" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
 
             <q-chip
               @dblclick="model_action = true"
@@ -420,10 +420,15 @@ export default {
       tab: 'model',
       model_action: false,
       out: null,
-      permPermission: '',
-      permMethod: 'get',
-      permDetails: true,
-      permUrl: '',
+
+      accao:{
+        permPermission: '',
+        permMethod: 'get',
+        permDetails: true,
+        permUrl: '',
+      },
+
+
 
       newChoice :{
         label: '',
@@ -573,14 +578,14 @@ export default {
     },
 
     addPerm () {
-      if (!this.permPermission) return
-      if (!this.permMethod) return
-      this.form.actions.push({'method' :this.permMethod, 'permition': this.permPermission,  'url' : this.permUrl, 'details' : this.permDetails})
-      this.permPermission=''
-      this.permMethod=''
-      this.permMethod=''
-      this.permUrl=''
-      this.permDetails=true
+      if (!this.accao.Permission) return
+      if (!this.accao.Method) return
+      this.form.actions.push({'method' :this.accao.Method, 'permition': this.accao.Permission,  'url' : this.accao.Url, 'details' : this.accao.Details})
+      this.accao.Permission=''
+      this.accao.Method=''
+      this.accao.Method=''
+      this.accao.Url=''
+      this.accao.Details=true
     },
 
     isRelation (f) {

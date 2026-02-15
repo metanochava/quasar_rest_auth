@@ -57,22 +57,10 @@ export default defineComponent({
       required: false,
       default: ''
     },
-    permission: {
-      type: String,
+    accao: {
+      type: Array,
       required: false,
       default: ''
-    },
-
-    mothod: {
-      type: String,
-      required: false,
-      default: ''
-    },
-
-    details: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
