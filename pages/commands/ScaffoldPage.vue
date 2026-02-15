@@ -303,8 +303,8 @@
         <!-- ================= actions ================= -->
         <q-card flat bordered class="q-mt-md">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
-            🔐 Extra actions
-            <br />
+            <div class="text-h6 text-grey-3 col-12">🔐 Extra actions</div>
+
             <q-select
               class="col"
               v-model="permMethod"
