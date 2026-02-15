@@ -304,6 +304,7 @@
         <q-card flat bordered class="q-mt-md">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
             🔐 Extra actions
+            <br />
             <q-select
               class="col"
               v-model="permMethod"
@@ -335,7 +336,7 @@
               removable
               @remove="form?.actions.splice(i,1)"
             >
-              {{ p.permition }}
+              {{ p.method + '_' +p.permition }}
             </q-chip>
           </q-card-section>
           
