@@ -1,6 +1,6 @@
 <!-- DynamicFormEngine.vue (Quasar + Vue 3) -->
 <template>
-  <div class="col-12">
+  <div class="row ">
     <component
       outlined
       v-for="field in normalizedFields"
@@ -9,7 +9,7 @@
       v-model="localModel[field.name]"
       :label="field.label"
       :rules="field.required ? [v => isFilled(field, v) || tdc('Required')] : []"
-      class="q-mb-md col-4"
+      class="q-mb-md col-md-4 col-sm-6"
       v-bind="field.__bindProps"
       @filter="(val, update, abort) => onFilter(field, val, update, abort)"
     />
