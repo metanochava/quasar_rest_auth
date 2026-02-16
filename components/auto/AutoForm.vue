@@ -1,9 +1,8 @@
 <template>
   <div>
-    {{ fields }}
-    <!-- <component
-      v-for="field in fields"
-      :key="field.name"
+    <component
+      v-for="(field, index) in fields"
+      :key="field.name + '_' + index"
       :is="resolveComp(field)"
       v-model="model[field.name]"
       :label="field.label"
@@ -11,12 +10,13 @@
       class="q-mb-md"
       v-bind="bindProps(field)"
       @filter="(val, update) => onFilter(field, val, update)"
-    /> -->
+    />
   </div>
 </template>
 
 <script setup>
 import { reactive } from 'vue'
+import { QInput, QSelect, QFile, QToggle } from 'quasar'
 import { tdc } from './../../boot/base'
 
 const props = defineProps({
@@ -24,18 +24,28 @@ const props = defineProps({
   model: { type: Object, required: true }
 })
 
-const relationState = reactive({}) // { fieldName: { loading, options } }
+const relationState = reactive({})
+
+const compMap = {
+  'q-input': QInput,
+  'q-select': QSelect,
+  'q-file': QFile,
+  'q-toggle': QToggle
+}
 
 function resolveComp(field) {
-  return field.component
+  return compMap[field.component] || QInput
 }
 
 function bindProps(field) {
   const p = { ...(field.props || {}) }
 
-  // Normaliza q-select relation
   if (field.component === 'q-select' && field.props?._relation) {
-    const st = relationState[field.name] || (relationState[field.name] = { loading: false, options: [] })
+    const st = relationState[field.name] || (relationState[field.name] = {
+      loading: false,
+      options: []
+    })
+
     p.options = st.options
     p.loading = st.loading
     p.optionLabel = 'label'
@@ -43,16 +53,15 @@ function bindProps(field) {
     p.emitValue = true
     p.mapOptions = true
     p.clearable = true
+    p.useInput = true
     p.inputDebounce = 300
   }
 
-  // q-file: guarda File(s) no model
   if (field.component === 'q-file') {
     p.clearable = true
     p.maxFileSize = p.maxFileSize || 20 * 1024 * 1024
   }
 
-  // q-toggle: label já vai no component
   return p
 }
 
@@ -61,7 +70,10 @@ async function onFilter(field, val, update) {
     return
   }
 
-  const st = relationState[field.name] || (relationState[field.name] = { loading: false, options: [] })
+  const st = relationState[field.name] || (relationState[field.name] = {
+    loading: false,
+    options: []
+  })
 
   st.loading = true
   try {
