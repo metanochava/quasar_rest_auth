@@ -2,90 +2,130 @@
   <div>
 
     <q-table
+      flat
+      bordered
+      row-key="id"
       :rows="rows"
       :columns="columnsWithActions"
       :loading="loading"
-      row-key="id"
       :pagination="pagination"
       @request="onRequest"
-      flat bordered
     >
 
-      <!-- TOP -->
+      <!-- =========================
+           TOP BAR
+      ========================== -->
       <template #top>
-        <div class="row full-width items-center">
+        <div class="row full-width items-center q-gutter-sm">
 
           <div class="text-h6">{{ title }}</div>
           <q-space />
 
+          <!-- SEARCH -->
           <q-input
-            dense outlined
+            dense
+            outlined
+            debounce="400"
             v-model="search"
             :placeholder="tdc('Search')"
             @keyup.enter="refresh"
           />
 
-          <q-btn outline icon="filter_alt" @click="filtersOpen = !filtersOpen"/>
-          <q-btn outline icon="download" @click="exportCsv"/>
-          <q-btn color="primary" icon="add" @click="$emit('create')"/>
+          <!-- FILTER TOGGLE -->
+          <q-btn
+            outline
+            icon="filter_alt"
+            @click="filtersOpen = !filtersOpen"
+          />
 
+          <!-- EXPORT -->
+          <q-btn
+            outline
+            icon="download"
+            @click="exportCsv"
+          />
+
+          <!-- CREATE -->
+          <q-btn
+            color="primary"
+            icon="add"
+            @click="$emit('create')"
+          />
         </div>
 
-
-        <!-- 🔥 FILTERS AUTO -->
-        <div v-if="filtersOpen" class="row q-col-gutter-sm q-mt-md">
-
+        <!-- =========================
+             FILTERS
+        ========================== -->
+        <div
+          v-if="filtersOpen"
+          class="row q-col-gutter-sm q-mt-md"
+        >
           <div
             v-for="c in filterableColumns"
             :key="c.name"
             class="col-3"
           >
 
-            <!-- relation dropdown -->
+            <!-- RELATION FILTER -->
             <q-select
               v-if="c.relation"
-              dense outlined
+              dense
+              outlined
               use-input
-              :options="relationOptions[c.name]"
-              v-model="filters[c.name]"
-              @filter="(v,u)=>loadRelationOptions(c,v,u)"
+              emit-value
+              map-options
+              clearable
               :label="tdc(c.label)"
-              emit-value map-options
+              v-model="filters[c.name]"
+              :options="relationOptions[c.name]"
+              @filter="(v,u)=>loadRelationOptions(c,v,u)"
             />
 
-            <!-- normal input -->
+            <!-- NORMAL FILTER -->
             <q-input
               v-else
-              dense outlined
-              v-model="filters[c.name]"
+              dense
+              outlined
+              clearable
               :label="tdc(c.label)"
+              v-model="filters[c.name]"
             />
 
           </div>
-
         </div>
       </template>
 
-
-      <!-- 🔥 RELATION LABEL AUTO -->
+      <!-- =========================
+           RELATION LABEL RENDER
+      ========================== -->
       <template
         v-for="col in relationColumns"
         :key="col.name"
         v-slot:[`body-cell-${col.name}`]="props"
       >
         <q-td>
-
           {{ resolveRelationLabel(props.row[col.field], col.name) }}
-
         </q-td>
       </template>
 
-
-      <!-- ACTIONS -->
+      <!-- =========================
+           ACTIONS
+      ========================== -->
       <template #body-cell-actions="props">
-        <q-td>
-          <q-btn flat icon="edit" @click="$emit('edit', props.row)" />
-          <q-btn flat icon="delete" color="negative" @click="$emit('delete', props.row)" />
+        <q-td class="q-gutter-xs">
+          <q-btn
+            flat
+            dense
+            icon="edit"
+            @click="$emit('edit', props.row)"
+          />
+          <q-btn
+            flat
+            dense
+            color="negative"
+            icon="delete"
+            @click="$emit('delete', props.row)"
+          />
         </q-td>
       </template>
 
@@ -96,33 +136,36 @@
 
 <script setup>
 import { ref, computed, reactive } from 'vue'
-import { HTTPAuth } from './../../boot/api'
 import { exportFile } from 'quasar'
-import { tdc } from './../../boot/base'
+import { HTTPAuth } from '@/boot/api'
+import { tdc } from '@/boot/base'
 
-
+/* =========================
+   PROPS / EMITS
+========================= */
 const props = defineProps({
-  rows: Array,
-  columns: Array,
-  pagination: Object,
-  loading: Boolean,
-  title: String
+  rows: { type:Array, default:()=>[] },
+  columns: { type:Array, default:()=>[] },
+  pagination: { type:Object, required:true },
+  loading: { type:Boolean, default:false },
+  title: { type:String, default:'' }
 })
 
 const emit = defineEmits(['request','create','edit','delete'])
 
+/* =========================
+   STATE
+========================= */
 const search = ref('')
 const filtersOpen = ref(false)
 const filters = reactive({})
 
 const relationOptions = reactive({})
-const relationMap = reactive({}) // id → label
+const relationMap = reactive({}) // id -> label
 
-
-// --------------------------------------------------
-// RELATION DETECTION
-// --------------------------------------------------
-
+/* =========================
+   COLUMNS
+========================= */
 const relationColumns = computed(() =>
   props.columns.filter(c => c.relation)
 )
@@ -137,11 +180,9 @@ const columnsWithActions = computed(() => {
   return cols
 })
 
-
-// --------------------------------------------------
-// LOAD RELATION OPTIONS
-// --------------------------------------------------
-
+/* =========================
+   LOAD RELATION OPTIONS
+========================= */
 async function loadRelationOptions(col, search, update) {
 
   const [app, model] = col.relation.split('.')
@@ -166,40 +207,41 @@ async function loadRelationOptions(col, search, update) {
   update(()=>{})
 }
 
-
-// --------------------------------------------------
-// LABEL RESOLVE
-// --------------------------------------------------
-
+/* =========================
+   RELATION LABEL
+========================= */
 function resolveRelationLabel(value, colName) {
 
-  // nested object
   if (value && typeof value === 'object')
     return value.nome || value.name || value.id
 
-  // id mapping
-  return relationMap[value] || value
+  return relationMap[value] || value || ''
 }
 
-
-// --------------------------------------------------
-// CSV
-// --------------------------------------------------
-
+/* =========================
+   CSV EXPORT
+========================= */
 function exportCsv() {
-  const content = JSON.stringify(props.rows)
+  const content = JSON.stringify(props.rows, null, 2)
   exportFile('export.csv', content)
 }
 
-
-// --------------------------------------------------
-
+/* =========================
+   REQUEST / PAGINATION
+========================= */
 function refresh() {
-  emit('request', { pagination:props.pagination, search, filters })
+  emit('request', {
+    pagination: props.pagination,
+    search,
+    filters
+  })
 }
 
 function onRequest(ctx) {
-  emit('request', { pagination:ctx.pagination, search, filters })
+  emit('request', {
+    pagination: ctx.pagination,
+    search,
+    filters
+  })
 }
 </script>
-

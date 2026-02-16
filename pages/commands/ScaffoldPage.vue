@@ -643,7 +643,7 @@ export default {
           auto_now_add: f.auto_now_add,
           auto_now: f.auto_now,
           width_field: f.width_field,
-          height_field: fheight_field,
+          height_field: f.height_field,
         }
 
         // RELAÇÃO
