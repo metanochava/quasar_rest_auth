@@ -1,14 +1,15 @@
 <!-- DynamicFormEngine.vue (Quasar + Vue 3) -->
 <template>
-  <div>
+  <div class="col-12">
     <component
+      outlined
       v-for="field in normalizedFields"
       :key="field.__key"
       :is="field.__component"
       v-model="localModel[field.name]"
       :label="field.label"
       :rules="field.required ? [v => isFilled(field, v) || tdc('Required')] : []"
-      class="q-mb-md"
+      class="q-mb-md col-4"
       v-bind="field.__bindProps"
       @filter="(val, update, abort) => onFilter(field, val, update, abort)"
     />
