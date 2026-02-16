@@ -2,7 +2,7 @@ quasar<template>
   <q-layout view="hHh lpR fFf">
     <!-- -------------------- DIALOGS -------------------- -->
     <q-dialog v-model="permissoes" persistent>
-      <UserPermissoes />
+      <!-- <UserPermissoes /> -->
     </q-dialog>
 
     <q-dialog v-model="pagepermissoes" persistent>
@@ -38,7 +38,7 @@ quasar<template>
         <q-separator />
 
         <q-card-section class="scroll">
-          <ApiRetorno />
+          <!-- <ApiRetorno /> -->
         </q-card-section>
       </q-card>
     </q-dialog>
