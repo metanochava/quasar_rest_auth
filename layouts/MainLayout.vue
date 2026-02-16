@@ -1,4 +1,4 @@
-quasar<template>
+<template>
   <q-layout view="hHh lpR fFf">
     <!-- -------------------- DIALOGS -------------------- -->
     <q-dialog v-model="permissoes" persistent>

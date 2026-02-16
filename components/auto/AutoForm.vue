@@ -1,6 +1,7 @@
 <template>
   <div>
-    <component
+    {{ fields }}
+    <!-- <component
       v-for="field in fields"
       :key="field.name"
       :is="resolveComp(field)"
@@ -10,7 +11,7 @@
       class="q-mb-md"
       v-bind="bindProps(field)"
       @filter="(val, update) => onFilter(field, val, update)"
-    />
+    /> -->
   </div>
 </template>
 
