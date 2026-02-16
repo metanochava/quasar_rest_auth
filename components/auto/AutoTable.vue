@@ -137,8 +137,8 @@
 <script setup>
 import { ref, computed, reactive } from 'vue'
 import { exportFile } from 'quasar'
-import { HTTPAuth } from '@/boot/api'
-import { tdc } from '@/boot/base'
+import { HTTPAuth } from './../../boot/api'
+import { tdc } from './../../boot/base'
 
 /* =========================
    PROPS / EMITS
