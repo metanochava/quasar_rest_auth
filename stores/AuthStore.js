@@ -56,7 +56,7 @@ export const AuthStore = defineStore('auth', {
 
   actions: {
     async getTipoEntidades(){
-      await HTTPClient.get(url({type: "u", url: "api/django_saas/tipoEntidades", params: {}}) )
+      await HTTPClient.get(url({type: "u", url: "api/django_saas/tipoentidades", params: {}}) )
       .then(res => {
         this.TipoEntidades = res.data
       }).catch(err => {
