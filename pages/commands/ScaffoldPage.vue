@@ -662,7 +662,7 @@ export default {
         ...this.form,
         fields: this.normalizeFields(this.form.fields),
       }
-      const { data } = await HTTPAuth.post('/saas/scaffold/preview/', payload)
+      const { data } = await HTTPAuth.post('/saas/scaffolds/preview/', payload)
 
       this.preview = data.data || data || {
         model:'',
@@ -677,7 +677,7 @@ export default {
         ...this.form,
         fields: this.normalizeFields(this.form.fields)
       }
-      const { data } = await HTTPAuth.post('/saas/scaffold/migrate/', payload)
+      const { data } = await HTTPAuth.post('/saas/scaffolds/migrate/', payload)
       this.out = data.out 
     },
 
