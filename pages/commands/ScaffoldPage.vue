@@ -693,22 +693,22 @@ export default {
         ...this.form,
         fields: this.normalizeFields(this.form.fields)
       }
-      const {data} = await HTTPAuth.post('/saas/scaffold/', payload)
+      const {data} = await HTTPAuth.post('/api/django_saas/scaffolds/', payload)
       this.out = data.out
     },
 
     async loadApps() {
-      const {data} = await HTTPAuth.get('/saas/modulos/')
+      const {data} = await HTTPAuth.get('/api/django_saas/modulos/')
       this.modules = data.apps
     },
 
     async loadModelsRelation(f){
-      const {data} = await HTTPAuth.get('/saas/modulos/'+ f.relModule)
+      const {data} = await HTTPAuth.get('/api/django_saas/modulos/'+ f.relModule)
       f.models = data.models
     },
 
     async loadModelsSchema(f){
-      const {data} = await HTTPAuth.get('/saas/modulos/'+ f)
+      const {data} = await HTTPAuth.get('/api/django_saas/modulos/'+ f)
       this.models = data.models
       this.accaoTeste = false
     },

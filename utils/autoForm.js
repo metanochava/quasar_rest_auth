@@ -43,7 +43,7 @@ async function fetchRelationOptions(relation, search = '') {
  * espera GET /api/django_saas/modulo/<module>/<model>/schema/
  */
 export async function buildFormFromSchema(module, model) {
-  const { data } = await HTTPAuth.get(`/saas/modulos/${module}/${model}/schema/`)
+  const { data } = await HTTPAuth.get(`/api/django_saas/modulos/${module}/${model}/schema/`)
   const out = []
 
   for (const f of (data.fields || [])) {
@@ -284,7 +284,7 @@ export async function buildFormFromSchemaPRO({
 
   if (!module || !model) throw new Error('module/model required')
 
-  const { data } = await HTTPAuth.get(`/saas/modulos/${module}/${model}/schema/`)
+  const { data } = await HTTPAuth.get(`/api/django_saas/modulos/${module}/${model}/schema/`)
 
   // ✅ resolve schemaPath
   const fields =

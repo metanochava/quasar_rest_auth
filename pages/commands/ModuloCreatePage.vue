@@ -117,7 +117,7 @@ const apps = ref([])
 // ----------------------------------
 
 async function loadApps () {
-  const { data } = await HTTPAuth.get('/saas/modulos/')
+  const { data } = await HTTPAuth.get('/api/django_saas/modulos/')
   apps.value = data.apps
 }
 
@@ -135,7 +135,7 @@ async function createModule () {
   name.value = ''
 
   try {
-    await HTTPAuth.post('/saas/modulos/', { name: moduleName })
+    await HTTPAuth.post('/api/django_saas/modulos/', { name: moduleName })
   } catch (e) {
     // rollback
     apps.value = apps.value.filter(a => a.name !== moduleName)
@@ -166,7 +166,7 @@ async function deleteModule(app) {
   apps.value = apps.value.filter(a => a.name !== app)
 
   try {
-    await HTTPAuth.delete(`/saas/modulos/${app}/`)
+    await HTTPAuth.delete(`/api/django_saas/modulos/${app}/`)
   } catch (e) {
     apps.value = old
   }
