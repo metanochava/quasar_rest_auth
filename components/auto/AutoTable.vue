@@ -137,7 +137,7 @@
 <script setup>
 import { ref, computed, reactive } from 'vue'
 import { exportFile } from 'quasar'
-import { HTTPAuth } from './../../boot/api'
+import { HTTPAuth, url } from './../../boot/api'
 import { tdc } from './../../boot/base'
 
 /* =========================
@@ -187,10 +187,7 @@ async function loadRelationOptions(col, search, update) {
 
   const [app, model] = col.relation.split('.')
 
-  const { data } = await HTTPAuth.get(
-    `/${app}/${model.toLowerCase()}s/`,
-    { params:{ search, page_size:50 } }
-  )
+  const { data } = await HTTPAuth.get(url({type:'u', url: `/${app}/${model.toLowerCase()}s/`, params: { search, page_size:50 }}) )
 
   const rows = data.results || data
 

@@ -55,7 +55,7 @@ import { useRoute } from 'vue-router'
 import { Notify } from 'quasar'
 
 import { tdc } from './../../boot/base'
-import { HTTPAuth } from './../../boot/api'
+import { HTTPAuth, url } from './../../boot/api'
 
 import AutoTable from './AutoTable.vue'
 import AutoForm from './AutoForm.vue'
@@ -139,7 +139,7 @@ function buildParams(p, search = '', filters = {}) {
 async function fetchRows({ pagination: p, search = '', filters = {} }) {
   loading.value = true
   try {
-    const { data } = await HTTPAuth.get(endpoint, { params: buildParams(p, search, filters) })
+    const { data } = await HTTPAuth.get(url({type:'u', url: endpoint, params: buildParams(p, search, filters)}))
     const items = data?.results || data || []
     rows.value = items
     pagination.value = {
@@ -175,9 +175,9 @@ async function save() {
 
     let res
     if (editing.value) {
-      res = await HTTPAuth.put(`${endpoint}${payload.id}/`, payload)
+      res = await HTTPAuth.put(url({type:'u', url: `${endpoint}${payload.id}/`, params: {}}), payload)
     } else {
-      res = await HTTPAuth.post(endpoint, payload)
+      res = await HTTPAuth.post(url({type:'u', url: endpoint, params: {}}), payload)
     }
 
     notifyFromApi(res.data || {})
@@ -198,7 +198,7 @@ async function remove() {
   if (!delRow.value) return
   saving.value = true
   try {
-    const res = await HTTPAuth.delete(`${endpoint}${delRow.value.id}/`)
+    const res = await HTTPAuth.delete(url({type:'u', url: `${endpoint}${delRow.value.id}/`, params: {}}))
     notifyFromApi(res.data || {})
     delDialog.value = false
     delRow.value = null
@@ -211,7 +211,7 @@ async function remove() {
 // Inline edit: PATCH /<id>/ { field: value }
 async function inlineSave(row, field, value) {
   try {
-    const res = await HTTPAuth.patch(`${endpoint}${row.id}/`, { [field]: value })
+    const res = await HTTPAuth.patch(url({type:'u', url: `${endpoint}${row.id}/`, params: {}}), { [field]: value })
     notifyFromApi(res.data || { alert_success: tdc('Updated') })
   } catch (e) {
     Notify.create({ type: 'negative', message: tdc('Update failed') })

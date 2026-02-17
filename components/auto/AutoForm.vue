@@ -2,6 +2,7 @@
 <template>
   <div class="row q-col-gutter-sm">
     <component
+      dense
       outlined
       v-for="field in normalizedFields"
       :key="field.__key"
