@@ -56,7 +56,7 @@ export const AuthStore = defineStore('auth', {
 
   actions: {
     async getTipoEntidades(){
-      await HTTPClient.get(url({type: "u", url: "saas/tipoEntidades", params: {}}) )
+      await HTTPClient.get(url({type: "u", url: "api/tipoEntidades", params: {}}) )
       .then(res => {
         this.TipoEntidades = res.data
       }).catch(err => {
@@ -88,7 +88,7 @@ export const LanguageStore = defineStore("lang", {
         const res = await HTTPClient.get(
           url({
             type: "u",
-            url: `saas/idiomas/${idioma?.id}/traducaos`,
+            url: `api/idiomas/${idioma?.id}/traducaos`,
             params: {}
           })
         )
@@ -118,7 +118,7 @@ export const LanguageStore = defineStore("lang", {
     },
     
     async get() {
-      await HTTPClient.get(url({type: "u", url: "saas/idiomas", params: {}}) )
+      await HTTPClient.get(url({type: "u", url: "api/idiomas", params: {}}) )
       .then(res => {
         this.list = res.data
         this.current = this.list[0]
@@ -173,7 +173,7 @@ export const UserStore = defineStore("user", {
 
   actions: {
     async getMenus () {
-      await HTTPAuth.get(url({ type: 'u', url: 'saas/users/' + this.data.id + '/menus/', params: {} }))
+      await HTTPAuth.get(url({ type: 'u', url: 'api/users/' + this.data.id + '/menus/', params: {} }))
         .then(res => {
           this.AllMenus = res.data
           this.Menus = this.AllMenus
@@ -182,7 +182,7 @@ export const UserStore = defineStore("user", {
         })
     },
     async setEntidadeModelos () {
-      await HTTPAuth.get(url({ type: 'u', url: 'saas/entidades/' + this.Entidade?.id + '/modelos', params: {} }))
+      await HTTPAuth.get(url({ type: 'u', url: 'api/entidades/' + this.Entidade?.id + '/modelos', params: {} }))
         .then(res => {
            this.EntidadeModelos = res.data
         }).catch(err => {
@@ -229,7 +229,7 @@ export const UserStore = defineStore("user", {
     async login(data, q) {
       this.loginMsg  = ''
       this.access = ''
-      const rsp = await HTTPClient.post(url({type: "u", url: "saas/login/", params: {}}), data )
+      const rsp = await HTTPClient.post(url({type: "u", url: "api/login/", params: {}}), data )
       .then(async res => {
         this.access = res.data.tokens.access
         this.refresh = res.data.tokens.refresh
@@ -255,7 +255,7 @@ export const UserStore = defineStore("user", {
     },
 
     async me() {
-      const rsp = await HTTPAuth.get(url({type: "u", url: "saas/me", params: {}}) )
+      const rsp = await HTTPAuth.get(url({type: "u", url: "api/me", params: {}}) )
       .then(res => {
         this.data = res.data
         const Language = LanguageStore()
@@ -270,7 +270,7 @@ export const UserStore = defineStore("user", {
 
     async refreshToken() {
       const data = {refresh: this.refresh }
-      const rsp = await HTTPAuth.post(url({type: "u", url: "saas/refresh_token/", params: {}}), data )
+      const rsp = await HTTPAuth.post(url({type: "u", url: "api/refresh_token/", params: {}}), data )
       .then(res => {
         this.access = res.data.access
         setStorage('c', 'access', this.access,  365)
@@ -283,19 +283,19 @@ export const UserStore = defineStore("user", {
 
     async change_password_email(email, antiga, nova) {
       const data = { email: email, password: antiga, passwordNova: nova }
-      const rsp = await HTTPAuth.post(url({type: "u", url: "saas/change_password_email/", params: {}}), data )
+      const rsp = await HTTPAuth.post(url({type: "u", url: "api/change_password_email/", params: {}}), data )
       return rsp
     },
 
     async change_password_numero(mobile, otp, nova) {
       const data = { mobile: mobile, otp: otp, password: nova }
-      const rsp = await HTTPAuth.post(url({type: "u", url: "saas/change_password_email/", params: {}}), data )
+      const rsp = await HTTPAuth.post(url({type: "u", url: "api/change_password_email/", params: {}}), data )
       return rsp
     },
 
     async getEntidades () {
       if (!this.data?.id) return
-      const rsp = await HTTPAuth.get( url({ type: 'u', url: `saas/users/${this.data.id}/userEntidades/`,params: {}}))
+      const rsp = await HTTPAuth.get( url({ type: 'u', url: `api/users/${this.data.id}/userEntidades/`,params: {}}))
       setStorage('c', 'userEntidades', JSON.stringify(rsp.data), 365)
       this.Entidades = rsp.data
       return rsp
@@ -308,7 +308,7 @@ export const UserStore = defineStore("user", {
         const res = await HTTPAuth.get(
           url({
             type: 'u',
-            url: `saas/users/${this.data.id}/userEntidades/`,
+            url: `api/users/${this.data.id}/userEntidades/`,
             params: {}
           })
         )
@@ -356,7 +356,7 @@ export const UserStore = defineStore("user", {
     },
 
     async getSucursals_ (q) {
-      await HTTPAuth.get(url({ type: 'u', url: 'saas/users/' + this.data?.id + '/userSucursals/', params: { } }))
+      await HTTPAuth.get(url({ type: 'u', url: 'api/users/' + this.data?.id + '/userSucursals/', params: { } }))
         .then(async res => {
           setStorage('c', 'userSucursals', JSON.stringify(res.data), 365)
           
@@ -417,7 +417,7 @@ export const UserStore = defineStore("user", {
       this.spiner = true
       if (getStorage('c', 'userEntidade') !== null) {
       
-        const rsp = await HTTPAuth.get(url({ type: 'u', url: 'saas/users/' + this.data?.id + '/userSucursals/', params: { } }))
+        const rsp = await HTTPAuth.get(url({ type: 'u', url: 'api/users/' + this.data?.id + '/userSucursals/', params: { } }))
           .then(res => {
             this.Sucursal = {}
             setStorage('c', 'userSucursal', JSON.stringify({}), 365)
@@ -440,7 +440,7 @@ export const UserStore = defineStore("user", {
     async getGrupos () {
 
       const res = await HTTPAuth.get(
-        url({ type: 'u', url: `saas/users/${this.data?.id}/userGrupos/`, params: {} })
+        url({ type: 'u', url: `api/users/${this.data?.id}/userGrupos/`, params: {} })
       )
 
       setStorage('c', 'userGrupos', JSON.stringify(res.data), 365)
@@ -455,7 +455,7 @@ export const UserStore = defineStore("user", {
     async getGrupos_ (q) {
 
       const res = await HTTPAuth.get(
-        url({ type: 'u', url: `saas/users/${this.data?.id}/userGrupos/`, params: {} })
+        url({ type: 'u', url: `api/users/${this.data?.id}/userGrupos/`, params: {} })
       )
       setStorage('c', 'userGrupos', JSON.stringify(res.data), 365)
       this.Grupos = res.data
@@ -502,7 +502,7 @@ export const UserStore = defineStore("user", {
     async setEntidadeModulos () {
       if (getStorage('c', 'userEntidade') !== null) {
 
-        const rsp = await HTTPAuth.get(url({ type: 'u', url: 'saas/entidades/' + this.Entidade?.id + '/modulos/', params: { } }))
+        const rsp = await HTTPAuth.get(url({ type: 'u', url: 'api/entidades/' + this.Entidade?.id + '/modulos/', params: { } }))
           .then(res => {
             setStorage('c', 'entidadeModulos', JSON.stringify(res.data), 365)
             this.EntidadeModulos = res.data
@@ -516,7 +516,7 @@ export const UserStore = defineStore("user", {
       if (getStorage('c', 'userSucursal') !== null) {
 
         const res = await HTTPAuth.get(
-          url({ type: 'u', url: `saas/users/${this.data?.id}/userPermicoes/`, params: {} })
+          url({ type: 'u', url: `api/users/${this.data?.id}/userPermicoes/`, params: {} })
         )
 
         const perms = (res.data || [])
@@ -597,7 +597,7 @@ export const UserStore = defineStore("user", {
         return
       } 
 
-      const rsp = await HTTPAuth.post(url({type: "u", url: "saas/logout/", params: {}}), {refresh: this.refresh} )
+      const rsp = await HTTPAuth.post(url({type: "u", url: "api/logout/", params: {}}), {refresh: this.refresh} )
       .then(res => {
         this.data = null
         this.refresh = null
