@@ -54,12 +54,12 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Notify } from 'quasar'
 
-import { tdc } from './../../boot/base'
-import { HTTPAuth, url } from './../../boot/api'
+import { tdc } from '../../boot/base'
+import { HTTPAuth, url } from '../../boot/api'
 
 import AutoTable from './AutoTable.vue'
 import AutoForm from './AutoForm.vue'
-import { buildFormFromSchema } from './../../utils/autoForm'
+import { buildFormFromSchema } from '../../utils/autoForm'
 
 const route = useRoute()
 const module = String(route.params.module)

@@ -11,12 +11,11 @@ export * from './boot/data.js'
 export * from './boot/storage.js'
 
 
-
 import MainLayout from './layouts/MainLayout.vue'
 import AuthLayout from './layouts/AuthLayout.vue'
 import AutoForm from './components/auto/AutoForm.vue'
 import AutoTable from './components/auto/AutoTable.vue'
-import AutoCrud from './components/auto/AutoCRUDPage.vue'
+import AutoCrud from './components/auto/AutoCrud.vue'
 import AllLogo from './components/AllLogo.vue'
 
 
