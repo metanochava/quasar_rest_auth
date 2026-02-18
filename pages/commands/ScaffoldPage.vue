@@ -611,7 +611,6 @@ export default {
 
   mounted(){
     this.loadApps()
-    this.loadIcons()
     this.filteredTypes = this.rawTypes
     this.filteredMoneys = this.rawMoneys
   },
@@ -773,7 +772,7 @@ export default {
         ...this.form,
         fields: this.normalizeFields(this.form.fields)
       }
-      const { data } = await HTTPAuth.post('/saas/scaffolds/migrate/', payload)
+      const { data } = await HTTPAuth.post('/api/django_saas/scaffolds/migrate/', payload)
       this.out = data.out 
     },
 
@@ -796,11 +795,6 @@ export default {
     async loadApps() {
       const {data} = await HTTPAuth.get('/api/django_saas/modulos/')
       this.modules = data.apps
-    },
-
-     async loadIcons() {
-      const {data} = await HTTPAuth.get('/api/django_saas/icons/')
-      this.icons = data.icons
     },
 
     async loadModelsRelation(f){
