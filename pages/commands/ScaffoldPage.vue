@@ -48,6 +48,43 @@
                 @keyup="accaoTeste = false"
               />
             </div>
+
+            <div class="col">
+              <q-select
+                v-model="form.icon"
+                :options="ICONS"
+                label="Icon"
+                use-input
+                dense
+                outlined
+              >
+
+                <!-- ITEM SELECIONADO -->
+                <template v-slot:selected-item="scope">
+                  <div class="row items-center q-gutter-sm">
+                    <q-icon :name="scope.opt" />
+                    <span>{{ scope.opt }}</span>
+                  </div>
+                </template>
+
+                <!-- LISTA DE OPÇÕES -->
+                <template v-slot:option="scope">
+                  <q-item v-bind="scope.itemProps">
+                    <q-item-section avatar>
+                      <q-icon :name="scope.opt" />
+                    </q-item-section>
+
+                    <q-item-section>
+                      {{ scope.opt }}
+                    </q-item-section>
+                  </q-item>
+                </template>
+
+              </q-select>
+            </div>
+
+
+
             <div class="col" v-if="models.includes(form.modelo)">
               <q-btn class="full-width" color="primary" icon="refresh"  label="Reload Model" @click="reloadModelShema" />
             </div>
@@ -440,6 +477,7 @@ export default {
       },
 
       modules: [],
+      icons: [],
       models: [],
       filteredTypes: [],
       filteredMoneys: [],
@@ -448,6 +486,62 @@ export default {
         'USD',
         '...',
       ],
+
+      ICONS: [
+        "menu",
+        "add","add_circle","add_box","add_link",
+        "edit","edit_note","edit_square",
+        "delete","delete_forever","delete_outline",
+        "visibility","visibility_off",
+        "search","filter_alt","filter_list",
+        "download","upload","file_upload","file_download",
+        "save","save_alt",
+        "refresh","restart_alt","autorenew",
+        "home","dashboard","space_dashboard",
+        "settings","settings_applications","tune",
+        "person","group","groups","badge",
+        "account_circle","supervisor_account",
+        "lock","lock_open","vpn_key",
+        "email","mail","mark_email_read",
+        "phone","call","contacts",
+        "calendar_today","event","schedule",
+        "image","photo","photo_camera",
+        "folder","folder_open","drive_folder_upload",
+        "attach_file","attachment",
+        "list","view_list","table_view","dataset",
+        "inventory","inventory_2","storage",
+        "widgets","apps","extension",
+        "construction","build","engineering","architecture",
+        "shopping_cart","payments","credit_card",
+        "receipt","point_of_sale","request_quote",
+        "bar_chart","pie_chart","analytics","timeline",
+        "trending_up","trending_down",
+        "print","picture_as_pdf","description",
+        "article","note","notes",
+        "map","location_on","place",
+        "public","language",
+        "notifications","notifications_active",
+        "help","help_outline","info","info_outline",
+        "warning","error","check","check_circle",
+        "cancel","close","done","done_all",
+        "arrow_back","arrow_forward","arrow_upward","arrow_downward",
+        "expand_more","expand_less",
+        "chevron_left","chevron_right",
+        "fullscreen","fullscreen_exit",
+        "zoom_in","zoom_out",
+        "play_arrow","pause","stop",
+        "mic","mic_off","volume_up","volume_off",
+        "favorite","favorite_border","star","star_border",
+        "share","link","content_copy",
+        "cloud","cloud_upload","cloud_download",
+        "wifi","bluetooth","battery_full",
+        "desktop_windows","laptop","phone_android",
+        "security","verified","shield",
+        "bug_report","report","report_problem",
+        "code","terminal","data_object",
+        "api","integration_instructions"
+      ],
+
 
       rawTypes : [
 
@@ -501,6 +595,7 @@ export default {
       form: {
         modulo: '',
         modelo: '',
+        icon: 'list',
         fields: [],
         actions: []
       },
@@ -516,6 +611,7 @@ export default {
 
   mounted(){
     this.loadApps()
+    this.loadIcons()
     this.filteredTypes = this.rawTypes
     this.filteredMoneys = this.rawMoneys
   },
@@ -700,6 +796,11 @@ export default {
     async loadApps() {
       const {data} = await HTTPAuth.get('/api/django_saas/modulos/')
       this.modules = data.apps
+    },
+
+     async loadIcons() {
+      const {data} = await HTTPAuth.get('/api/django_saas/icons/')
+      this.icons = data.icons
     },
 
     async loadModelsRelation(f){
