@@ -93,7 +93,7 @@ const modules = ref([])
 const model = ref('')
 const models = ref([])
 
-const title = ``
+var title = tdc('Nome da tabela')
 
 // Endpoint do CRUD (ajusta aqui se teu padrão for diferente)
 const endpoint = `/${module.value}/${model.value.toLowerCase()}s/`
