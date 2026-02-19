@@ -5,7 +5,7 @@
       :key="item.menu"
       clickable
       v-ripple
-      :to="item.rota ? { name: item.rota } : null"
+      :to="{name: item.rota }"
     >
       <!-- Icon -->
       <q-item-section avatar>

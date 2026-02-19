@@ -20,7 +20,7 @@
           <br>
           <q-form  @submit.prevent="login">
 
-            <q-input outlined dense   clearable v-model="identifier" :label="tdc('Usuario ou Celular ou Email')">
+            <q-input outlined dense @keyup.enter="login()" clearable v-model="identifier" :label="tdc('Usuario ou Celular ou Email')">
               <template v-slot:prepend>
                 <q-icon name="email" />
               </template>
@@ -29,7 +29,7 @@
               </template>
             </q-input>
             <br/>
-            <q-input outlined dense   :readonly="readonly" clearable v-model="password" :type="isPwd ? 'password': 'text'" :label="tdc('Senha')">
+            <q-input outlined dense @keyup.enter="login()"  :readonly="readonly" clearable v-model="password" :type="isPwd ? 'password': 'text'" :label="tdc('Senha')">
 
               <template v-slot:prepend>
                 <q-icon
