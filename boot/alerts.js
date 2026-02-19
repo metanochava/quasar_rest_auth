@@ -114,6 +114,11 @@ const AlertError = (error) => {
       sms = data?.data?.alert_error
       go = true
     }
+
+    if (data?.data?.detail) {
+      sms = data?.data?.detail
+      go = true
+    }
   }
 
   if (go) pushAlert(sms, tipo)
