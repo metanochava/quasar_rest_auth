@@ -93,7 +93,7 @@ const modules = ref([])
 const model = ref('')
 const models = ref([])
 
-const title = `${module}/${model}`
+const title = `${model}`
 
 // Endpoint do CRUD (ajusta aqui se teu padrão for diferente)
 const endpoint = `/${module.value}/${model.value.toLowerCase()}s/`
@@ -127,7 +127,7 @@ function notifyFromApi(data) {
 }
 
 async function loadSchema() {
-  fields.value = await buildFormFromSchema(module, model)
+  fields.value = await buildFormFromSchema(module.value, model.value)
 
   columns.value = fields.value.map(f => ({
     name: f.name,
