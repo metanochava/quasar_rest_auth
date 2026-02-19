@@ -88,9 +88,9 @@ import AutoForm from './AutoForm.vue'
 import { buildFormFromSchema } from '../../utils/autoForm'
 
 
-const module = ref('')
+const module = ''
 const modules = ref([])
-const model = ref('')
+const model = ''
 const models = ref([])
 
 const title = `${module}/${model}`
