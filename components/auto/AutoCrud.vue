@@ -1,5 +1,31 @@
 <template>
   <q-page padding>
+    <div class="row q-col-gutter-sm q-pa-0">
+      <div class="col">
+        <q-select
+          v-model="module"
+          :options="modules"
+          label="module"
+          outlined
+          dense 
+          map-options
+          emit-value
+          option-value="name"
+          option-label="name"
+          @update:model-value="loadModelsRelation()"
+        />
+      </div>
+      <div class="col">
+        <q-select
+          v-model="model"
+          :options="models"
+          label="model"
+          outlined
+          dense 
+          @update:model-value="load()"
+        />
+      </div>
+    </div>
     <AutoTable
       :rows="rows"
       :columns="columns"
@@ -51,7 +77,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+
 import { Notify } from 'quasar'
 
 import { tdc } from '../../boot/base'
@@ -61,9 +87,11 @@ import AutoTable from './AutoTable.vue'
 import AutoForm from './AutoForm.vue'
 import { buildFormFromSchema } from '../../utils/autoForm'
 
-const route = useRoute()
-const module = String(route.params.module)
-const model = String(route.params.model)
+
+const module = ref('')
+const modules = ref([])
+const model = ref('')
+const models = ref([])
 
 const title = `${module}/${model}`
 
@@ -111,6 +139,16 @@ async function loadSchema() {
     // 🔥 ESTA LINHA NOVA
     relation: f.props?.relation || null
   }))
+}
+
+async function loadApps() {
+  const {data} = await HTTPAuth.get('/api/django_saas/modulos/')
+  modules.value = data.apps
+}
+
+async function loadModelsRelation(){
+  const {data} = await HTTPAuth.get('/api/django_saas/modulos/'+ module.value)
+  models.value = data.models
 }
 
 
@@ -218,8 +256,12 @@ async function inlineSave(row, field, value) {
   }
 }
 
-onMounted(async () => {
+async function load() {
   await loadSchema()
   await fetchRows({ pagination: pagination.value })
+}
+
+onMounted(async () => {
+  await loadApps()
 })
 </script>
