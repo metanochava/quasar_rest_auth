@@ -155,6 +155,7 @@ export const UserStore = defineStore("user", {
     manterLogado: false,
     redirect: '',
     loginMsg: ''
+    loading: false,
   }),
 
   getters: {
@@ -227,15 +228,16 @@ export const UserStore = defineStore("user", {
     },
 
     async login(data, q) {
+      this.loading = true
       this.loginMsg  = ''
       this.access = ''
       const rsp = await HTTPClient.post(url({type: "u", url: "api/login/", params: {}}), data )
       .then(async res => {
+        this.loading = false
         this.access = res.data.tokens.access
         this.refresh = res.data.tokens.refresh
         setStorage('c', 'access', this.access,  365)
         setStorage('c', 'refresh', this.refresh,  365)
-
         if (this.manterLogado) {
           setStorage('c', 'username', data.email, 365)
           setStorage('c', 'password', data.password, 365)
@@ -247,6 +249,7 @@ export const UserStore = defineStore("user", {
         await this.me()
         await this.getEntidades_(q)
       }).catch(err => {
+        this.loading = false
         console.log(err)
         this.loginMsg = 'error'
         
