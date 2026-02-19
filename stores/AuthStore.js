@@ -154,7 +154,7 @@ export const UserStore = defineStore("user", {
     isLogout: false,
     manterLogado: false,
     redirect: '',
-    loginMsg: ''
+    loginMsg: '',
     loading: false,
   }),
 
