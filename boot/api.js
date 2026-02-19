@@ -197,7 +197,7 @@ HTTPClient.interceptors.response.use(
     Alert(error?.response)
     const status = error?.response?.status
 
-    if (status === 401 || status === 403) {
+    if (status === 401 ) {
       User.logout('N')
     }
   
