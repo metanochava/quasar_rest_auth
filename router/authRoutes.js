@@ -3,7 +3,7 @@
 
 export const authRoutes = [
   {
-    path: '/',
+    path: '/auth/',
     component: () => import('../layouts/AuthLayout.vue'),
     children: [
       { path: 'login', component: () => import('./../pages/auth/LoginPage.vue'), name: 'login' },
@@ -11,7 +11,8 @@ export const authRoutes = [
   },
   {
     path: '/',
-    component: () => import('../layouts/AuthLayout.vue'),
+    // component: () => import('../layouts/AuthLayout.vue'),
+    component: () => import('../layouts/MainLayout.vue'),
     children: [
       { path: '/welcome', component: () => import('./../pages/WelcomeGuestPage.vue'), name: 'welcome' }
     ],

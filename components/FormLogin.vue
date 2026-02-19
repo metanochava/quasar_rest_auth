@@ -13,7 +13,7 @@
           <q-card  v-if="User.loginMsg == 'good'" class="my-card bg-green text-white">
             <q-card-section>
               <div class="text-subtitle2"> {{ tdc('Login successfuly') }} <br>
-                {{ tdc('Redirect to home page') }} ...</div>
+                {{ tdc('Redirect to home page') }}...</div>
             </q-card-section>
 
           </q-card>
