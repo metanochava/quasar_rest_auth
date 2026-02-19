@@ -88,15 +88,15 @@ import AutoForm from './AutoForm.vue'
 import { buildFormFromSchema } from '../../utils/autoForm'
 
 
-const module = ''
+const module = ref('')
 const modules = ref([])
-const model = ''
+const model = ref('')
 const models = ref([])
 
 const title = `${module}/${model}`
 
 // Endpoint do CRUD (ajusta aqui se teu padrão for diferente)
-const endpoint = `/${module}/${model.toLowerCase()}s/`
+const endpoint = `/${module.value}/${model.value.toLowerCase()}s/`
 
 const rows = ref([])
 const columns = ref([])
