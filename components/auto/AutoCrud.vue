@@ -96,7 +96,7 @@ const models = ref([])
 var title = tdc('Nome da tabela')
 
 // Endpoint do CRUD (ajusta aqui se teu padrão for diferente)
-const endpoint = `/${module.value}/${model.value.toLowerCase()}s/`
+var endpoint = ''
 
 const rows = ref([])
 const columns = ref([])
@@ -128,6 +128,7 @@ function notifyFromApi(data) {
 
 async function loadSchema() {
   title = `${model.value}`
+  endpoint = `/${module.value}/${model.value.toLowerCase()}s/`
   fields.value = await buildFormFromSchema(module.value, model.value)
 
   columns.value = fields.value.map(f => ({
