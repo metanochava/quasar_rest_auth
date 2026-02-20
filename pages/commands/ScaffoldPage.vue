@@ -389,8 +389,9 @@
       </div>
 
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
-      
-      <q-btn v-if="form.modulo" class="full-width col-8" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
+      <div class="col-8">
+        <q-btn v-if="form.modulo" class="full-width" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
+      </div>
       <div class="col-8" v-if="out">
         <div class="col" >
           <br>
