@@ -364,7 +364,6 @@
               dense 
             />
             <q-input class="col" dense v-model="accao.Permission" @keyup.enter="addPerm()" outlined label="Permission" placeholder="Permission"/>
-
             <q-input class="col-12" dense v-model="accao.Url" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
 
             <q-chip
@@ -391,7 +390,8 @@
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       
       <div class="col-8">
-        <q-btn v-if="form.modulo" class="full-width" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
+        <q-btn v-if="form.modulo" class="full-width coll" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
+        <q-btn v-if="form.modelo" class="full-width coll" flat icon="refresh" color="success" :label="'Permissions Updade' + ' '+ form.modulo" @click="permissionUpdade" />
         <div class="col" v-if="out">
           <br>
           <pre  class="code">{{ out }}</pre>
@@ -770,6 +770,17 @@ export default {
         modulo: this.form.modulo,
       }
       const { data } = await HTTPAuth.post('/api/django_saas/scaffolds/migrate/', payload)
+      this.out = data.out 
+    },
+
+    async permissionUpdade () {
+      this.out=null
+      const payload = {
+        modulo: this.form.modulo,
+        modelo: this.form.modelo,
+        actions: form.actions,
+      }
+      const { data } = await HTTPAuth.post('/api/django_saas/scaffolds/permissions/', payload)
       this.out = data.out 
     },
 
