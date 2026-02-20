@@ -103,10 +103,7 @@
     <!-- -------------------- PAGE CONTAINER -------------------- -->
 
     <q-page-container class="">
-      <router-view :showing="Load.count === 0" />
-      <q-inner-loading :showing="Load.count !== 0">
-        <q-spinner-gears size="80px" color="primary" />
-      </q-inner-loading>
+      <router-view />
     </q-page-container>
 
     <!-- -------------------- RODAPÉ -------------------- -->

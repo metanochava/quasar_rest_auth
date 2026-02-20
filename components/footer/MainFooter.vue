@@ -12,7 +12,8 @@
               &copy; {{ User?.Entidade?.created_at==null? '2020' : User?.Entidade?.created_at }} - {{ new Date().getFullYear() }} {{ User?.Entidade?.tipoEntidade }} {{ User?.Entidade?.nome }}
             </div>
             <div class="col-md-3 text-right  items-center" style="font-size:12px;">
-                  {{ Load.count }} <label  @click="this.comment = !this.comment">  {{tdc('Enviar comentário ou opinião')}} </label>
+              <q-spinner-gears size="md" color="primary" :showing="Load.count"/>
+              {{ Load.count }} <label  @click="this.comment = !this.comment">  {{tdc('Enviar comentário ou opinião')}} </label>
             </div>
           </div>
         </q-toolbar-title>
