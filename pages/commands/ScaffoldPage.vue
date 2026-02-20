@@ -389,15 +389,16 @@
       </div>
 
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
-      <div class="col-8" v-if="out">
+      
+      <div class=" row col-8">
         <q-btn v-if="form.modulo" class="full-width" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
-       <div class="col" >
-        <br>
-        <br>
-        <pre  class="code">{{ out }}</pre>
-       </div>
-      </div>
-      <div class="col-8" v-else>
+        <div class="col-12" v-if="out">
+          <div class="col" >
+
+            <br>
+            <pre  class="code">{{ out }}</pre>
+          </div>
+        </div>
 
         <q-tabs v-model="tab" dense >
 
