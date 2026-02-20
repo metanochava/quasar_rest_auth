@@ -390,8 +390,8 @@
 
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       <div class="col-8" v-if="out">
-        <q-btn v-if="out == 'migrate'" flat icon="refresh" color="accent" label="Migrate" @click="generateMigrate" />
-       <div class="col" v-else>
+        <q-btn v-if="form.modulo" class="full-width" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
+       <div class="col" >
         <br>
         <br>
         <pre  class="code">{{ out }}</pre>
