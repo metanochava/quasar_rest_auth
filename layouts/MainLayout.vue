@@ -168,7 +168,6 @@ export default defineComponent({
     return {
       Auth,
       User,
-      Load,
       barStyle, 
       thumbStyle 
     }
