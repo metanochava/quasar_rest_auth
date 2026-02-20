@@ -120,7 +120,7 @@
 <script>
 /* -------------------- IMPORT STORES -------------------- */
 
-import { AuthStore, LoadStore, UserStore } from '../stores/AuthStore'
+import { AuthStore, UserStore } from '../stores/AuthStore'
 
 /* -------------------- IMPORT COMPONENTS -------------------- */
 import HeaderBrand from '../components/header/HeaderBrand.vue'
@@ -165,7 +165,6 @@ export default defineComponent({
   setup() {
     const Auth = AuthStore()
     const User = UserStore()
-    const Load = LoadStore()
     return {
       Auth,
       User,
