@@ -390,8 +390,10 @@
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       
       <div class="col-8">
-        <q-btn v-if="form.modulo" class="full-width coll" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
-        <q-btn v-if="form.modelo" class="full-width coll" flat icon="refresh" color="success" :label="'Permissions Updade' + ' '+ form.modulo" @click="permissionUpdade" />
+        <div class="row" v-if="out"></div>
+          <q-btn v-if="form.modulo" class=" coll" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
+          <q-btn v-if="form.modelo" class=" coll" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
+        </div>
         <div class="col" v-if="out">
           <br>
           <pre  class="code">{{ out }}</pre>
