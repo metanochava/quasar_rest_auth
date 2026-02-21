@@ -7,7 +7,7 @@ export const tdc = (texto = '') => {
   if (!getActivePinia()) return texto
 
   const store = LanguageStore()
-  const chave = texto.toLowerCase().trim()
+  const chave = texto?.toLowerCase()?.trim()
 
   return store.TraducaoMap[chave] || texto
 }
