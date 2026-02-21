@@ -432,7 +432,7 @@
 <script>
 
 import { ref, computed, watch, onMounted } from 'vue'
-import { HTTPAuth, tdc, UserStore , AlertError, buildFormFromSchema} from './../../index'
+import { HTTPAuth, tdc, UserStore , AlertError, buildFormFromSchema, actionsFromSchema} from './../../index'
 import ModelAction from './ModelAction.vue';
 
 
