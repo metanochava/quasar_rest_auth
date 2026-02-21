@@ -129,7 +129,7 @@ function notifyFromApi(data) {
 async function loadSchema() {
   title = `${model.value}`
   endpoint = `api/${module.value}/${model.value.toLowerCase()}s/`
-  fields.value = await buildFormFromSchema(module.value, model.value)
+  fields.value = await buildFormFromSchema({'module':module.value, model: model.value})
 
   columns.value = fields.value.map(f => ({
     name: f.name,

@@ -790,7 +790,7 @@ export default {
 
     async reloadModelShema(){
       this.accaoTeste = false
-      this.form.fields = await buildFormFromSchema(this.form.modulo, this.form.modelo)
+      this.form.fields = await buildFormFromSchema({'module': this.form.modulo, 'model': this.form.modelo})
       this.form.actions = await actionsFromSchema(this.form.modulo, this.form.modelo)
       this.accaoTeste = true
     },

@@ -31,7 +31,7 @@ async function fetchRelationOptions(relation, search = '') {
  * buildFormFromSchema(module, model) -> fields config
  * espera GET /api/django_saas/modulos/<module>/<model>/schema/
  */
-export async function buildFormFromSchema(module, model) {
+export async function buildFormFromSchema({'module':module, 'model': model}) {
   const { data } = await HTTPAuth.get(url({type:'u', url:`/api/django_saas/modulos/${module}/${model}/schema/`, params:{}}))
   const out = []
 
