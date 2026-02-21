@@ -96,17 +96,27 @@ HTTPAuthBlob.interceptors.response.use(
 )
 
 
-
 HTTPAuth.interceptors.request.use(async config => {
   const User = UserStore()
+
+  config.headers = config.headers || {}
+
   config.withCredentials = false
+
   if (config.headers.Cookie) {
     delete config.headers.Cookie
   }
-  
+
   if (config.data instanceof FormData) {
     config.headers['Content-Type'] = 'multipart/form-data'
   }
+
+  const token = User.access || getStorage('c', 'access')
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
   const headersMap = {
     E: 'userEntidade',
     S: 'userSucursal',
@@ -115,22 +125,22 @@ HTTPAuth.interceptors.request.use(async config => {
     L: 'userLang'
   }
 
-  config.headers.Authorization = `Bearer ${User.access || getStorage('c', 'access') || ''}`
-  console.log(config.headers.Authorization)
-
   Object.entries(headersMap).forEach(([key, storage]) => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
   })
 
-  config.headers['fek'] =process.env.FRONT_END_KEY
-  config.headers['fep'] =process.env.FRONT_END_PASSWORD
-  
+  config.headers['fek'] = process.env.FRONT_END_KEY
+  config.headers['fep'] = process.env.FRONT_END_PASSWORD
+
+  console.log("HEADERS:", config.headers)
+
   const Load = LoadStore()
   Load.inc()
 
   return config
 })
+
 
 HTTPAuth.interceptors.response.use(
   (response) => {
