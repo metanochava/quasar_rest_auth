@@ -239,8 +239,8 @@ export const UserStore = defineStore("user", {
         setStorage('c', 'access', this.access,  365)
         setStorage('c', 'refresh', this.refresh,  365)
         if (this.manterLogado) {
-          setStorage('c', 'username', data.email, 365)
-          setStorage('c', 'password', data.password, 365)
+          setStorage('c', 'username', res.data.email, 365)
+          setStorage('c', 'password', res.data.password, 365)
         } else {
           deleteStorage('c', 'username')
           deleteStorage('c', 'password')
@@ -277,9 +277,9 @@ export const UserStore = defineStore("user", {
       .then(res => {
         this.access = res.data.access
         setStorage('c', 'access', this.access,  365)
-        console.log('deu  access')
+        // console.log('deu  access')
       }).catch(err => {
-        console.log('nao deu  access')
+        // console.log('nao deu  access')
       })
       return rsp
     },

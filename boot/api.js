@@ -74,7 +74,7 @@ export const HTTPAuthBlob = axios.create({
 
 HTTPAuthBlob.interceptors.request.use(async config => {
   const User = UserStore()
-  config.headers.Authorization = `Bearer ${User.access || ''}`
+  config.headers.Authorization = `Bearer ${User.access || getStorage('c', 'access') || ''}`
   const Load = LoadStore()
   Load.inc()
   return config
@@ -115,7 +115,7 @@ HTTPAuth.interceptors.request.use(async config => {
     L: 'userLang'
   }
 
-  config.headers.Authorization = `Bearer ${User.access || ''}`
+  config.headers.Authorization = `Bearer ${User.access || getStorage('c', 'access') || ''}`
 
   Object.entries(headersMap).forEach(([key, storage]) => {
     const data = safeParse(getStorage('c', storage))
