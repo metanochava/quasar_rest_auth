@@ -133,8 +133,6 @@ HTTPAuth.interceptors.request.use(async config => {
   config.headers['fek'] = process.env.FRONT_END_KEY
   config.headers['fep'] = process.env.FRONT_END_PASSWORD
 
-  console.log("HEADERS:", config.headers)
-
   const Load = LoadStore()
   Load.inc()
 
@@ -168,15 +166,21 @@ HTTPAuth.interceptors.response.use(
 
 
 HTTPClient.interceptors.request.use(async config => {
-  const User = UserStore()
+    const User = UserStore()
+
+  config.headers = config.headers || {}
+
   config.withCredentials = false
+
   if (config.headers.Cookie) {
     delete config.headers.Cookie
   }
-  
+
   if (config.data instanceof FormData) {
     config.headers['Content-Type'] = 'multipart/form-data'
   }
+
+
   const headersMap = {
     // L: 'userLang'
   }
@@ -185,8 +189,10 @@ HTTPClient.interceptors.request.use(async config => {
     const data = safeParse(getStorage('c', storage))
     if (data?.id) config.headers[key] = data.id
   })
-  config.headers['fek'] =process.env.FRONT_END_KEY
-  config.headers['fep'] =process.env.FRONT_END_PASSWORD
+
+  config.headers['fek'] = process.env.FRONT_END_KEY
+  config.headers['fep'] = process.env.FRONT_END_PASSWORD
+
   const Load = LoadStore()
   Load.inc()
 
