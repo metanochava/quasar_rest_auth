@@ -349,3 +349,9 @@ export async function buildFormFromSchema({
 
   return out
 }
+
+
+export async function actionsFromSchema(module, model) {
+  const { data } = await HTTPAuth.get(url({type:'u', url:`/api/django_saas/modulos/${module}/${model}/schema/`, params:{}}))
+  return data.actions 
+}
