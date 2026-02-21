@@ -390,16 +390,16 @@
       <!-- ================= RIGHT (PREVIEW CODE) ================= -->
       
       <div class="col-8">
-        <div class="row" v-if="out">
-          <q-btn v-if="form.modulo" class=" coll" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
-          <q-btn v-if="form.modelo" class=" coll" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
+        <div class="row" >
+          <q-btn v-if="form.modulo" class=" col" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
+          <q-btn v-if="form.modelo" class=" col" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
         </div>
         <div class="col" v-if="out">
           <br>
           <pre  class="code">{{ out }}</pre>
         </div>
 
-        <q-tabs v-model="tab" dense v-else >
+        <q-tabs v-model="tab" dense  v-if="!out" >
 
           <q-tab name="model" label="Model"/>
           <q-tab name="serializer" label="Serializer"/>
@@ -407,9 +407,9 @@
 
         </q-tabs>
 
-        <q-separator/>
+        <q-separator  v-if="!out"/>
 
-        <q-tab-panels v-model="tab" animated>
+        <q-tab-panels  v-if="!out" v-model="tab" animated>
 
           <q-tab-panel name="model">
             <pre class="code">{{ preview?.model }}</pre>
