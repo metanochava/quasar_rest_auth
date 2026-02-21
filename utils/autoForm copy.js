@@ -2,6 +2,163 @@ import { tdc, HTTPAuth, url,  toPluralEndpoint, guessLabelKey } from './../index
 
 
 
+
+
+async function fetchRelationOptions(relation, search = '') {
+  // relation = "rh.Departamento"
+  if (!relation) return []
+
+  const [app, model] = relation.split('.')
+  const endpoint = `/api/${app}/${toPluralEndpoint(model)}/`
+
+  const params = {}
+  if (search) params.search = search
+  params.page_size = 50
+
+  const { data } = await HTTPAuth.get(url({type:'u', url:endpoint, params: params}))
+  const items = data?.results || data || []
+
+  const labelKey = guessLabelKey(items[0])
+
+  return items.map(x => ({
+    label: String(x[labelKey] ?? x.id),
+    value: x.id,
+    raw: x
+  }))
+}
+
+/**
+ * buildFormFromSchema(module, model) -> fields config
+ * espera GET /api/django_saas/modulos/<module>/<model>/schema/
+ */
+export async function buildFormFromSchema(module, model) {
+  const { data } = await HTTPAuth.get(url({type:'u', url:`/api/django_saas/modulos/${module}/${model}/schema/`, params:{}}))
+  const out = []
+
+  for (const f of (data.fields || [])) {
+    // ignora id/auto se quiser (podes comentar)
+    if (['id', 'created_at', 'updated_at'].includes(f.name)) continue
+
+    let component = 'q-input'
+    const props = {}
+
+    // TYPE MAPPING
+    switch (f.type) {
+      case 'CharField':
+      case 'TextField':
+        component = 'q-input'
+        props.type = 'text'
+        break
+
+      case 'IntegerField':
+      case 'DecimalField':
+      case 'MoneyField':
+        component = 'q-input'
+        props.type = 'number'
+        break
+
+      case 'BooleanField':
+        component = 'q-toggle'
+        break
+
+      case 'DateField':
+      case 'DateTimeField':
+        component = 'q-input'
+        props.type = 'date'
+        break
+
+      case 'JSONField':
+        component = 'q-input'
+        props.type = 'textarea'
+        props.autogrow = true
+        break
+
+      case 'ImageField':
+      case 'FileField':
+        component = 'q-file'
+        break
+
+      case 'ForeignKey':
+        component = 'q-select'
+        props.multiple = false
+        props.relation = f.relation
+        props._relation = true
+        break
+
+      case 'ManyToManyField':
+        component = 'q-select'
+        props.multiple = true
+        props.relation = f.relation
+        props._relation = true
+        break
+
+      default:
+        component = 'q-input'
+    }
+
+    // CHOICES
+    if (f.choices && Array.isArray(f.choices) && f.choices.length) {
+      component = 'q-select'
+      props.options = f.choices.map(([v, l]) => ({ label: tdc(String(l)), value: v }))
+      props.emitValue = true
+      props.mapOptions = true
+    }
+
+    // RELATIONS: options async
+    if (props._relation) {
+      props.emitValue = true
+      props.mapOptions = true
+      props.useInput = true
+      props.fillInput = false
+      props.options = [] // vai carregar depois
+      props.loadOptions = (search) => fetchRelationOptions(props.relation, search)
+    }
+
+    out.push({
+      name: f.name,
+      label: tdc(f.label || f.name),
+      type: f.type,
+      required: !!f.required,
+      component,
+      props
+    })
+  }
+
+  return out
+}
+
+export async function actionsFromSchema(module, model) {
+  const { data } = await HTTPAuth.get(url({type:'u', url:`/api/django_saas/modulos/${module}/${model}/schema/`, params:{}}))
+  return data.actions 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // PRO+ — buildFormFromSchema
 // ✅ masks (telefone, NIF, money)
 // ✅ relations lazy-load + cache + debounce
@@ -108,7 +265,7 @@ async function defaultFetchRelationOptions(relationStr, search = '') {
   }))
 }
 
-export async function buildFormFromSchema({
+export async function buildFormFromSchemaPRO({
   module,
   model,
   fetchRelationOptions = null, // opcional: injeta a tua função
