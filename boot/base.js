@@ -121,4 +121,16 @@ export function ascii(text, font = 'Standard') {
 }
 
 
+export function toPluralEndpoint (modelName) {
+  // "Funcionario" -> "funcionarios"
+  // ajuste simples: lower + "s". Se tua API usa outro plural, substitui aqui.
+  return `${modelName.toLowerCase()}s`
+}
+
+export function guessLabelKey(obj) {
+  // tenta achar um campo “humano” pra label
+  const candidates = ['nome', 'name', 'titulo', 'title', 'descricao', 'description', 'username', 'email']
+  for (const k of candidates) if (obj && obj[k]) return k
+  return 'id'
+}
 

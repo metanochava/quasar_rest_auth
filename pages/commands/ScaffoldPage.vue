@@ -680,9 +680,8 @@ export default {
     addPerm () {
       if (!this.accao.Permission) return
       if (!this.accao.Method) return
-      this.form.actions.push({'method' :this.accao.Method, 'permition': this.accao.Permission,  'url' : this.accao.Url, 'details' : this.accao.Details})
+      this.form.actions.push({'method' :this.accao.Method, 'permission': this.accao.Permission,  'url' : this.accao.Url, 'details' : this.accao.Details})
       this.accao.Permission=''
-      this.accao.Method=''
       this.accao.Method=''
       this.accao.Url=''
       this.accao.Details=true
@@ -756,6 +755,7 @@ export default {
       const payload = {
         ...this.form,
         fields: this.normalizeFields(this.form.fields),
+        actions: this.form.actions,
       }
       const { data } = await HTTPAuth.post('/api/django_saas/scaffolds/preview/', payload)
 
@@ -789,6 +789,7 @@ export default {
     async reloadModelShema(){
       this.accaoTeste = false
       this.form.fields = await buildFormFromSchema(this.form.modulo, this.form.modelo)
+      this.form.actions = await actionsFromSchema(this.form.modulo, this.form.modelo)
       this.accaoTeste = true
     },
 

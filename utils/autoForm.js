@@ -1,26 +1,15 @@
-import { tdc, HTTPAuth } from './../index'
+import { tdc, HTTPAuth,  toPluralEndpoint, guessLabelKey } from './../index'
 
 
 
-function toPluralEndpoint(modelName) {
-  // "Funcionario" -> "funcionarios"
-  // ajuste simples: lower + "s". Se tua API usa outro plural, substitui aqui.
-  return `${modelName.toLowerCase()}s`
-}
 
-function guessLabelKey(obj) {
-  // tenta achar um campo “humano” pra label
-  const candidates = ['nome', 'name', 'titulo', 'title', 'descricao', 'description', 'username', 'email']
-  for (const k of candidates) if (obj && obj[k]) return k
-  return 'id'
-}
 
 async function fetchRelationOptions(relation, search = '') {
   // relation = "rh.Departamento"
   if (!relation) return []
 
   const [app, model] = relation.split('.')
-  const endpoint = `/${app}/${toPluralEndpoint(model)}/`
+  const endpoint = `/api/${app}/${toPluralEndpoint(model)}/`
 
   const params = {}
   if (search) params.search = search
@@ -40,7 +29,7 @@ async function fetchRelationOptions(relation, search = '') {
 
 /**
  * buildFormFromSchema(module, model) -> fields config
- * espera GET /api/django_saas/modulo/<module>/<model>/schema/
+ * espera GET /api/django_saas/modulos/<module>/<model>/schema/
  */
 export async function buildFormFromSchema(module, model) {
   const { data } = await HTTPAuth.get(`/api/django_saas/modulos/${module}/${model}/schema/`)
@@ -136,6 +125,11 @@ export async function buildFormFromSchema(module, model) {
   }
 
   return out
+}
+
+export async function actionsFromSchema(module, model) {
+  const { data } = await HTTPAuth.get(`/api/django_saas/modulos/${module}/${model}/schema/`)
+  return data.actions 
 }
 
 
