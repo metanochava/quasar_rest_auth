@@ -379,7 +379,11 @@
               removable
               @remove="form?.actions.splice(i,1)"
             >
-              {{ p.method + '_' +p.permition }}
+              {{ p.method + '_' +p.permission }}
+              <q-tooltip class="bg-primary text-white">
+                url = {{p.url}}<br />
+                details = {{p.details}}
+              </q-tooltip>
             </q-chip>
           </q-card-section>
           
@@ -434,8 +438,6 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { HTTPAuth, tdc, UserStore , AlertError, buildFormFromSchema, actionsFromSchema} from './../../index'
 import ModelAction from './ModelAction.vue';
-
-
 
 
 export default {
