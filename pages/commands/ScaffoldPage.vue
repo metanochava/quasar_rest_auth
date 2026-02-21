@@ -780,7 +780,7 @@ export default {
       const payload = {
         modulo: this.form.modulo,
         modelo: this.form.modelo,
-        actions: form.actions,
+        actions: this.form.actions,
       }
       const { data } = await HTTPAuth.post('/api/django_saas/scaffolds/permissions/', payload)
       this.out = data.out 
