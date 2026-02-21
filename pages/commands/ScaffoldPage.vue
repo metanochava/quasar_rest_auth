@@ -757,7 +757,7 @@ export default {
         ...this.form,
         fields: this.normalizeFields(this.form.fields),
       }
-      const { data } = await HTTPAuth.post('/saas/scaffolds/preview/', payload)
+      const { data } = await HTTPAuth.post('/api/django_saas/scaffolds/preview/', payload)
 
       this.preview = data.data || data || {
         model:'',
