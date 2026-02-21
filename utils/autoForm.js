@@ -98,7 +98,7 @@ async function defaultFetchRelationOptions(relationStr, search = '') {
   // Sugestão de endpoint padrão:
   // GET /saas/relations/?model=app.Model&search=...
   // Se tu não tens, troca aqui por GET /saas/<model-endpoint>/
-  const { data } = await HTTPAuth.get(url({type:'u', url: '/api/django_saas/relations/',  params: { model: relationStr, search: search || '' }}))
+  const { data } = await HTTPAuth.get(url({type:'u', url: '/api/django_saas/modulos/relations/',  params: { model: relationStr, search: search || '' }}))
 
   // esperado: [{id, label}] ou [{id, nome}] etc
   const rows = data?.results || data?.data || data || []
