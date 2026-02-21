@@ -116,6 +116,7 @@ HTTPAuth.interceptors.request.use(async config => {
   }
 
   config.headers.Authorization = `Bearer ${User.access || getStorage('c', 'access') || ''}`
+  console.log(onfig.headers.Authorization)
 
   Object.entries(headersMap).forEach(([key, storage]) => {
     const data = safeParse(getStorage('c', storage))
