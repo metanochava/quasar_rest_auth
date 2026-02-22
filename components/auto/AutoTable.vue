@@ -48,6 +48,8 @@ const geralActions = computed(() =>
   (props.actions || []).filter(c => c.details === false || c.details === 'false')
 )
 const density = ref('normal')
+const objects = ref('Activos')
+const objectsOptions = ref( ['Activos', 'Apagados', 'Todos'])
 
 // ---------------- COMPUTED ----------------
 const allColumns = computed(() => props.columns.map(c => c.name))
@@ -167,6 +169,14 @@ function onRestore(row) {
         />
 
         <q-select
+          v-model="objects"
+          :options="objectsOptions"
+          dense
+          outlined
+          style="width:100px"
+        />
+
+        <q-select
           v-model="visibleColumns"
           :options="allColumns"
           multiple
@@ -225,7 +235,7 @@ function onRestore(row) {
 
               <!-- EDIT -->
               <q-item
-                v-if="canDo('change_'+model.toLowerCase())"
+                v-if="canDo('chang_'+model.toLowerCase())"
                 clickable
                 @click="emit('edit', props.row)"
               >
@@ -249,7 +259,7 @@ function onRestore(row) {
 
               <!-- HARD DELETE -->
               <q-item
-                v-if="canDo('delete_'+model.toLowerCase()) && props.row?.deleted_at"
+                v-if="canDo('hard_delete_'+model.toLowerCase()) && props.row?.deleted_at"
                 clickable
                 @click="onHardDelete(props.row)"
               >
