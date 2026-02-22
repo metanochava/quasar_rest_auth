@@ -25,6 +25,7 @@
           @update:model-value="load()"
         />
       </div>
+      {{ module }} | {{ model }} 
     </div>
 
     <AutoCrud :module="module" :model="model" />
