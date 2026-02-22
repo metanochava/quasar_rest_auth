@@ -386,7 +386,7 @@
               </q-tooltip>
             </q-chip>
             
-            <q-btn v-if="form.modelo" class=" col" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
+            <q-btn v-if="form.modelo" class=" col-12" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
           </q-card-section>
           
         </q-card>
