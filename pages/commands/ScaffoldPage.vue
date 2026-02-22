@@ -657,6 +657,7 @@ export default {
         type: '',
         required: true, 
         unique: false, 
+        choices: [],
       })
     },
 

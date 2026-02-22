@@ -72,6 +72,15 @@ function exportCSV() {
 
   exportFile('export.csv', `${header}\n${body}`)
 }
+
+watch(
+  () => props.columns,
+  async (columns) => {
+    if (!columns) return
+    visibleColumns.value = []
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -91,7 +100,7 @@ function exportCSV() {
       <div class="row q-gutter-sm">
 
         <q-btn icon="add" color="primary" @click="emit('create')" >
-          <q-tooltip>{{('Create')}} {{ mdel }}</q-tooltip>
+          <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
         </q-btn>
         <q-btn icon="filter_list" @click="emit('filter')" />
         <q-btn icon="refresh" @click="emit('refresh')" />
