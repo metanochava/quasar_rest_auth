@@ -207,7 +207,7 @@ const paginationLabel = (start, end, total) => {
               </q-item>
 
               <q-separator v-if="singularActions.length" />
-              {{ a.method + '_' + a.permission + '_' +  String(a.modelo || '').toLowerCase() }}
+              
 
               <!-- ACTIONS DINÂMICAS -->
               <q-item
@@ -217,6 +217,7 @@ const paginationLabel = (start, end, total) => {
                 :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' +  String(a.modelo || '').toLowerCase())"
                 @click="runAction(a, props.row)"
               >
+              {{ a.method + '_' + a.permission + '_' +  String(a.modelo || '').toLowerCase() }}
                 <q-item-section avatar v-if="a.icon">
                   <q-icon :name="a.icon" :color="{
                       'green': a.method === 'get',
