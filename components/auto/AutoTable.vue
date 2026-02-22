@@ -75,7 +75,7 @@ function exportCSV() {
 </script>
 
 <template>
-  <mark-table
+  <q-markup-table
     :rows="rows"
     :columns="columns"
     :loading="loading"
@@ -164,5 +164,5 @@ function exportCSV() {
       </q-td>
     </template>
 
-  </mark-table>
+  </q-markup-table>
 </template>
