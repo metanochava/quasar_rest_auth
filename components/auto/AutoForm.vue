@@ -1,24 +1,40 @@
+
+
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { tdc } from '../../boot/base'
 import { HTTPAuth, url } from '../../boot/api'
 
+// ---------------- PROPS ----------------
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
   schema: { type: Array, default: () => [] },
   data: { type: Object, default: null },
   module: { type: String, required: true },
   model: { type: String, required: true },
-  canDo: { type: Function, default: () => true },
+  canDo: { type: Function, default: () => true }
 })
 
-const emit = defineEmits(['update:modelValue', 'saved'])
+// ---------------- EMITS ----------------
+const emit = defineEmits(['update:modelValue','saved'])
 
+// ---------------- LOCAL STATE (FIX) ----------------
+const localModel = ref(props.modelValue)
+
+watch(() => props.modelValue, v => {
+  localModel.value = v
+})
+
+watch(localModel, v => {
+  emit('update:modelValue', v)
+})
+
+// ---------------- FORM ----------------
 const form = ref({})
 const saving = ref(false)
 const uploadProgress = ref(0)
 
-// layout por tabs
+// ---------------- TABS ----------------
 const tab = ref('general')
 
 const generalFields = computed(() =>
@@ -33,19 +49,22 @@ const fileFields = computed(() =>
   props.schema.filter(f => f.ui?.isFile || f.ui?.isImage)
 )
 
-watch(
-  () => props.data,
-  (v) => { form.value = v ? { ...v } : {} },
-  { immediate: true }
-)
+// ---------------- WATCH DATA ----------------
+watch(() => props.data, (v) => {
+  form.value = v ? { ...v } : {}
+}, { immediate: true })
 
+// ---------------- CLOSE ----------------
 function close() {
-  emit('update:modelValue', false)
+  localModel.value = false
 }
 
-function buildPayloadAndConfig() {
-  // se tiver file/image, manda multipart
-  const hasFiles = fileFields.value.some(f => form.value[f.name] instanceof File || Array.isArray(form.value[f.name]))
+// ---------------- BUILD PAYLOAD ----------------
+function buildPayload() {
+  const hasFiles = fileFields.value.some(f =>
+    form.value[f.name] instanceof File ||
+    (Array.isArray(form.value[f.name]) && form.value[f.name][0] instanceof File)
+  )
 
   if (!hasFiles) {
     return { data: form.value, config: {} }
@@ -54,57 +73,49 @@ function buildPayloadAndConfig() {
   const fd = new FormData()
 
   for (const [k, v] of Object.entries(form.value)) {
-    if (v === undefined) continue
-    if (v === null) { fd.append(k, ''); continue }
+    if (v == null) continue
 
     if (v instanceof File) {
       fd.append(k, v)
-      continue
-    }
-
-    // q-file pode retornar array
-    if (Array.isArray(v) && v.length && v[0] instanceof File) {
-      // assume 1 file
+    } else if (Array.isArray(v) && v[0] instanceof File) {
       fd.append(k, v[0])
-      continue
-    }
-
-    // objects → JSON
-    if (typeof v === 'object') {
+    } else if (typeof v === 'object') {
       fd.append(k, JSON.stringify(v))
-      continue
-    }
-
-    fd.append(k, String(v))
-  }
-
-  const config = {
-    headers: { 'Content-Type': 'multipart/form-data' },
-    onUploadProgress: (e) => {
-      if (!e.total) return
-      uploadProgress.value = Math.round((e.loaded * 100) / e.total)
+    } else {
+      fd.append(k, v)
     }
   }
 
-  return { data: fd, config }
+  return {
+    data: fd,
+    config: {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (e) => {
+        if (e.total) {
+          uploadProgress.value = Math.round((e.loaded * 100) / e.total)
+        }
+      }
+    }
+  }
 }
 
+// ---------------- SAVE ----------------
 async function save() {
   saving.value = true
-  uploadProgress.value = 0
 
   try {
-    const apiBase = `/api/${props.module}/${props.model}/`
+    const api = `/api/${props.module}/${props.model}/`
+    const { data, config } = buildPayload()
 
-    const { data, config } = buildPayloadAndConfig()
-
-    if (form.value?.id) {
-      await HTTPAuth.put(url({ type: 'u', url: `${apiBase}${form.value.id}/` }), data, config)
+    if (form.value.id) {
+      await HTTPAuth.put(url({ type:'u', url: api + form.value.id + '/' }), data, config)
     } else {
-      await HTTPAuth.post(url({ type: 'u', url: apiBase }), data, config)
+      await HTTPAuth.post(url({ type:'u', url: api }), data, config)
     }
 
     emit('saved')
+    localModel.value = false
+
   } finally {
     saving.value = false
   }
@@ -112,8 +123,10 @@ async function save() {
 </script>
 
 <template>
-  <q-dialog v-model="modelValue" persistent>
+  <q-dialog v-model="localModel" persistent>
     <q-card style="min-width: 760px; max-width: 92vw;">
+
+      <!-- HEADER -->
       <q-card-section class="row items-center justify-between">
         <div class="text-h6">
           {{ form?.id ? 'Editar' : 'Novo' }}
@@ -123,73 +136,63 @@ async function save() {
 
       <q-separator />
 
+      <!-- BODY -->
       <q-card-section>
+
         <q-tabs v-model="tab" dense>
           <q-tab name="general" label="Geral" />
           <q-tab name="relations" label="Relações" />
           <q-tab name="files" label="Ficheiros" />
         </q-tabs>
 
-        <q-separator class="q-mt-sm q-mb-md" />
+        <q-separator class="q-my-sm" />
 
-        <q-tab-panels v-model="tab" animated>
+        <q-tab-panels v-model="tab">
+
+          <!-- GENERAL -->
           <q-tab-panel name="general">
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-6" v-for="f in generalFields" :key="f.name">
-                <component
-                  :is="f.component"
-                  v-model="form[f.name]"
-                  v-bind="f.props"
-                />
-                <div v-if="f.help_text" class="text-caption text-grey-7 q-mt-xs">{{ f.help_text }}</div>
-              </div>
+            <div v-for="f in generalFields" :key="f.name">
+              <component :is="f.component" v-model="form[f.name]" v-bind="f.props" />
             </div>
           </q-tab-panel>
 
+          <!-- RELATIONS -->
           <q-tab-panel name="relations">
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-6" v-for="f in relationFields" :key="f.name">
-                <component
-                  :is="f.component"
-                  v-model="form[f.name]"
-                  v-bind="f.props"
-                />
-                <div v-if="f.help_text" class="text-caption text-grey-7 q-mt-xs">{{ f.help_text }}</div>
-              </div>
+            <div v-for="f in relationFields" :key="f.name">
+              <component :is="f.component" v-model="form[f.name]" v-bind="f.props" />
             </div>
           </q-tab-panel>
 
+          <!-- FILES -->
           <q-tab-panel name="files">
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-6" v-for="f in fileFields" :key="f.name">
-                <!-- preview image -->
-                <div v-if="f.ui?.isImage && typeof form[f.name] === 'string' && form[f.name]" class="q-mb-sm">
-                  <img :src="form[f.name]" style="max-width: 160px; border-radius: 8px;" />
-                </div>
+            <div v-for="f in fileFields" :key="f.name">
 
-                <component
-                  :is="f.component"
-                  v-model="form[f.name]"
-                  v-bind="f.props"
-                />
-                <div v-if="f.help_text" class="text-caption text-grey-7 q-mt-xs">{{ f.help_text }}</div>
-              </div>
+              <!-- preview -->
+              <img
+                v-if="f.ui?.isImage && typeof form[f.name] === 'string'"
+                :src="form[f.name]"
+                style="max-width:100px"
+              />
+
+              <component :is="f.component" v-model="form[f.name]" v-bind="f.props" />
+
             </div>
 
-            <div v-if="uploadProgress > 0 && uploadProgress < 100" class="q-mt-md">
-              <q-linear-progress :value="uploadProgress / 100" />
-              <div class="text-caption q-mt-xs">{{ uploadProgress }}%</div>
-            </div>
+            <q-linear-progress v-if="uploadProgress > 0" :value="uploadProgress/100" />
           </q-tab-panel>
+
         </q-tab-panels>
+
       </q-card-section>
 
       <q-separator />
 
+      <!-- ACTIONS -->
       <q-card-actions align="right">
         <q-btn flat label="Cancelar" @click="close" />
         <q-btn color="primary" :loading="saving" label="Salvar" @click="save" />
       </q-card-actions>
+
     </q-card>
   </q-dialog>
 </template>
