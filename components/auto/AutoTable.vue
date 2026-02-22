@@ -229,12 +229,7 @@ const paginationLabel = (start, end, total) => {
                 </q-item-section>
 
                 <q-item-section>
-                  {{ a.method + '_' + a.permission + '_' }}
-                </q-item-section>
-
-                <!-- loading -->
-                <q-item-section side v-if="isLoading(`${props.row.id}_${a.url}`)">
-                  <q-spinner size="16px" />
+                  {{ a.method + '_' + a.permission }}
                 </q-item-section>
               </q-item>
 
