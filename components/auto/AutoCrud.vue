@@ -65,20 +65,9 @@ const props = defineProps({
 })
 
 watch(
-  () => [props.model],
-  async ([ model], [oldModel]) => {
-    // 🔒 proteção
+  () => props.model,
+  async (model) => {
     if (!model) return
-
-    // 🔁 evita reload desnecessário
-    if ( model === oldModel) return
-
-    // reset estado
-    schema.value = []
-    actions.value = []
-    rows.value = []
-    pagination.value.page = 1
-
     await init()
   },
   { immediate: true }
