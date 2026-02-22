@@ -1,57 +1,70 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 
+// ---------------- PROPS ----------------
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
-  schema: { type: Array, default: () => [] },
+  schema: { type: Array, default: () => [] }
 })
 
-const emit = defineEmits(['update:modelValue', 'apply'])
+// ---------------- EMITS ----------------
+const emit = defineEmits(['update:modelValue','apply'])
 
+// ---------------- FIX V-MODEL ----------------
+const localModel = ref(props.modelValue)
+
+watch(() => props.modelValue, v => {
+  localModel.value = v
+})
+
+watch(localModel, v => {
+  emit('update:modelValue', v)
+})
+
+// ---------------- STATE ----------------
 const tab = ref('basic')
-const f = ref({})
+const filters = ref({})
 
-// heurística simples: campos bons para filtrar
+// ---------------- COMPUTED ----------------
 const basicFields = computed(() =>
-  props.schema.filter(x => {
-    if (x.ui?.isFile || x.ui?.isImage) return false
-    if (x.ui?.isRelation) return true
-    if (x.ui?.isChar || x.ui?.isNumeric) return true
+  props.schema.filter(f => {
+    if (f.ui?.isFile || f.ui?.isImage) return false
+    if (f.ui?.isRelation) return true
+    if (f.ui?.isChar || f.ui?.isNumeric) return true
     return false
   }).slice(0, 10)
 )
 
 const advancedFields = computed(() =>
-  props.schema.filter(x => {
-    if (x.ui?.isFile || x.ui?.isImage) return false
-    return true
-  })
+  props.schema.filter(f => !(f.ui?.isFile || f.ui?.isImage))
 )
 
-watch(() => props.modelValue, (open) => {
-  if (open) tab.value = 'basic'
-})
-
+// ---------------- ACTIONS ----------------
 function close() {
-  emit('update:modelValue', false)
+  localModel.value = false
 }
 
 function clear() {
-  f.value = {}
+  filters.value = {}
 }
 
 function apply() {
-  // remove vazios
   const payload = Object.fromEntries(
-    Object.entries(f.value).filter(([_, v]) => v !== null && v !== undefined && v !== '')
+    Object.entries(filters.value).filter(([_, v]) =>
+      v !== null && v !== undefined && v !== ''
+    )
   )
+
   emit('apply', payload)
+  localModel.value = false
 }
 </script>
 
 <template>
-  <q-dialog v-model="modelValue">
+  <q-dialog v-model="localModel">
     <q-card style="min-width: 720px; max-width: 92vw;">
+
+      <!-- HEADER -->
       <q-card-section class="row items-center justify-between">
         <div class="text-h6">Filtros</div>
         <q-btn dense flat icon="close" @click="close" />
@@ -59,50 +72,55 @@ function apply() {
 
       <q-separator />
 
+      <!-- BODY -->
       <q-card-section>
+
         <q-tabs v-model="tab" dense>
           <q-tab name="basic" label="Básico" />
           <q-tab name="advanced" label="Avançado" />
         </q-tabs>
 
-        <q-separator class="q-mt-sm q-mb-md" />
+        <q-separator class="q-my-sm" />
 
-        <q-tab-panels v-model="tab" animated>
+        <q-tab-panels v-model="tab">
+
+          <!-- BASIC -->
           <q-tab-panel name="basic">
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-6" v-for="field in basicFields" :key="field.name">
-                <component
-                  :is="field.component"
-                  v-model="f[field.name]"
-                  v-bind="field.props"
-                  :label="field.label"
-                />
-              </div>
+            <div v-for="f in basicFields" :key="f.name">
+              <component
+                :is="f.component"
+                v-model="filters[f.name]"
+                v-bind="f.props"
+                :label="f.label"
+              />
             </div>
           </q-tab-panel>
 
+          <!-- ADVANCED -->
           <q-tab-panel name="advanced">
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-6" v-for="field in advancedFields" :key="field.name">
-                <component
-                  :is="field.component"
-                  v-model="f[field.name]"
-                  v-bind="field.props"
-                  :label="field.label"
-                />
-              </div>
+            <div v-for="f in advancedFields" :key="f.name">
+              <component
+                :is="f.component"
+                v-model="filters[f.name]"
+                v-bind="f.props"
+                :label="f.label"
+              />
             </div>
           </q-tab-panel>
+
         </q-tab-panels>
+
       </q-card-section>
 
       <q-separator />
 
+      <!-- ACTIONS -->
       <q-card-actions align="right">
         <q-btn flat label="Limpar" @click="clear" />
         <q-btn flat label="Cancelar" @click="close" />
         <q-btn color="primary" label="Aplicar" @click="apply" />
       </q-card-actions>
+
     </q-card>
   </q-dialog>
 </template>
