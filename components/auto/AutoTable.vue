@@ -196,11 +196,11 @@ const paginationLabel = (start, end, total) => {
                 <q-item-section>Eliminar</q-item-section>
               </q-item>
 
-              <q-separator v-if="visibleActions.length" />
+              <q-separator v-if="actions.length" />
 
               <!-- ACTIONS DINÂMICAS -->
               <q-item
-                v-for="a in visibleActions"
+                v-for="a in actions"
                 :key="a.url"
                 clickable
                 :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' + a.modelo.toLowerCase())"
