@@ -116,6 +116,7 @@
               group="fields"
               :model-value="i === form.fields.length - 1"
               expand-separator
+            
             >
 
 
@@ -797,6 +798,9 @@ export default {
     async reloadModelShema(){
       this.accaoTeste = false
       this.form.fields = await buildFormFromSchema({'module': this.form.modulo, 'model': this.form.modelo})
+      this.form.fields = (this.form.fields || []).filter(f =>
+          !['id', 'created_at', 'updated_at'].includes(f?.name)
+      )
       this.form.actions = await actionsFromSchema(this.form.modulo, this.form.modelo)
       this.accaoTeste = true
     },
