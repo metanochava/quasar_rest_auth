@@ -1,4 +1,44 @@
 
+<template>
+  <q-page >
+    {{  module }} ||| {{  model }}
+    <AutoTable
+      :rows="rows"
+      :columns="columns"
+      :schema="schema"
+      :actions="actions"
+      :can-do="canDo"
+      :loading="loading"
+      :pagination="pagination"
+      @request="onRequest"
+      @create="openCreate"
+      @edit="openEdit"
+      @delete="onDelete"
+      @filter="showFilter = true"
+      @inline-patch="onInlinePatch"
+      @run-action="onRunAction"
+      @refresh="loadData"
+    />
+
+    <AutoForm
+      v-model="showForm"
+      :schema="schema"
+      :module="module"
+      :model="model"
+      :data="selectedRow"
+      :can-do="canDo"
+      @saved="onSaved"
+    />
+
+    <AutoFilter
+      v-model="showFilter"
+      :schema="schema"
+      @apply="onApplyFilter"
+    />
+  </q-page>
+</template>
+
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
@@ -172,40 +212,3 @@ async function onRunAction({ action, row }) {
 
 onMounted(init)
 </script>
-
-<template>
-  
-  <AutoTable
-    :rows="rows"
-    :columns="columns"
-    :schema="schema"
-    :actions="actions"
-    :can-do="canDo"
-    :loading="loading"
-    :pagination="pagination"
-    @request="onRequest"
-    @create="openCreate"
-    @edit="openEdit"
-    @delete="onDelete"
-    @filter="showFilter = true"
-    @inline-patch="onInlinePatch"
-    @run-action="onRunAction"
-    @refresh="loadData"
-  />
-
-  <AutoForm
-    v-model="showForm"
-    :schema="schema"
-    :module="module"
-    :model="model"
-    :data="selectedRow"
-    :can-do="canDo"
-    @saved="onSaved"
-  />
-
-  <AutoFilter
-    v-model="showFilter"
-    :schema="schema"
-    @apply="onApplyFilter"
-  />
-</template>
