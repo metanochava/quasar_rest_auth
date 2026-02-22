@@ -207,6 +207,7 @@ const paginationLabel = (start, end, total) => {
               </q-item>
 
               <q-separator v-if="singularActions.length" />
+              {{ a.method + '_' + a.permission + '_' +  String(a.modelo || '').toLowerCase() }}
 
               <!-- ACTIONS DINÂMICAS -->
               <q-item
