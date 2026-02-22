@@ -348,7 +348,7 @@
         <q-card flat bordered class="q-mt-md" v-if="accaoTeste">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
             <div class="text-h6 text-grey col-12">🔐 Extra actions of {{ form.modulo }}.{{form.modelo}}</div>
-            <div class="col">
+            <div class="col-12">
               <q-select
                 v-model="accao.Icon"
                 :options="ICONS"
@@ -400,8 +400,11 @@
             <q-input class="col" dense v-model="accao.Permission" @keyup.enter="addPerm()" outlined label="Permission" placeholder="Permission"/>
             <q-input class="col-12" dense v-model="accao.Url" @keyup.enter="addPerm()" placeholder="'(?P<model>[^/.]+)/schema'" outlined/>
 
+            <q-btn v-if="form.modelo" class=" col-12" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
+
             <q-chip
               @dblclick="accaoMetodo(p)"
+              :icon="p.icon"
               :class="{
                 'bg-green text-white': p.method === 'get',
                 'bg-blue text-white': p.method === 'post',
@@ -420,7 +423,6 @@
               </q-tooltip>
             </q-chip>
             
-            <q-btn v-if="form.modelo" class=" col-12" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
           </q-card-section>
           
         </q-card>
