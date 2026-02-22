@@ -41,7 +41,7 @@
 
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import AutoTable from './AutoTable.vue'
 import AutoForm from './AutoForm.vue'
 import AutoFilter from './AutoFilter.vue'
@@ -49,6 +49,29 @@ import AutoFilter from './AutoFilter.vue'
 import { HTTPAuth, url } from '../../boot/api'
 import { buildFormFromSchema, actionsFromSchema } from '../../utils/autoForm'
 
+
+
+watch(
+  () => [props.module, props.model],
+  async ([module, model], [oldModule, oldModel]) => {
+    console.log('WATCH →', module, model)
+
+    // 🔒 proteção
+    if (!module || !model) return
+
+    // 🔁 evita reload desnecessário
+    if (module === oldModule && model === oldModel) return
+
+    // reset estado
+    schema.value = []
+    actions.value = []
+    rows.value = []
+    pagination.value.page = 1
+
+    await init()
+  },
+  { immediate: true }
+)
 
 // --- props ---
 const props = defineProps({
@@ -109,10 +132,17 @@ function canDo(perm) {
 }
 
 async function init() {
-  // schema
-  schema.value = await buildFormFromSchema({ module: props.module,  model: props.model,  schemaPath: props.schemaPath, })
+  if (!props.module || !props.model) {
+    console.warn('init skipped: missing module/model')
+    return
+  }
 
-  // actions (dinâmicas)
+  schema.value = await buildFormFromSchema({
+    module: props.module,
+    model: props.model,
+    schemaPath: props.schemaPath,
+  })
+
   try {
     actions.value = await actionsFromSchema(props.module, props.model)
   } catch {

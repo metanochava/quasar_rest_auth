@@ -22,7 +22,6 @@
           label="model"
           outlined
           dense 
-          @update:model-value="load()"
         />
       </div>
     </div>
@@ -215,10 +214,7 @@ async function inlineSave(row, field, value) {
   }
 }
 
-async function load() {
-  await loadSchema()
-  await fetchRows({ pagination: pagination.value })
-}
+
 
 onMounted(async () => {
   await loadApps()
