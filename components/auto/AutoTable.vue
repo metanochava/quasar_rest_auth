@@ -92,7 +92,15 @@ watch(
   { immediate: true }
 )
 
-
+function getMethodColor(method) {
+  switch ((method || '').toLowerCase()) {
+    case 'get': return 'green'
+    case 'post': return 'blue'
+    case 'put': return 'orange'
+    case 'delete': return 'red'
+    default: return 'grey'
+  }
+}
 
 const paginationLabel = (start, end, total) => {
   if (!total || total === 0) return tdc('Sem dados')
@@ -214,18 +222,11 @@ const paginationLabel = (start, end, total) => {
                 v-for="a in singularActions"
                 :key="a.url"
                 clickable
-                :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' +  String(a.modelo || '').toLowerCase())"
+                :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' + a.modelo .toLowerCase())"
                 @click="runAction(a, props.row)"
               >
-              {{ a.method + '_' + a.permission + '_' +  String(a.modelo || '').toLowerCase() }}
                 <q-item-section avatar v-if="a.icon">
-                  <q-icon :name="a.icon" :color="{
-                      'green': a.method === 'get',
-                      'blue': a.method === 'post',
-                      'orange': a.method ==='put',
-                      'red': a.method === 'delete'
-                    }" 
-                  />
+                  <q-icon :name="a.icon" :color="getMethodColor(a.method)" />
                 </q-item-section>
 
                 <q-item-section>
