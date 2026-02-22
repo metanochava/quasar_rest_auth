@@ -25,13 +25,10 @@
           @update:model-value="load()"
         />
       </div>
-      <br />
-      {{ module }} | {{ model }} 
     </div>
 
     <AutoCrud :module="module" :model="model" />
 
-   
   </q-page>
 </template>
 

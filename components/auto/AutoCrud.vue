@@ -20,7 +20,7 @@
       @refresh="loadData"
     />
 
-    <AutoForm
+    <!-- <AutoForm
       v-model="showForm"
       :schema="schema"
       :module="module"
@@ -34,7 +34,7 @@
       v-model="showFilter"
       :schema="schema"
       @apply="onApplyFilter"
-    />
+    /> -->
   </q-page>
 </template>
 
