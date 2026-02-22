@@ -1,269 +1,214 @@
-<template>
-  <q-page padding>
-    <div class="row q-col-gutter-sm q-pa-0">
-      <div class="col">
-        <q-select
-          v-model="module"
-          :options="modules"
-          label="module"
-          outlined
-          dense 
-          map-options
-          emit-value
-          option-value="name"
-          option-label="name"
-          @update:model-value="loadModelsRelation()"
-        />
-      </div>
-      <div class="col">
-        <q-select
-          v-model="model"
-          :options="models"
-          label="model"
-          outlined
-          dense 
-          @update:model-value="load()"
-        />
-      </div>
-    </div>
-    <AutoTable
-      :rows="rows"
-      :columns="columns"
-      :loading="loading"
-      :title="title"
-      :pagination="pagination"
-      @create="openCreate"
-      @edit="openEdit"
-      @delete="confirmDelete"
-      @request="handleRequest"
-      @inline-save="inlineSave"
-    />
 
-    <!-- FORM DIALOG -->
-    <q-dialog v-model="dialog" persistent>
-      <q-card style="min-width: 520px; max-width: 92vw;">
-        <q-card-section class="text-h6">
-          {{ editing ? tdc('Edit') : tdc('Create') }}
-        </q-card-section>
-
-        <q-card-section>
-          <AutoForm :fields="fields" :model="form" />
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat v-close-popup :label="tdc('Cancel')" />
-          <q-btn color="primary" :label="tdc('Save')" :loading="saving" @click="save" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    <!-- DELETE CONFIRM -->
-    <q-dialog v-model="delDialog">
-      <q-card style="min-width: 420px">
-        <q-card-section class="text-h6">
-          {{ tdc('Confirm delete') }}
-        </q-card-section>
-        <q-card-section>
-          {{ tdc('Are you sure you want to delete') }}: <b>{{ delRow?.id }}</b> ?
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat v-close-popup :label="tdc('Cancel')" />
-          <q-btn color="negative" :label="tdc('Delete')" :loading="saving" @click="remove" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-  </q-page>
-</template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-
-import { Notify } from 'quasar'
-
-import { tdc } from '../../boot/base'
-import { HTTPAuth, url } from '../../boot/api'
-
+import { ref, computed, onMounted } from 'vue'
 import AutoTable from './AutoTable.vue'
 import AutoForm from './AutoForm.vue'
-import { buildFormFromSchema } from '../../utils/autoForm'
+import AutoFilter from './AutoFilter.vue'
+
+import { HTTPAuth, url } from '../../boot/api'
+import { buildFormFromSchema, actionsFromSchema } from '../../utils/autoForm'
 
 
-const module = ref('')
-const modules = ref([])
-const model = ref('')
-const models = ref([])
+// --- props ---
+const props = defineProps({
+  module: { type: String, required: true },
+  model: { type: String, required: true },
 
-var title = tdc('Nome da tabela')
+  // opcional: função de permissão (ex: (perm) => userCan(perm))
+  can: { type: Function, default: null },
 
-// Endpoint do CRUD (ajusta aqui se teu padrão for diferente)
-var endpoint = ''
-
-const rows = ref([])
-const columns = ref([])
-const fields = ref([])
-const loading = ref(false)
-const saving = ref(false)
-
-const dialog = ref(false)
-const editing = ref(false)
-const form = ref({})
-
-const delDialog = ref(false)
-const delRow = ref(null)
-
-// server-side pagination
-const pagination = ref({
-  page: 1,
-  rowsPerPage: 20,
-  rowsNumber: 0,
-  sortBy: 'id',
-  descending: true
+  // opcional: schemaPath (se o teu ok() embrulha)
+  schemaPath: { type: String, default: 'fields' }, // 'fields' | 'data.fields'
 })
 
-function notifyFromApi(data) {
-  if (data?.alert_success) Notify.create({ type:'positive', message:data.alert_success })
-  if (data?.alert_error) Notify.create({ type:'negative', message:data.alert_error })
-  if (data?.alert_warning) Notify.create({ type:'warning', message:data.alert_warning })
-}
+// --- state ---
+const schema = ref([])
+const actions = ref([])
+const rows = ref([])
+const loading = ref(false)
 
-async function loadSchema() {
-  title = `${model.value}`
-  endpoint = `api/${module.value}/${model.value.toLowerCase()}s/`
-  fields.value = await buildFormFromSchema({'module':module.value, model: model.value})
+const showForm = ref(false)
+const showFilter = ref(false)
 
-  columns.value = fields.value.map(f => ({
+const selectedRow = ref(null)
+
+// server-side pagination/sort
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 10,
+  rowsNumber: 0,
+  sortBy: 'id',
+  descending: true,
+})
+
+// filtros aplicados (server-side)
+const filters = ref({})
+
+// cache simples por module+model
+const __cacheKey = computed(() => `${props.module}::${props.model}`)
+
+// columns dinâmicas
+const columns = computed(() => {
+  const base = schema.value.map(f => ({
     name: f.name,
     label: f.label,
     field: f.name,
-    align: 'left',
     sortable: true,
-
-    // 🔥 ESTA LINHA NOVA
-    relation: f.props?.relation || null
+    align: 'left',
   }))
+  base.push({ name: '__actions', label: 'Ações', field: '__actions', sortable: false })
+  return base
+})
+
+// permissões
+function canDo(perm) {
+  if (!perm) return true
+  if (typeof props.can === 'function') return !!props.can(perm)
+  return true // fallback: mostra tudo
 }
 
-async function loadApps() {
-  const {data} = await HTTPAuth.get('/api/django_saas/modulos/')
-  modules.value = data.apps
-}
+async function init() {
+  // schema
+  schema.value = await buildFormFromSchema({
+    module: props.module,
+    model: props.model,
+    schemaPath: props.schemaPath,
+  })
 
-async function loadModelsRelation(){
-  const {data} = await HTTPAuth.get('/api/django_saas/modulos/'+ module.value)
-  models.value = data.models
-}
-
-
-function buildParams(p, search = '', filters = {}) {
-  const params = {
-    page: p.page,
-    page_size: p.rowsPerPage
+  // actions (dinâmicas)
+  try {
+    actions.value = await actionsFromSchema(props.module, props.model)
+  } catch {
+    actions.value = []
   }
 
-  if (search) params.search = search
-
-  // filtros simples: envia como query param do mesmo nome do campo
-  // (backend precisa suportar filterset ou filter backend)
-  for (const [k, v] of Object.entries(filters || {})) {
-    if (v !== undefined && v !== null && String(v).length) params[k] = v
-  }
-
-  // sort (se você suportar ordering)
-  if (p.sortBy) {
-    params.ordering = (p.descending ? '-' : '') + p.sortBy
-  }
-
-  return params
+  await loadData()
 }
 
-async function fetchRows({ pagination: p, search = '', filters = {} }) {
+async function loadData() {
   loading.value = true
   try {
-    const { data } = await HTTPAuth.get(url({type:'u', url: endpoint, params: buildParams(p, search, filters)}))
-    const items = data?.results || data || []
-    rows.value = items
-    pagination.value = {
-      ...p,
-      rowsNumber: Number(data?.count ?? items.length)
+    const params = {
+      page: pagination.value.page,
+      page_size: pagination.value.rowsPerPage,
+      ordering: pagination.value.sortBy
+        ? `${pagination.value.descending ? '-' : ''}${pagination.value.sortBy}`
+        : undefined,
+      ...filters.value,
     }
+
+    const { data } = await HTTPAuth.get(
+      url({ type: 'u', url: `/api/${props.module}/${props.model}/`, params })
+    )
+
+    rows.value = data?.results || data || []
+    pagination.value.rowsNumber = data?.count ?? rows.value.length
   } finally {
     loading.value = false
   }
 }
 
-function handleRequest(payload) {
-  // payload: { pagination, search, filters }
-  fetchRows(payload)
+function onRequest(req) {
+  pagination.value = req.pagination
+  loadData()
 }
 
 function openCreate() {
-  form.value = {}
-  editing.value = false
-  dialog.value = true
+  selectedRow.value = null
+  showForm.value = true
 }
 
 function openEdit(row) {
-  form.value = { ...row }
-  editing.value = true
-  dialog.value = true
+  selectedRow.value = row
+  showForm.value = true
 }
 
-async function save() {
-  saving.value = true
-  try {
-    const payload = { ...form.value }
+async function onDelete(row) {
+  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model}/${row.id}/` }))
+  await loadData()
+}
 
-    let res
-    if (editing.value) {
-      res = await HTTPAuth.put(url({type:'u', url: `${endpoint}${payload.id}/`, params: {}}), payload)
-    } else {
-      res = await HTTPAuth.post(url({type:'u', url: endpoint, params: {}}), payload)
-    }
+async function onSaved() {
+  showForm.value = false
+  await loadData()
+}
 
-    notifyFromApi(res.data || {})
-    dialog.value = false
+function onApplyFilter(payload) {
+  filters.value = payload || {}
+  pagination.value.page = 1
+  showFilter.value = false
+  loadData()
+}
 
-    await fetchRows({ pagination: pagination.value })
-  } finally {
-    saving.value = false
+// inline edit (PATCH)
+async function onInlinePatch({ id, field, value }) {
+  await HTTPAuth.patch(
+    url({ type: 'u', url: `/api/${props.module}/${props.model}/${id}/` }),
+    { [field]: value }
+  )
+  await loadData()
+}
+
+// executar action dinâmica (POST /custom-url ou /{id}/action/)
+async function onRunAction({ action, row }) {
+  if (action?.permission && !canDo(action.permission)) return
+
+  // action.url pode ser absoluto/relativo. Se for relativo, assume /api/...
+  const actionUrl = action.url?.startsWith('http')
+    ? action.url
+    : `/api/${action.url?.replace(/^\//, '')}`
+
+  const method = (action.method || 'POST').toUpperCase()
+
+  if (method === 'GET') {
+    await HTTPAuth.get(url({ type: 'u', url: actionUrl, params: { id: row?.id } }))
+  } else {
+    await HTTPAuth.request({
+      method,
+      url: url({ type: 'u', url: actionUrl }),
+      data: row?.id ? { id: row.id } : {},
+    })
   }
+
+  await loadData()
 }
 
-function confirmDelete(row) {
-  delRow.value = row
-  delDialog.value = true
-}
-
-async function remove() {
-  if (!delRow.value) return
-  saving.value = true
-  try {
-    const res = await HTTPAuth.delete(url({type:'u', url: `${endpoint}${delRow.value.id}/`, params: {}}))
-    notifyFromApi(res.data || {})
-    delDialog.value = false
-    delRow.value = null
-    await fetchRows({ pagination: pagination.value })
-  } finally {
-    saving.value = false
-  }
-}
-
-// Inline edit: PATCH /<id>/ { field: value }
-async function inlineSave(row, field, value) {
-  try {
-    const res = await HTTPAuth.patch(url({type:'u', url: `${endpoint}${row.id}/`, params: {}}), { [field]: value })
-    notifyFromApi(res.data || { alert_success: tdc('Updated') })
-  } catch (e) {
-    Notify.create({ type: 'negative', message: tdc('Update failed') })
-  }
-}
-
-async function load() {
-  await loadSchema()
-  await fetchRows({ pagination: pagination.value })
-}
-
-onMounted(async () => {
-  await loadApps()
-})
+onMounted(init)
 </script>
+
+<template>
+  <AutoTable
+    :rows="rows"
+    :columns="columns"
+    :schema="schema"
+    :actions="actions"
+    :can-do="canDo"
+    :loading="loading"
+    :pagination="pagination"
+    @request="onRequest"
+    @create="openCreate"
+    @edit="openEdit"
+    @delete="onDelete"
+    @filter="showFilter = true"
+    @inline-patch="onInlinePatch"
+    @run-action="onRunAction"
+    @refresh="loadData"
+  />
+
+  <AutoForm
+    v-model="showForm"
+    :schema="schema"
+    :module="module"
+    :model="model"
+    :data="selectedRow"
+    :can-do="canDo"
+    @saved="onSaved"
+  />
+
+  <AutoFilter
+    v-model="showFilter"
+    :schema="schema"
+    @apply="onApplyFilter"
+  />
+</template>
