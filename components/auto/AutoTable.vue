@@ -39,8 +39,8 @@ watch(() => props.pagination, (val) => {
 
 // ---------------- UI STATE ----------------
 const visibleColumns = ref([])
-const geralActions = ref(props.actions.filter(c => c.details !== 'true'))
-const singularActions = ref(props.actions.filter(c => c.details !== 'false'))
+const geralActions = ref(props.actions.filter(c => c.details === 'true'))
+let singularActions = ref([])
 const density = ref('normal')
 
 // ---------------- COMPUTED ----------------
@@ -87,6 +87,17 @@ watch(
   },
   { immediate: true }
 )
+
+watch(
+  () => props.actions,
+  async (actions) => {
+    if (!actions) return
+    singularActions = props.actions.filter(c => c.details === 'true')
+    geralActions = props.actions.filter(c => c.details === 'false')
+  },
+  { immediate: true }
+)
+
 
 const paginationLabel = (start, end, total) => {
   if (!total || total === 0) return tdc('Sem dados')
