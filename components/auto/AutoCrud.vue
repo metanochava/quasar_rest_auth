@@ -68,8 +68,6 @@ const props = defineProps({
 watch(
   () => [props.module, props.model],
   async ([module, model], [oldModule, oldModel]) => {
-    console.log('WATCH →', module, model)
-
     // 🔒 proteção
     if (!module || !model) return
 
@@ -166,7 +164,7 @@ async function loadData() {
     }
 
     const { data } = await HTTPAuth.get(
-      url({ type: 'u', url: `/api/${props.module}/${props.model}/`, params })
+      url({ type: 'u', url: `api/django_saas/modulos/${props.module}/${props.model}/schema/`, params })
     )
 
     rows.value = data?.results || data || []
