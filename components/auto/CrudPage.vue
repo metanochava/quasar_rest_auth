@@ -47,9 +47,9 @@ import AutoCrud from './AutoCrud.vue'
 import { buildFormFromSchema } from '../../utils/autoForm'
 
 
-const module = ref('')
+const module = ref('django_saas')
 const modules = ref([])
-const model = ref('')
+const model = ref('User')
 const models = ref([])
 
 var title = tdc('Nome da tabela')
