@@ -209,7 +209,7 @@ export const UserStore = defineStore("user", {
     },
     setIdioma(idioma){
       this.Idioma = idioma
-      setStorage('c', 'userLang', idioma)
+      setStorage('c', 'userLang', JSON.stringify(idioma))
     },
     selectGroup(grupo){
       this.Grupo = grupo
