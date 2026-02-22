@@ -64,14 +64,6 @@ const props = defineProps({
   schemaPath: { type: String, default: 'fields' }, // 'fields' | 'data.fields'
 })
 
-watch(
-  () => props.model,
-  async (model) => {
-    if (!model) return
-    await init()
-  },
-  { immediate: true }
-)
 // --- state ---
 const schema = ref([])
 const actions = ref([])
@@ -162,31 +154,6 @@ async function loadData() {
   }
 }
 
-async function loadDat_() {
-  loading.value = true
-  try {
-    const params = {
-      page: pagination.value.page,
-      page_size: pagination.value.rowsPerPage,
-      ...filters.value,
-    }
-
-    const { data } = await HTTPAuth.get(
-      url({
-        type: 'u',
-        url: `/api/django_saas/${endpoint.value}/`,
-        params
-      })
-    )
-
-    rows.value = data?.results || data || []
-    pagination.value.rowsNumber = data?.count ?? rows.value.length
-
-  } finally {
-    loading.value = false
-  }
-}
-
 function onRequest(req) {
   pagination.value = req.pagination
   loadData()
@@ -253,4 +220,12 @@ async function onRunAction({ action, row }) {
 }
 
 onMounted(init)
+watch(
+  () => props.model,
+  async (model) => {
+    if (!model) return
+    await init()
+  },
+  { immediate: true }
+)
 </script>
