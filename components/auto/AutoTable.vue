@@ -29,7 +29,9 @@ const emit = defineEmits([
   'refresh',
   'inline-patch',
   'run-action',
-  'update:pagination'
+  'update:pagination',
+
+  'objects' // criado por Metano
 ])
 
 // ---------------- LOCAL STATE (FIX V-MODEL) ----------------
@@ -38,6 +40,8 @@ const localPagination = ref({ ...props.pagination })
 watch(() => props.pagination, (val) => {
   localPagination.value = { ...val }
 })
+
+
 
 // ---------------- UI STATE ----------------
 const visibleColumns = ref([])
@@ -49,7 +53,11 @@ const geralActions = computed(() =>
 )
 const density = ref('normal')
 const objects = ref('Activos')
-const objectsOptions = ref( ['Activos', 'Apagados', 'Todos'])
+const objectsOptions = [
+  { label: 'Activos', value: 'alive' },
+  { label: 'Eliminados', value: 'deleted' },
+  { label: 'Todos', value: 'all' }
+]
 
 // ---------------- COMPUTED ----------------
 const allColumns = computed(() => props.columns.map(c => c.name))
@@ -144,6 +152,7 @@ function onRestore(row) {
     :dense="density === 'dense'"
     row-key="id"
     @request="onRequest"
+
     :no-data-label="tdc('Sem dados')"
     :rows-per-page-label="tdc('Registos por página')"
     :pagination-label="paginationLabel"
@@ -171,9 +180,13 @@ function onRestore(row) {
         <q-select
           v-model="objects"
           :options="objectsOptions"
+          option-label="label"
+          option-value="value"
+          emit-value
+          map-options
           dense
           outlined
-          style="width:100px"
+          @update:model-value="val => emit('objects', val)"
         />
 
         <q-select

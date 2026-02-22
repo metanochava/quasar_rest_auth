@@ -19,6 +19,8 @@
       @inline-patch="onInlinePatch"
       @run-action="onRunAction"
       @refresh="loadData"
+
+      @objects="onChangeObjects"
     />
 
     <AutoForm
@@ -217,6 +219,13 @@ async function onRunAction({ action, row }) {
       data: row?.id ? { id: row.id } : {},
     })
   }
+
+  await loadData()
+}
+
+async function onChangeObjects(val) {
+  // 🔥 decide endpoint baseado nisso
+  filters.value.objects = val
 
   await loadData()
 }
