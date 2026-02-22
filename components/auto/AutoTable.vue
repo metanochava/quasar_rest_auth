@@ -1,17 +1,21 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { exportFile } from 'quasar'
 
+// ---------------- PROPS ----------------
 const props = defineProps({
-  rows: Array,
-  columns: Array,
-  schema: Array,
-  loading: Boolean,
-  pagination: Object,
-  actions: Array,
-  canDo: Function
+  rows: { type: Array, default: () => [] },
+  columns: { type: Array, default: () => [] },
+  schema: { type: Array, default: () => [] },
+
+  loading: { type: Boolean, default: false },
+  pagination: { type: Object, required: true },
+
+  actions: { type: Array, default: () => [] },
+  canDo: { type: Function, default: () => true }
 })
 
+// ---------------- EMITS ----------------
 const emit = defineEmits([
   'request',
   'create',
@@ -20,20 +24,28 @@ const emit = defineEmits([
   'filter',
   'refresh',
   'inline-patch',
-  'run-action'
+  'run-action',
+  'update:pagination'
 ])
 
-// 🔧 UI state
+// ---------------- LOCAL STATE (FIX V-MODEL) ----------------
+const localPagination = ref({ ...props.pagination })
+
+watch(() => props.pagination, (val) => {
+  localPagination.value = { ...val }
+})
+
+// ---------------- UI STATE ----------------
 const visibleColumns = ref([])
 const density = ref('normal')
 
-// 🔧 computed
+// ---------------- COMPUTED ----------------
 const allColumns = computed(() => props.columns.map(c => c.name))
 const effectiveColumns = computed(() =>
   visibleColumns.value.length ? visibleColumns.value : allColumns.value
 )
 
-// 🔧 inline edit allowed
+// ---------------- INLINE EDIT ----------------
 function isEditable(name) {
   const f = props.schema.find(x => x.name === name)
   if (!f) return false
@@ -41,7 +53,14 @@ function isEditable(name) {
   return true
 }
 
-// 🔧 export CSV
+// ---------------- REQUEST HANDLER ----------------
+function onRequest(e) {
+  localPagination.value = e.pagination
+  emit('update:pagination', e.pagination) // 🔥 FIX
+  emit('request', e)
+}
+
+// ---------------- EXPORT CSV ----------------
 function exportCSV() {
   const cols = props.columns.filter(c => c.name !== '__actions')
 
@@ -60,14 +79,14 @@ function exportCSV() {
     :rows="rows"
     :columns="columns"
     :loading="loading"
-    v-model:pagination="pagination"
+    :pagination="localPagination"
     :visible-columns="effectiveColumns"
     :dense="density === 'dense'"
     row-key="id"
-    @request="emit('request', $event)"
+    @request="onRequest"
   >
 
-    <!-- 🔥 HEADER ACTIONS -->
+    <!-- 🔥 TOP BAR -->
     <template #top>
       <div class="row q-gutter-sm">
 
