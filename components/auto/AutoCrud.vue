@@ -25,6 +25,14 @@
           @update:model-value="load()"
         />
       </div>
+      <div class="col">
+        <q-btn
+          label="load"
+          outlined
+          dense 
+          @click="load()"
+        />
+      </div>
     </div>
     <AutoTable
       :rows="rows"
