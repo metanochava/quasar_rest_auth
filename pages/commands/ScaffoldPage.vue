@@ -658,6 +658,7 @@ export default {
         name: '',
         type: '',
         required: true, 
+        help_text: '',
         unique: false, 
         choices: [],
       })
@@ -730,7 +731,8 @@ export default {
         const field = {
           name: f.name,
           type: f.type,
-          verbose: f.verbose,
+          verbose_name: f.verbose_name,
+          help_text: f.help_text,
           null: f.null,
           blank: f.blank,
           default: f.default,

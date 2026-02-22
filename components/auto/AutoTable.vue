@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { exportFile } from 'quasar'
+import { tdc } from '../../boot/base'
+
 
 // ---------------- PROPS ----------------
 const props = defineProps({
@@ -93,6 +95,7 @@ watch(
     :dense="density === 'dense'"
     row-key="id"
     @request="onRequest"
+    :no-data-label="tdc('Sem dados')"
   >
 
     <!-- 🔥 TOP BAR -->
@@ -159,18 +162,55 @@ watch(
     <template #body-cell-__actions="props">
       <q-td :props="props">
 
-        <q-btn dense flat icon="edit" @click="emit('edit', props.row)" />
-        <q-btn dense flat icon="delete" color="red" @click="emit('delete', props.row)" />
-
-        <q-btn
-          v-for="a in actions"
-          :key="a.url"
+        <q-btn-dropdown
           dense
           flat
-          :label="a.details"
-          :disable="a.permission && !canDo(a.permission)"
-          @click="emit('run-action', { action: a, row: props.row })"
-        />
+          icon="more_vert"
+          dropdown-icon="arrow_drop_down"
+        >
+
+          <q-list dense>
+
+            <!-- EDIT -->
+            <q-item clickable v-close-popup @click="emit('edit', props.row)">
+              <q-item-section avatar>
+                <q-icon name="edit" />
+              </q-item-section>
+              <q-item-section>
+                Editar
+              </q-item-section>
+            </q-item>
+
+            <!-- DELETE -->
+            <q-item clickable v-close-popup @click="emit('delete', props.row)">
+              <q-item-section avatar>
+                <q-icon name="delete" color="red" />
+              </q-item-section>
+              <q-item-section>
+                Eliminar
+              </q-item-section>
+            </q-item>
+
+            <!-- DIVIDER -->
+            <q-separator v-if="actions.length" />
+
+            <!-- ACTIONS DINÂMICAS -->
+            <q-item
+              v-for="a in actions"
+              :key="a.url"
+              clickable
+              v-close-popup
+              :disable="a.permission && !canDo(a.permission)"
+              @click="emit('run-action', { action: a, row: props.row })"
+            >
+              <q-item-section>
+                {{ a.details }}
+              </q-item-section>
+            </q-item>
+
+          </q-list>
+
+        </q-btn-dropdown>
 
       </q-td>
     </template>
