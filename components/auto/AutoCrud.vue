@@ -1,7 +1,6 @@
 
 <template>
   <q-page >
-    {{  module }} ||| {{  model }}
     <AutoTable
       :rows="rows"
       :columns="columns"
@@ -66,13 +65,13 @@ const props = defineProps({
 })
 
 watch(
-  () => [props.module, props.model],
-  async ([module, model], [oldModule, oldModel]) => {
+  () => [props.model],
+  async ([ model], [oldModel]) => {
     // 🔒 proteção
-    if (!module || !model) return
+    if (!model) return
 
     // 🔁 evita reload desnecessário
-    if (module === oldModule && model === oldModel) return
+    if ( model === oldModel) return
 
     // reset estado
     schema.value = []
@@ -164,7 +163,7 @@ async function loadData() {
     }
 
     const { data } = await HTTPAuth.get(
-      url({ type: 'u', url: `api/${props.module}/${props.model}/`, params })
+      url({ type: 'u', url: `api/${props.module}/${props.model.toLowerCase()}s/`, params })
     )
 
     rows.value = data?.results || data || []
