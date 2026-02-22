@@ -726,7 +726,7 @@ export default {
     addPerm () {
       if (!this.accao.Permission) return
       if (!this.accao.Method) return
-      this.form.actions.push({'icon' :this.accao.Icon, 'method' :this.accao.Method, 'permission': this.accao.Permission,  'url' : this.accao.Url, 'details' : this.accao.Details})
+      this.form.actions.push({'icon' :this.accao.Icon, 'method' :this.accao.Method, 'permission': this.accao.Permission.toLowerCase(),  'url' : this.accao.Url, 'details' : this.accao.Details})
       this.accao.Permission=''
       this.accao.Icon='list'
       this.accao.Method=''
