@@ -16,9 +16,10 @@ import AuthLayout from './layouts/AuthLayout.vue'
 import AutoForm from './components/auto/AutoForm.vue'
 import AutoTable from './components/auto/AutoTable.vue'
 import AutoCrud from './components/auto/AutoCrud.vue'
+import CrudPage from './components/auto/CrudPage.vue'
 import AllLogo from './components/AllLogo.vue'
 
 
 
-export { MainLayout, AuthLayout, AutoForm, AutoTable, AutoCrud, AllLogo}
+export { MainLayout, AuthLayout, AutoForm, AutoTable, AutoCrud, CrudPage,  AllLogo}
 

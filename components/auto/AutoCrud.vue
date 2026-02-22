@@ -70,11 +70,7 @@ function canDo(perm) {
 
 async function init() {
   // schema
-  schema.value = await buildFormFromSchema({
-    module: props.module,
-    model: props.model,
-    schemaPath: props.schemaPath,
-  })
+  schema.value = await buildFormFromSchema({ module: props.module,  model: props.model,  schemaPath: props.schemaPath, })
 
   // actions (dinâmicas)
   try {
@@ -178,6 +174,7 @@ onMounted(init)
 </script>
 
 <template>
+  
   <AutoTable
     :rows="rows"
     :columns="columns"
