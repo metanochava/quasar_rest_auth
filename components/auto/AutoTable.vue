@@ -39,7 +39,7 @@ watch(() => props.pagination, (val) => {
 
 // ---------------- UI STATE ----------------
 const visibleColumns = ref([])
-const geralActions = ref(props.actions.filter(c => c.details === 'true'))
+let geralActions = ref(props.actions.filter(c => c.details === 'true'))
 let singularActions = ref([])
 const density = ref('normal')
 
