@@ -39,6 +39,8 @@ watch(() => props.pagination, (val) => {
 
 // ---------------- UI STATE ----------------
 const visibleColumns = ref([])
+const geralActions = ref(props.actions.filter(c => c.details !== 'True'))
+const singularActions = ref(props.actions.filter(c => c.details !== 'False'))
 const density = ref('normal')
 
 // ---------------- COMPUTED ----------------
@@ -46,6 +48,8 @@ const allColumns = computed(() => props.columns.map(c => c.name))
 const effectiveColumns = computed(() =>
   visibleColumns.value.length ? visibleColumns.value : allColumns.value
 )
+
+
 
 // ---------------- INLINE EDIT ----------------
 function isEditable(name) {
@@ -196,11 +200,11 @@ const paginationLabel = (start, end, total) => {
                 <q-item-section>Eliminar</q-item-section>
               </q-item>
 
-              <q-separator v-if="actions.length" />
+              <q-separator v-if="singularActions.length" />
 
               <!-- ACTIONS DINÂMICAS -->
               <q-item
-                v-for="a in actions"
+                v-for="a in singularActions"
                 :key="a.url"
                 clickable
                 :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' + a.modelo.toLowerCase())"
@@ -217,7 +221,7 @@ const paginationLabel = (start, end, total) => {
                 </q-item-section>
 
                 <q-item-section>
-                  {{ a.details }}
+                  {{ a.method + '_' + a.permission + '_' }}
                 </q-item-section>
 
                 <!-- loading -->
