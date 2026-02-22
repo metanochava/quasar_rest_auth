@@ -667,6 +667,10 @@ export default {
     },
 
     addChoice(f){
+      if (!Array.isArray(f.choices)) {
+        f.choices = []
+      }
+
       if (this.newChoice.key!== '' && this.newChoice.label !== '' ){
         f.choices.push({ ...this.newChoice })
         this.newChoice.label = ''
