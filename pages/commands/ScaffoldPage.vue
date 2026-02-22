@@ -348,6 +348,39 @@
         <q-card flat bordered class="q-mt-md" v-if="accaoTeste">
           <q-card-section class="row q-col-gutter-sm q-gutter-s">
             <div class="text-h6 text-grey col-12">🔐 Extra actions of {{ form.modulo }}.{{form.modelo}}</div>
+            <div class="col">
+              <q-select
+                v-model="accao.Icon"
+                :options="ICONS"
+                label="Icon"
+                use-input
+                dense
+                outlined
+              >
+
+                <!-- ITEM SELECIONADO -->
+                <template v-slot:selected-item="scope">
+                  <div class="row items-center q-gutter-sm">
+                    <q-icon :name="scope.opt" />
+                    <span>{{ scope.opt }}</span>
+                  </div>
+                </template>
+
+                <!-- LISTA DE OPÇÕES -->
+                <template v-slot:option="scope">
+                  <q-item v-bind="scope.itemProps">
+                    <q-item-section avatar>
+                      <q-icon :name="scope.opt" />
+                    </q-item-section>
+
+                    <q-item-section>
+                      {{ scope.opt }}
+                    </q-item-section>
+                  </q-item>
+                </template>
+
+              </q-select>
+            </div>
 
             <q-select
               class="col"
@@ -468,6 +501,7 @@ export default {
 
       accao:{
         Permission: '',
+        Icon: 'list',
         Method: 'get',
         Details: true,
         Url: '',
@@ -690,8 +724,9 @@ export default {
     addPerm () {
       if (!this.accao.Permission) return
       if (!this.accao.Method) return
-      this.form.actions.push({'method' :this.accao.Method, 'permission': this.accao.Permission,  'url' : this.accao.Url, 'details' : this.accao.Details})
+      this.form.actions.push({'icon' :this.accao.Icon, 'method' :this.accao.Method, 'permission': this.accao.Permission,  'url' : this.accao.Url, 'details' : this.accao.Details})
       this.accao.Permission=''
+      this.accao.Icon='list'
       this.accao.Method=''
       this.accao.Url=''
       this.accao.Details=true

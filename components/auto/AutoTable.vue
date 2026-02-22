@@ -83,6 +83,11 @@ watch(
   },
   { immediate: true }
 )
+
+const paginationLabel = (start, end, total) => {
+  if (!total || total === 0) return tdc('Sem dados')
+  return `${start}-${end} ${tdc('de')} ${total}`
+}
 </script>
 
 <template>
@@ -96,6 +101,8 @@ watch(
     row-key="id"
     @request="onRequest"
     :no-data-label="tdc('Sem dados')"
+    :rows-per-page-label="tdc('Registos por página')"
+    :pagination-label="paginationLabel"
   >
 
     <!-- 🔥 TOP BAR -->
@@ -162,55 +169,61 @@ watch(
     <template #body-cell-__actions="props">
       <q-td :props="props">
 
-        <q-btn-dropdown
+        <!-- BOTÃO 3 PONTOS -->
+        <q-btn
           dense
           flat
+          round
           icon="more_vert"
-          dropdown-icon="arrow_drop_down"
         >
+          <q-menu auto-close>
 
-          <q-list dense>
+            <q-list dense style="min-width: 180px">
 
-            <!-- EDIT -->
-            <q-item clickable v-close-popup @click="emit('edit', props.row)">
-              <q-item-section avatar>
-                <q-icon name="edit" />
-              </q-item-section>
-              <q-item-section>
-                Editar
-              </q-item-section>
-            </q-item>
+              <!-- EDIT -->
+              <q-item clickable @click="emit('edit', props.row)">
+                <q-item-section avatar>
+                  <q-icon name="edit" />
+                </q-item-section>
+                <q-item-section>Editar</q-item-section>
+              </q-item>
 
-            <!-- DELETE -->
-            <q-item clickable v-close-popup @click="emit('delete', props.row)">
-              <q-item-section avatar>
-                <q-icon name="delete" color="red" />
-              </q-item-section>
-              <q-item-section>
-                Eliminar
-              </q-item-section>
-            </q-item>
+              <!-- DELETE -->
+              <q-item clickable @click="onDelete(props.row)">
+                <q-item-section avatar>
+                  <q-icon name="delete" color="red" />
+                </q-item-section>
+                <q-item-section>Eliminar</q-item-section>
+              </q-item>
 
-            <!-- DIVIDER -->
-            <q-separator v-if="actions.length" />
+              <q-separator v-if="visibleActions.length" />
 
-            <!-- ACTIONS DINÂMICAS -->
-            <q-item
-              v-for="a in actions"
-              :key="a.url"
-              clickable
-              v-close-popup
-              :disable="a.permission && !canDo(a.permission)"
-              @click="emit('run-action', { action: a, row: props.row })"
-            >
-              <q-item-section>
-                {{ a.details }}
-              </q-item-section>
-            </q-item>
+              <!-- ACTIONS DINÂMICAS -->
+              <q-item
+                v-for="a in visibleActions"
+                :key="a.url"
+                clickable
+                :disable="a.permission && !canDo(a.permission)"
+                @click="runAction(a, props.row)"
+              >
+                <q-item-section avatar v-if="a.icon">
+                  <q-icon :name="a.icon" :color="a.color || 'primary'" />
+                </q-item-section>
 
-          </q-list>
+                <q-item-section>
+                  {{ a.details }}
+                </q-item-section>
 
-        </q-btn-dropdown>
+                <!-- loading -->
+                <q-item-section side v-if="isLoading(`${props.row.id}_${a.url}`)">
+                  <q-spinner size="16px" />
+                </q-item-section>
+              </q-item>
+
+            </q-list>
+
+          </q-menu>
+        </q-btn>
 
       </q-td>
     </template>
