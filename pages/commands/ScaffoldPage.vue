@@ -385,6 +385,8 @@
                 details = {{p.details}}
               </q-tooltip>
             </q-chip>
+            
+            <q-btn v-if="form.modelo" class=" col" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
           </q-card-section>
           
         </q-card>
@@ -396,7 +398,6 @@
       <div class="col-8">
         <div class="row" >
           <q-btn v-if="form.modulo" class=" col" flat icon="refresh" color="accent" :label="'Migrate' + ' '+ form.modulo" @click="generateMigrate" />
-          <q-btn v-if="form.modelo" class=" col" flat icon="arrow_upward" color="success" :label="'Permissions Updade' + ' '+ form.modelo" @click="permissionUpdade" />
         </div>
         <div class="col" v-if="out">
           <br>
