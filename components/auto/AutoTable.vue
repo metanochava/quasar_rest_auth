@@ -39,8 +39,12 @@ watch(() => props.pagination, (val) => {
 
 // ---------------- UI STATE ----------------
 const visibleColumns = ref([])
-let geralActions = ref(props.actions.filter(c => c.details === 'true'))
-let singularActions = ref([])
+const singularActions = computed(() =>
+  (props.actions || []).filter(c => c.details === true || c.details === 'true')
+)
+const geralActions = computed(() =>
+  (props.actions || []).filter(c => c.details === false || c.details === 'false')
+)
 const density = ref('normal')
 
 // ---------------- COMPUTED ----------------
@@ -88,15 +92,6 @@ watch(
   { immediate: true }
 )
 
-watch(
-  () => props.actions,
-  async (actions) => {
-    if (!actions) return
-    singularActions = actions.filter(c => c.details === 'true')
-    geralActions = actions.filter(c => c.details === 'false')
-  },
-  { immediate: true }
-)
 
 
 const paginationLabel = (start, end, total) => {
