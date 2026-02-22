@@ -39,8 +39,8 @@ watch(() => props.pagination, (val) => {
 
 // ---------------- UI STATE ----------------
 const visibleColumns = ref([])
-const geralActions = ref(props.actions.filter(c => c.details !== 'True'))
-const singularActions = ref(props.actions.filter(c => c.details !== 'False'))
+const geralActions = ref(props.actions.filter(c => c.details !== 'true'))
+const singularActions = ref(props.actions.filter(c => c.details !== 'false'))
 const density = ref('normal')
 
 // ---------------- COMPUTED ----------------
