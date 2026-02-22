@@ -92,8 +92,8 @@ watch(
   () => props.actions,
   async (actions) => {
     if (!actions) return
-    singularActions = props.actions.filter(c => c.details === 'true')
-    geralActions = props.actions.filter(c => c.details === 'false')
+    singularActions = actions.filter(c => c.details === 'true')
+    geralActions = actions.filter(c => c.details === 'false')
   },
   { immediate: true }
 )
