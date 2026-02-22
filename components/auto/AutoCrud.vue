@@ -51,6 +51,20 @@ import { buildFormFromSchema, actionsFromSchema } from '../../utils/autoForm'
 
 
 
+
+
+// --- props ---
+const props = defineProps({
+  module: { type: String, required: true },
+  model: { type: String, required: true },
+
+  // opcional: função de permissão (ex: (perm) => userCan(perm))
+  can: { type: Function, default: null },
+
+  // opcional: schemaPath (se o teu ok() embrulha)
+  schemaPath: { type: String, default: 'fields' }, // 'fields' | 'data.fields'
+})
+
 watch(
   () => [props.module, props.model],
   async ([module, model], [oldModule, oldModel]) => {
@@ -72,19 +86,6 @@ watch(
   },
   { immediate: true }
 )
-
-// --- props ---
-const props = defineProps({
-  module: { type: String, required: true },
-  model: { type: String, required: true },
-
-  // opcional: função de permissão (ex: (perm) => userCan(perm))
-  can: { type: Function, default: null },
-
-  // opcional: schemaPath (se o teu ok() embrulha)
-  schemaPath: { type: String, default: 'fields' }, // 'fields' | 'data.fields'
-})
-
 // --- state ---
 const schema = ref([])
 const actions = ref([])
