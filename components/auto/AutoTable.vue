@@ -213,15 +213,15 @@ const paginationLabel = (start, end, total) => {
                 v-for="a in singularActions"
                 :key="a.url"
                 clickable
-                :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' + a.modelo.toLowerCase())"
+                :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' +  String(a.modelo || '').toLowerCase())"
                 @click="runAction(a, props.row)"
               >
                 <q-item-section avatar v-if="a.icon">
                   <q-icon :name="a.icon" :color="{
-                      'green': p.method === 'get',
-                      'blue': p.method === 'post',
-                      'orange': p.method ==='put',
-                      'red': p.method === 'delete'
+                      'green': a.method === 'get',
+                      'blue': a.method === 'post',
+                      'orange': a.method ==='put',
+                      'red': a.method === 'delete'
                     }" 
                   />
                 </q-item-section>
