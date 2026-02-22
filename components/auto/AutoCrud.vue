@@ -164,11 +164,36 @@ async function loadData() {
     }
 
     const { data } = await HTTPAuth.get(
-      url({ type: 'u', url: `api/django_saas/modulos/${props.module}/${props.model}/schema/`, params })
+      url({ type: 'u', url: `api/${props.module}/${props.model}/`, params })
     )
 
     rows.value = data?.results || data || []
     pagination.value.rowsNumber = data?.count ?? rows.value.length
+  } finally {
+    loading.value = false
+  }
+}
+
+async function loadDat_() {
+  loading.value = true
+  try {
+    const params = {
+      page: pagination.value.page,
+      page_size: pagination.value.rowsPerPage,
+      ...filters.value,
+    }
+
+    const { data } = await HTTPAuth.get(
+      url({
+        type: 'u',
+        url: `/api/django_saas/${endpoint.value}/`,
+        params
+      })
+    )
+
+    rows.value = data?.results || data || []
+    pagination.value.rowsNumber = data?.count ?? rows.value.length
+
   } finally {
     loading.value = false
   }
