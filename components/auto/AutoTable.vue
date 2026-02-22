@@ -6,6 +6,8 @@ import { tdc } from '../../boot/base'
 
 // ---------------- PROPS ----------------
 const props = defineProps({
+  module: { type: String, default:'' },
+  model:  { type: String, default:'' },
   rows: { type: Array, default: () => [] },
   columns: { type: Array, default: () => [] },
   schema: { type: Array, default: () => [] },
@@ -106,6 +108,28 @@ const paginationLabel = (start, end, total) => {
   if (!total || total === 0) return tdc('Sem dados')
   return `${start}-${end} ${tdc('de')} ${total}`
 }
+
+function onHardDelete(row) {
+  runAction({
+    url: `${props.module}/${props.model}/${row.id}/hard_delete/`,
+    method: 'DELETE',
+    confirm: true,
+    confirm_message: 'Eliminar permanentemente este registo?',
+    success_message: 'Eliminado permanentemente',
+    error_message: 'Erro ao eliminar permanentemente'
+  }, row)
+}
+
+function onRestore(row) {
+  runAction({
+    url: `${props.module}/${props.model}/${row.id}/restore/`,
+    method: 'POST',
+    confirm: true,
+    confirm_message: 'Restaurar este registo?',
+    success_message: 'Restaurado com sucesso',
+    error_message: 'Erro ao restaurar'
+  }, row)
+}
 </script>
 
 <template>
@@ -198,20 +222,53 @@ const paginationLabel = (start, end, total) => {
 
             <q-list dense style="min-width: 180px">
 
+
               <!-- EDIT -->
-              <q-item clickable @click="emit('edit', props.row)">
+              <q-item
+                v-if="canDo('change_'+model.toLowerCase())"
+                clickable
+                @click="emit('edit', props.row)"
+              >
                 <q-item-section avatar>
                   <q-icon name="edit" />
                 </q-item-section>
                 <q-item-section>Editar</q-item-section>
               </q-item>
 
-              <!-- DELETE -->
-              <q-item clickable @click="onDelete(props.row)">
+              <!-- SOFT DELETE -->
+              <q-item
+                v-if="canDo('delete_'+model.toLowerCase()) && !props.row?.deleted_at"
+                clickable
+                @click="onDelete(props.row)"
+              >
                 <q-item-section avatar>
-                  <q-icon name="delete" color="red" />
+                  <q-icon name="delete" color="orange" />
                 </q-item-section>
                 <q-item-section>Eliminar</q-item-section>
+              </q-item>
+
+              <!-- HARD DELETE -->
+              <q-item
+                v-if="canDo('delete_'+model.toLowerCase()) && props.row?.deleted_at"
+                clickable
+                @click="onHardDelete(props.row)"
+              >
+                <q-item-section avatar>
+                  <q-icon name="delete_forever" color="red" />
+                </q-item-section>
+                <q-item-section>Eliminar Permanentemente</q-item-section>
+              </q-item>
+
+              <!-- RESTORE -->
+              <q-item
+                v-if="canDo('restore_'+model.toLowerCase()) && props.row?.deleted_at"
+                clickable
+                @click="onRestore(props.row)"
+              >
+                <q-item-section avatar>
+                  <q-icon name="restore" color="green" />
+                </q-item-section>
+                <q-item-section>Restaurar</q-item-section>
               </q-item>
 
               <q-separator v-if="singularActions.length" />

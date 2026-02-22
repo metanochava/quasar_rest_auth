@@ -2,6 +2,8 @@
 <template>
   <q-page >
     <AutoTable
+      :module="module"
+      :model="model"
       :rows="rows"
       :columns="columns"
       :schema="schema"
@@ -220,6 +222,7 @@ async function onRunAction({ action, row }) {
 }
 
 onMounted(init)
+
 watch(
   () => props.model,
   async (model) => {

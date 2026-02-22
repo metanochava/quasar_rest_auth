@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <AutoCrud :module="module" :model="model" />
+    <AutoCrud :module="module" :model="model" :can="User.can"/>
 
   </q-page>
 </template>
@@ -42,7 +42,9 @@ import { HTTPAuth, url } from '../../boot/api'
 
 import AutoCrud from './AutoCrud.vue'
 import { buildFormFromSchema } from '../../utils/autoForm'
+import { UserStore } from '../../stores/AuthStore'
 
+const User = UserStore()
 
 const module = ref('')
 const modules = ref([])
