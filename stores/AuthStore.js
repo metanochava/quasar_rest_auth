@@ -122,7 +122,7 @@ export const LanguageStore = defineStore("lang", {
       .then(res => {
         this.list = res.data
         this.current = this.list[0]
-        User = UserStore()
+        const User = UserStore()
         User.setIdioma(this.current)
       }).catch(err => {
       })
