@@ -61,14 +61,16 @@ function apply() {
 </script>
 
 <template>
-  <q-dialog v-model="localModel">
+  <q-dialog v-model="localModel" persistent>
     <q-card style="min-width: 720px; max-width: 92vw;">
 
       <!-- HEADER -->
-      <q-card-section class="row items-center justify-between">
+      <q-bar class="row items-center justify-between" :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
         <div class="text-h6">Filtros</div>
-        <q-btn dense flat icon="close" @click="close" />
-      </q-card-section>
+        <q-btn dense flat icon="close" @click="close" >
+          <q-tooltip>{{('Fechar')}}</q-tooltip>
+        </q-btn>
+      </q-bar>
 
       <q-separator />
 

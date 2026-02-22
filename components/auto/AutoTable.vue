@@ -90,7 +90,9 @@ function exportCSV() {
     <template #top>
       <div class="row q-gutter-sm">
 
-        <q-btn icon="add" color="primary" @click="emit('create')" />
+        <q-btn icon="add" color="primary" @click="emit('create')" >
+          <q-tooltip>{{('Create')}} {{ mdel }}</q-tooltip>
+        </q-btn>
         <q-btn icon="filter_list" @click="emit('filter')" />
         <q-btn icon="refresh" @click="emit('refresh')" />
         <q-btn icon="download" @click="exportCSV" />

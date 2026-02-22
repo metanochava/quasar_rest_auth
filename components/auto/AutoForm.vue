@@ -127,12 +127,16 @@ async function save() {
     <q-card style="min-width: 760px; max-width: 92vw;">
 
       <!-- HEADER -->
-      <q-card-section class="row items-center justify-between">
-        <div class="text-h6">
+
+      <!-- HEADER -->
+      <q-bar class="row items-center justify-between" :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
+         <div class="text-h6">
           {{ form?.id ? 'Editar' : 'Novo' }}
         </div>
-        <q-btn dense flat icon="close" @click="close" />
-      </q-card-section>
+        <q-btn dense flat icon="close" @click="close" >
+          <q-tooltip>{{('Fechar')}}</q-tooltip>
+        </q-btn>
+      </q-bar>
 
       <q-separator />
 
