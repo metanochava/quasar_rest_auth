@@ -1,4 +1,4 @@
-import { tdc, HTTPAuth, url,  toPluralEndpoint, guessLabelKey } from './../index'
+import { tdc, HTTPAuth, url, guessLabelKey } from './../index'
 
 
 

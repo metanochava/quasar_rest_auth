@@ -1,4 +1,4 @@
-import { tdc, HTTPAuth, url,  toPluralEndpoint, guessLabelKey } from './../index'
+import { tdc, HTTPAuth, url, guessLabelKey } from './../index'
 
 
 
@@ -9,7 +9,7 @@ async function fetchRelationOptions(relation, search = '') {
   if (!relation) return []
 
   const [app, model] = relation.split('.')
-  const endpoint = `/api/${app}/${toPluralEndpoint(model)}/`
+  const endpoint = `/api/${app}/${(model)}s/`
 
   const params = {}
   if (search) params.search = search
