@@ -162,7 +162,7 @@ export function toPlural(word, count = 2) {
   // =========================
   // 🇵🇹 PORTUGUÊS (regras comuns)
   // =========================
-  if (lang === 'pt') {
+  if (lang === 'pt-pt') {
     // já termina em s/x/z? muitas vezes é invariável no plural (lápis, tórax, juiz->juízes é exceção)
     // Como regra geral segura: se termina em "s" ou "x", mantém
     if (/[sx]$/i.test(w)) return w
@@ -186,7 +186,7 @@ export function toPlural(word, count = 2) {
   // =========================
   // 🇬🇧 INGLÊS (regras comuns)
   // =========================
-  if (lang === 'en') {
+  if (lang === 'en-en') {
     // city -> cities
     if (/[^aeiou]y$/i.test(w)) return w.replace(/y$/i, 'ies')
 
