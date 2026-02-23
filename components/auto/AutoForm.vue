@@ -165,8 +165,8 @@ async function save() {
         <q-tab-panels v-model="tab">
 
           <!-- GENERAL -->
-          <q-tab-panel name="general">
-            <div v-for="f in generalFields" :key="f.name">
+          <q-tab-panel name="general" class="row">
+            <div v-for="f in generalFields" :key="f.name" class="col-6">
               <component
                 :is="componentMap[f.component] || f.component"
                 v-model="form[f.name]"
@@ -178,9 +178,10 @@ async function save() {
           </q-tab-panel>
 
           <!-- RELATIONS -->
-          <q-tab-panel name="relations">
-            <div v-for="f in relationFields" :key="f.name">
+          <q-tab-panel name="relations" class="row">
+            <div v-for="f in relationFields" :key="f.name" class="col-6">
               <component
+
                 :is="componentMap[f.component] || f.component"
                 v-model="form[f.name]"
                 v-bind="f.props"
@@ -191,8 +192,8 @@ async function save() {
           </q-tab-panel>
 
           <!-- FILES -->
-          <q-tab-panel name="files">
-            <div v-for="f in fileFields" :key="f.name">
+          <q-tab-panel name="files" class="row">
+            <div v-for="f in fileFields" :key="f.name" class="col-6">
 
               <!-- preview -->
               <img

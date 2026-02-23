@@ -120,8 +120,8 @@ function apply() {
         <q-tab-panels v-model="tab">
 
           <!-- BASIC -->
-          <q-tab-panel name="basic">
-            <div v-for="f in basicFields" :key="f.name">
+          <q-tab-panel name="basic" class="row">
+            <div v-for="f in basicFields" :key="f.name" class="col-4">
               <component
                 :is="componentMap[f.component] || f.component"
                 v-model="filters[f.name]"
@@ -134,8 +134,8 @@ function apply() {
           </q-tab-panel>
 
           <!-- ADVANCED -->
-          <q-tab-panel name="advanced">
-            <div v-for="f in advancedFields" :key="f.name">
+          <q-tab-panel name="advanced" class="row" >
+            <div v-for="f in advancedFields" :key="f.name" class="col-4">
               <component
                :is="componentMap[f.component] || f.component"
                 v-model="filters[f.name]"
