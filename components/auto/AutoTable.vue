@@ -23,6 +23,7 @@ const showConfirm = ref(false)
 const actionType = ref(null) // 'delete' | 'hard_delete'
 const selectedRow = ref(null)
 
+
 // ---------------- EMITS ----------------
 const emit = defineEmits([
   'request',
@@ -38,6 +39,7 @@ const emit = defineEmits([
   'objects', // criado por Metano
   'hard_delete',
   'restore',
+  'search',
 ])
 
 // ---------------- LOCAL STATE (FIX V-MODEL) ----------------
@@ -48,6 +50,7 @@ watch(() => props.pagination, (val) => {
 })
 
 
+const show_filter = ref(false)
 
 // ---------------- UI STATE ----------------
 const visibleColumns = ref([])
@@ -218,29 +221,43 @@ async function executeAction() {
     <template #top>
       <div class="row items-center justify-between q-mb-md">
 
-        <!-- ESQUERDA -->
-        <div class="text-h5">
-          {{ model }}
-        </div>
+        <!-- LEFT -->
+        <div class="text-h5">{{ model }}</div>
 
-        <!-- DIREITA -->
-        <q-btn
-          icon="add"
-          color="primary"
-          @click="emit('create')"
-          v-show="canDo('add_' + model.toLowerCase())"
-        >
-          <q-tooltip>Criar {{ model }}</q-tooltip>
-        </q-btn>
+        <!-- RIGHT -->
+        <div class="row q-gutter-sm">
+
+          <q-btn v-if="show_filter" flat icon="filter_list" @click="emit('filter')" />
+          <q-btn v-if="show_filter" flat icon="refresh" @click="emit('refresh')" />
+          <q-btn v-if="show_filter" flat icon="download" @click="exportCSV" />
+
+
+          <q-input
+            icon="search"
+            v-model="search"
+            dense
+            outlined
+            style="min-width:200px"
+            :label="tdc('Search')"
+            @keyup.enter="emit('search', val)"
+          />
+          <q-btn
+            icon="add"
+            color="primary"
+            @click="emit('create')"
+            v-show="canDo('add_' + model.toLowerCase())"
+          />
+        </div>
 
       </div>
       <div class="row q-gutter-sm q-col-gutter-sm">
-        <q-btn  icon="add" color="primary" @click="emit('create')" v-show="canDo('add_'+model.toLowerCase())" >
+        <q-btn  icon="add" color="primary" @click=" show_filter = true" >
           <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
         </q-btn>
 
 
         <q-select
+          v-if="show_filter"
           v-model="objects"
           :options="objectsOptions"
           option-label="label"
@@ -251,11 +268,9 @@ async function executeAction() {
           outlined
           @update:model-value="val => emit('objects', val)"
         />
-        <q-btn flat icon="filter_list" @click="emit('filter')" />
-        <q-btn flat icon="refresh" @click="emit('refresh')" />
-        <q-btn flat icon="download" @click="exportCSV" />
+        
 
-        <q-select
+        <q-select v-if="show_filter"
           v-model="density"
           :options="['dense','normal']"
           dense
@@ -264,6 +279,7 @@ async function executeAction() {
         />
 
         <q-select
+          v-if="show_filter"
           v-model="visibleColumns"
           :options="allColumns"
           multiple

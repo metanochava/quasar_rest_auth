@@ -23,6 +23,7 @@
       @objects="onChangeObjects"
       @hard_delete="onHardDelete"
       @restore="onRestore"
+      @search="onSearch"
     />
 
     <AutoForm
@@ -253,6 +254,12 @@ async function onChangeObjects(val) {
   // 🔥 decide endpoint baseado nisso
   filters.value.objects = val
 
+  await loadData()
+}
+
+async function onSearch(val) {
+  // 🔥 decide endpoint baseado nisso
+  filters.value.search = val
   await loadData()
 }
 
