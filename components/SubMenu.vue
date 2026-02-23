@@ -14,7 +14,7 @@
 
       <!-- Title -->
       <q-item-section>
-        {{ toPlural(tdc(item.menu)) }}
+        {{ toPlural(tdc(item.menu)) }} {{ resolveRoute(item) }} | {{ resolveRoute(item, 1) }}
       </q-item-section>
 
       <!-- ADD BUTTON -->

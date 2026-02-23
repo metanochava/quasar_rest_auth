@@ -224,12 +224,13 @@ export function resolveRoute(item, add=0) {
   if (!item) return null
 
   if (item.crud) {
+    console.log(item)
     return {
       name: 'crud',
       params: {module: item.crud[0], model: item.crud[1]} || {},
     }
   }
-  if(add==1){
+  if(add===1){
     if (item.rota) {
       return {
         name: item.rota,
