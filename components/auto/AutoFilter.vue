@@ -24,19 +24,40 @@ watch(localModel, v => {
 // ---------------- STATE ----------------
 const tab = ref('basic')
 const filters = ref({})
+const activeCount = computed(() =>
+  Object.values(filters.value).filter(v => v !== null && v !== '').length
+)
 
 // ---------------- COMPUTED ----------------
+// const basicFields = computed(() =>
+//   props.schema.filter(f => {
+//     if (f.ui?.isFile || f.ui?.isImage) return false
+//     if (f.ui?.isRelation) return true
+//     if (f.ui?.isChar || f.ui?.isNumeric) return true
+//     return false
+//   }).slice(0, 10)
+// )
+
+// const advancedFields = computed(() =>
+//   props.schema.filter(f => !(f.ui?.isFile || f.ui?.isImage))
+// )
+
 const basicFields = computed(() =>
-  props.schema.filter(f => {
-    if (f.ui?.isFile || f.ui?.isImage) return false
-    if (f.ui?.isRelation) return true
-    if (f.ui?.isChar || f.ui?.isNumeric) return true
-    return false
-  }).slice(0, 10)
+  props.schema
+    .filter(f => {
+      if (f.ui?.isFile || f.ui?.isImage) return false
+      if (f.ui?.isRelation) return true
+      if (f.ui?.isChar || f.ui?.isNumeric) return true
+      return false
+    })
+    .slice(0, 10)
 )
 
 const advancedFields = computed(() =>
-  props.schema.filter(f => !(f.ui?.isFile || f.ui?.isImage))
+  props.schema.filter(f =>
+    !(f.ui?.isFile || f.ui?.isImage) &&
+    !basicFields.value.find(b => b.name === f.name)
+  )
 )
 
 // ---------------- ACTIONS ----------------
@@ -55,13 +76,19 @@ function apply() {
     )
   )
 
-  emit('apply', payload)
+  emit('apply', {
+    ...payload,
+    __resetPage: true
+  })
   localModel.value = false
+
+
 }
 </script>
 
 <template>
   <q-dialog v-model="localModel" persistent>
+    <q-btn label="Aplicar ({{ activeCount }})" />
     <q-card style="min-width: 720px; max-width: 92vw;">
 
       <!-- HEADER -->

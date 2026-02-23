@@ -23,6 +23,7 @@ const showConfirm = ref(false)
 const actionType = ref(null) // 'delete' | 'hard_delete'
 const selectedRow = ref(null)
 
+const search = ref('')
 
 // ---------------- EMITS ----------------
 const emit = defineEmits([
@@ -140,6 +141,10 @@ const paginationLabel = (start, end, total) => {
   return `${start}-${end} ${tdc('de')} ${total}`
 }
 
+
+function runAction(action, row) {
+  emit('run-action', { action, row })
+}
 
 async function executeAction() {
   if (!selectedRow.value?.id) return

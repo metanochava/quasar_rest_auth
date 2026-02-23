@@ -94,8 +94,6 @@ const pagination = ref({
 // filtros aplicados (server-side)
 const filters = ref({})
 
-// cache simples por module+model
-const __cacheKey = computed(() => `${props.module}::${props.model}`)
 
 // columns dinâmicas
 const columns = computed(() => {
@@ -250,20 +248,23 @@ async function onRunAction({ action, row }) {
   await loadData()
 }
 
-async function onChangeObjects(val) {
-  // 🔥 decide endpoint baseado nisso
-  filters.value.objects = val
 
+async function onChangeObjects(val) {
+  filters.value.objects = val
+  pagination.value.page = 1
   await loadData()
 }
+
 
 async function onSearch(val) {
-  // 🔥 decide endpoint baseado nisso
-  filters.value.search = val
+  filters.value = {
+    ...filters.value,
+    search: val
+  }
+
+  pagination.value.page = 1
   await loadData()
 }
-
-onMounted(init)
 
 watch(
   () => props.model,

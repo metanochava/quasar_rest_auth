@@ -102,13 +102,15 @@ function buildPayload() {
 // ---------------- SAVE ----------------
 async function save() {
   saving.value = true
-
+  uploadProgress.value = 0
   try {
-    const api = `/api/${props.module}/${props.model}/`
+
+    const api = `/api/${props.module}/${props.model.toLowerCase()}s/`
     const { data, config } = buildPayload()
 
     if (form.value.id) {
-      await HTTPAuth.put(url({ type:'u', url: api + form.value.id + '/' }), data, config)
+      // await HTTPAuth.put(url({ type:'u', url: api + form.value.id + '/' }), data, config)
+      await HTTPAuth.patch(url({ type:'u', url: api + form.value.id + '/' }), data, config)
     } else {
       await HTTPAuth.post(url({ type:'u', url: api }), data, config)
     }
