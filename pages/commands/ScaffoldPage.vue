@@ -83,6 +83,16 @@
               </q-select>
             </div>
 
+            <div class="col">
+              <q-toggle
+                v-model="form.icon"
+                label="Crudeble"
+                dense
+                outlined
+              >
+              </q-toggle>
+            </div>
+
 
 
             <div class="col" v-if="models.includes(form.modelo)">
@@ -636,6 +646,7 @@ export default {
         modulo: '',
         modelo: '',
         icon: 'list',
+        crud: false,
         fields: [],
         actions: []
       },

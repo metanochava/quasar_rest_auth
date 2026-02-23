@@ -5,7 +5,7 @@
       :key="item.menu"
       clickable
       v-ripple
-      :to="resolveRoute(item)"
+      :to="resolveRoute(item, 0)"
     >
       <!-- Icon -->
       <q-item-section avatar>

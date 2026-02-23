@@ -220,7 +220,7 @@ export function guessLabelKey(obj) {
   return 'id'
 }
 
-export function resolveRoute(item, add=0) {
+export function resolveRoute(item, add) {
   if (!item) return null
 
   if (item.crud) {
@@ -229,13 +229,14 @@ export function resolveRoute(item, add=0) {
       params: item.crud || {},
     }
   }
-  if(add==1){
+  if(add==0){
     if (item.rota) {
       return {
         name: item.rota,
       }
     }
-  }else{
+  }
+  if(add==1){
 
     if (item.add_rota) {
       return {
