@@ -162,7 +162,7 @@ function onRestore(row) {
     <template #top>
       <div class="row q-gutter-sm">
 
-        <q-btn icon="add" color="primary" @click="emit('create')" v-show="caDo('add_'+model.toLowerCase())" >
+        <q-btn flat icon="add" color="primary" @click="emit('create')" v-show="caDo('add_'+model.toLowerCase())" >
           <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
         </q-btn>
         <q-select
@@ -176,9 +176,9 @@ function onRestore(row) {
           outlined
           @update:model-value="val => emit('objects', val)"
         />
-        <q-btn icon="filter_list" @click="emit('filter')" />
-        <q-btn icon="refresh" @click="emit('refresh')" />
-        <q-btn icon="download" @click="exportCSV" />
+        <q-btn flat icon="filter_list" @click="emit('filter')" />
+        <q-btn flat icon="refresh" @click="emit('refresh')" />
+        <q-btn flat icon="download" @click="exportCSV" />
 
         <q-select
           v-model="density"
