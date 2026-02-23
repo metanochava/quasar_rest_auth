@@ -26,6 +26,7 @@
       @search="onSearch"
     />
 
+    {{ schema }}
     <AutoForm
       v-model="showForm"
       :schema="schema"

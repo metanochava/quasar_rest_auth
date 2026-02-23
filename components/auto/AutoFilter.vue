@@ -88,8 +88,10 @@ function apply() {
 
 <template>
   <q-dialog v-model="localModel" persistent>
-    <q-btn label="Aplicar ({{ activeCount }})" />
     <q-card style="min-width: 720px; max-width: 92vw;">
+    <q-btn label="Aplicar ({{ activeCount }})" />
+
+      {{ schema }}
 
       <!-- HEADER -->
       <q-bar class="row items-center justify-between" :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
