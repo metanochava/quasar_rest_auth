@@ -216,11 +216,30 @@ async function executeAction() {
 
     <!-- 🔥 TOP BAR -->
     <template #top>
-      <div class="row q-gutter-sm">
+      <div class="row items-center justify-between q-mb-md">
 
+        <!-- ESQUERDA -->
+        <div class="text-h5">
+          {{ model }}
+        </div>
+
+        <!-- DIREITA -->
+        <q-btn
+          icon="add"
+          color="primary"
+          @click="emit('create')"
+          v-show="canDo('add_' + model.toLowerCase())"
+        >
+          <q-tooltip>Criar {{ model }}</q-tooltip>
+        </q-btn>
+
+      </div>
+      <div class="row q-gutter-sm q-col-gutter-sm">
         <q-btn  icon="add" color="primary" @click="emit('create')" v-show="canDo('add_'+model.toLowerCase())" >
           <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
         </q-btn>
+
+
         <q-select
           v-model="objects"
           :options="objectsOptions"
@@ -332,35 +351,6 @@ async function executeAction() {
                   <q-icon name="delete_forever" color="red" />
                 </q-item-section>
                 <q-item-section>Eliminar Permanentemente</q-item-section>
-              </q-item>
-
-
-
-
-
-
-              <!-- SOFT DELETE -->
-              <q-item
-                v-if="canDo('delete_'+model.toLowerCase()) && !isDeleted(props.row)"
-                clickable
-                @click="emit('delete', props.row)"
-              >
-                <q-item-section avatar>
-                  <q-icon name="delete" color="orange" />
-                </q-item-section>
-                <q-item-section>Eliminar</q-item-section>
-              </q-item>
-
-              <!-- HARD DELETE -->
-              <q-item
-                v-if="canDo('hard_delete_'+model.toLowerCase()) && isDeleted(props.row)"
-                clickable
-                @click="emit('hard_delete', props.row)"
-              >
-                <q-item-section avatar>
-                  <q-icon name="delete_forever" color="red" />
-                </q-item-section>
-                <q-item-section>Remover</q-item-section>
               </q-item>
 
               <!-- RESTORE -->
