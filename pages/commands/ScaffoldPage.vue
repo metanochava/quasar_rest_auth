@@ -12,7 +12,7 @@
 
         <q-card-section class="text-subtitle1" dense>
           <div class="row items-center  sticky-header">
-            <div class="text-h5">⚡ Scaffold Command Wizard</div>
+            <div class="text-h5"> ⚡ Scaffold Command Wizard</div>
             <q-space/>
             <q-btn flat icon="visibility" label="Preview" @click="generatePreview" />
             <q-btn color="primary" icon="save" label="Create / Update" @click="submit" />
@@ -729,7 +729,6 @@ export default {
       }else{
         AlertError('Label, Key ou ambos estao vazios!')
       }
-   
     },
 
     removeChoice (f, index){

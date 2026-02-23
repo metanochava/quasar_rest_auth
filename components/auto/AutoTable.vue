@@ -203,6 +203,7 @@ async function executeAction() {
   </q-dialog>
 
   <q-table
+    square
     flat
     bordered
     :rows="rows"

@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-sm">
     <div class="row q-col-gutter-sm q-pa-0" v-if="!route.params.model ">
       <div class="col">
         <q-select

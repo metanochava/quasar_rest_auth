@@ -1,6 +1,6 @@
 
 <template>
-  <q-page >
+
     <AutoTable
       :module="module"
       :model="model"
@@ -41,7 +41,7 @@
       :schema="schema"
       @apply="onApplyFilter"
     />
-  </q-page>
+
 </template>
 
 
