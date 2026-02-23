@@ -162,7 +162,7 @@ function onRestore(row) {
     <template #top>
       <div class="row q-gutter-sm">
 
-        <q-btn flat icon="add" color="primary" @click="emit('create')" v-show="caDo('add_'+model.toLowerCase())" >
+        <q-btn flat icon="add" color="primary" @click="emit('create')" v-show="canDo('add_'+model.toLowerCase())" >
           <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
         </q-btn>
         <q-select
