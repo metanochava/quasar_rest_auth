@@ -124,7 +124,7 @@ export function ascii(text, font = 'Standard') {
 
 export function toPlural(word, count = 2) {
   const User = UserStore()
-  lang = User.Idioma.code
+  const lang = User.Idioma.code
   const w = String(word || '').trim()
   if (!w) return ''
 
