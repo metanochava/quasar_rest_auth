@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page>
     <div class="row q-col-gutter-sm q-pa-0" v-if="!route.params.model ">
       <div class="col">
         <q-select
@@ -44,8 +44,10 @@ import { tdc } from '../../boot/base'
 const User = UserStore()
 const route = useRoute()
 
-const module = computed(() => route.params.module)
-const model = computed(() => route.params.model)
+// estado
+const module = ref('')
+const model = ref('')
+
 const modules = ref([])
 const models = ref([])
 
@@ -61,4 +63,16 @@ async function loadModelsRelation(){
 onMounted(async () => {
   await loadApps()
 })
+
+// 🔥 WATCH REATIVO DA ROTA
+watch(
+  () => route.params,
+  (params) => {
+    if (!params?.module || !params?.model) return
+
+    module.value = params.module
+    model.value = params.model
+  },
+  { immediate: true }
+)
 </script>
