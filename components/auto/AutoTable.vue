@@ -227,10 +227,46 @@ async function executeAction() {
         <!-- RIGHT -->
         <div class="row q-gutter-sm">
 
+          <q-select
+            v-if="show_filter"
+            v-model="objects"
+            :options="objectsOptions"
+            option-label="label"
+            option-value="value"
+            emit-value
+            map-options
+            dense
+            outlined
+            @update:model-value="val => emit('objects', val)"
+          />
+          
+
+          <q-select v-if="show_filter"
+            v-model="density"
+            :options="['dense','normal']"
+            dense
+            outlined
+            style="width:120px"
+          />
+
+          <q-select
+            v-if="show_filter"
+            v-model="visibleColumns"
+            :options="allColumns"
+            multiple
+            dense
+            outlined
+            style="min-width:200px"
+            label="Colunas"
+          />
+
           <q-btn v-if="show_filter" flat icon="filter_list" @click="emit('filter')" />
           <q-btn v-if="show_filter" flat icon="refresh" @click="emit('refresh')" />
           <q-btn v-if="show_filter" flat icon="download" @click="exportCSV" />
 
+          <q-btn  flat :icon="show_filter? 'chevron_right' : 'chevron_left'" color="accent" @click=" show_filter = !show_filter" >
+            <q-tooltip>{{tdc('Mostar Filtros')}} </q-tooltip>
+          </q-btn>
 
           <q-input
             icon="search"
@@ -248,47 +284,6 @@ async function executeAction() {
             v-show="canDo('add_' + model.toLowerCase())"
           />
         </div>
-
-      </div>
-      <div class="row q-gutter-sm q-col-gutter-sm">
-        <q-btn  icon="filter" color="accent" @click=" show_filter = !show_filter" >
-          <q-tooltip>{{tdc('Mostar Filtros')}} </q-tooltip>
-        </q-btn>
-
-
-        <q-select
-          v-if="show_filter"
-          v-model="objects"
-          :options="objectsOptions"
-          option-label="label"
-          option-value="value"
-          emit-value
-          map-options
-          dense
-          outlined
-          @update:model-value="val => emit('objects', val)"
-        />
-        
-
-        <q-select v-if="show_filter"
-          v-model="density"
-          :options="['dense','normal']"
-          dense
-          outlined
-          style="width:120px"
-        />
-
-        <q-select
-          v-if="show_filter"
-          v-model="visibleColumns"
-          :options="allColumns"
-          multiple
-          dense
-          outlined
-          style="min-width:200px"
-          label="Colunas"
-        />
-
       </div>
     </template>
 
