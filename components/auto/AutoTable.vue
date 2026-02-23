@@ -162,55 +162,61 @@ function onRestore(row) {
     <!-- 🔥 TOP BAR -->
     <template #top>
       <div class="row items-center q-gutter-sm">
+        <q-card >
+          <q-bar class="row items-center justify-between" :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
+            <div class="text-h6">
+              {{ model }}
+            </div>
 
-        <b class="text-h4">{{ model }}</b>
+            <q-separator vertical class="q-mx-sm" />
 
-        <!-- ✅ FIX -->
-        <q-separator vertical class="q-mx-sm" />
+            <q-div >
+              <q-select
+                v-model="objects"
+                :options="objectsOptions"
+                option-label="label"
+                option-value="value"
+                emit-value
+                map-options
+                dense
+                outlined
+                @update:model-value="val => emit('objects', val)"
+              />
 
-        <q-select
-          v-model="objects"
-          :options="objectsOptions"
-          option-label="label"
-          option-value="value"
-          emit-value
-          map-options
-          dense
-          outlined
-          @update:model-value="val => emit('objects', val)"
-        />
+              <q-btn flat icon="filter_list" @click="emit('filter')" />
+              <q-btn flat icon="refresh" @click="emit('refresh')" />
+              <q-btn flat icon="download" @click="exportCSV" />
 
-        <q-btn flat icon="filter_list" @click="emit('filter')" />
-        <q-btn flat icon="refresh" @click="emit('refresh')" />
-        <q-btn flat icon="download" @click="exportCSV" />
+              <q-select
+                v-model="density"
+                :options="['dense','normal']"
+                dense
+                outlined
+                style="width:120px"
+              />
 
-        <q-select
-          v-model="density"
-          :options="['dense','normal']"
-          dense
-          outlined
-          style="width:120px"
-        />
+              <q-select
+                v-model="visibleColumns"
+                :options="allColumns"
+                multiple
+                dense
+                outlined
+                style="min-width:200px"
+                label="Colunas"
+              />
 
-        <q-select
-          v-model="visibleColumns"
-          :options="allColumns"
-          multiple
-          dense
-          outlined
-          style="min-width:200px"
-          label="Colunas"
-        />
+              <q-btn
+                icon="add"
+                color="primary"
+                @click="emit('create')"
+                v-show="canDo('add_'+model.toLowerCase())"
+              >
+                <q-tooltip>Create {{ model }}</q-tooltip>
+              </q-btn>
+            </q-div>
+          </q-bar>
 
-        <q-btn
-          icon="add"
-          color="primary"
-          @click="emit('create')"
-          v-show="canDo('add_'+model.toLowerCase())"
-        >
-          <q-tooltip>Create {{ model }}</q-tooltip>
-        </q-btn>
-
+        </q-card>
       </div>
     </template>
     <!-- 🔥 INLINE EDIT -->
