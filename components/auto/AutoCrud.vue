@@ -43,11 +43,9 @@
     />
 
 </template>
-
-
-
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { debounce } from 'quasar'
 import AutoTable from './AutoTable.vue'
 import AutoForm from './AutoForm.vue'
 import AutoFilter from './AutoFilter.vue'
@@ -55,20 +53,12 @@ import AutoFilter from './AutoFilter.vue'
 import { HTTPAuth, url } from '../../boot/api'
 import { buildFormFromSchema, actionsFromSchema } from '../../utils/autoForm'
 
-
-
-
-
 // --- props ---
 const props = defineProps({
   module: { type: String, required: true },
   model: { type: String, required: true },
-
-  // opcional: função de permissão (ex: (perm) => userCan(perm))
   can: { type: Function, default: null },
-
-  // opcional: schemaPath (se o teu ok() embrulha)
-  schemaPath: { type: String, default: 'fields' }, // 'fields' | 'data.fields'
+  schemaPath: { type: String, default: 'fields' }
 })
 
 // --- state ---
@@ -79,10 +69,8 @@ const loading = ref(false)
 
 const showForm = ref(false)
 const showFilter = ref(false)
-
 const selectedRow = ref(null)
 
-// server-side pagination/sort
 const pagination = ref({
   page: 1,
   rowsPerPage: 10,
@@ -91,11 +79,9 @@ const pagination = ref({
   descending: true,
 })
 
-// filtros aplicados (server-side)
 const filters = ref({})
 
-
-// columns dinâmicas
+// --- computed columns ---
 const columns = computed(() => {
   const base = schema.value.map(f => ({
     name: f.name,
@@ -108,18 +94,16 @@ const columns = computed(() => {
   return base
 })
 
-// permissões
+// --- permissions ---
 function canDo(perm) {
   if (!perm) return true
   if (typeof props.can === 'function') return !!props.can(perm)
-  return true // fallback: mostra tudo
+  return true
 }
 
+// --- INIT ---
 async function init() {
-  if (!props.module || !props.model) {
-    console.warn('init skipped: missing module/model')
-    return
-  }
+  if (!props.module || !props.model) return
 
   schema.value = await buildFormFromSchema({
     module: props.module,
@@ -136,8 +120,12 @@ async function init() {
   await loadData()
 }
 
-async function loadData() {
+// --- LOAD DATA (SOURCE OF TRUTH) ---
+let lastToken = 0
+
+async function loadData(token = null) {
   loading.value = true
+
   try {
     const params = {
       page: pagination.value.page,
@@ -149,16 +137,27 @@ async function loadData() {
     }
 
     const { data } = await HTTPAuth.get(
-      url({ type: 'u', url: `api/${props.module}/${props.model.toLowerCase()}s/`, params })
+      url({
+        type: 'u',
+        url: `api/${props.module}/${props.model.toLowerCase()}s/`,
+        params
+      })
     )
+
+    // 🔥 IGNORA resposta antiga
+    if (token && token !== lastToken) return
 
     rows.value = data?.results || data || []
     pagination.value.rowsNumber = data?.count ?? rows.value.length
+
   } finally {
-    loading.value = false
+    if (!token || token === lastToken) {
+      loading.value = false
+    }
   }
 }
 
+// --- EVENTS ---
 function onRequest(req) {
   pagination.value = req.pagination
   loadData()
@@ -175,17 +174,26 @@ function openEdit(row) {
 }
 
 async function onDelete(row) {
-  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/`, params:{} }))
+  await HTTPAuth.delete(url({
+    type: 'u',
+    url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/`
+  }))
   await loadData()
 }
 
 async function onHardDelete(row) {
-  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/hard_delete/`, params:{} }))
+  await HTTPAuth.delete(url({
+    type: 'u',
+    url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/hard_delete/`
+  }))
   await loadData()
 }
 
 async function onRestore(row) {
-  await HTTPAuth.post(url({ type: 'u', url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/restore/`, params:{}}), {})
+  await HTTPAuth.post(url({
+    type: 'u',
+    url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/restore/`
+  }), {})
   await loadData()
 }
 
@@ -194,6 +202,7 @@ async function onSaved() {
   await loadData()
 }
 
+// --- FILTER ---
 function clean(obj) {
   const out = {}
   Object.entries(obj || {}).forEach(([k, v]) => {
@@ -215,20 +224,19 @@ function onApplyFilter(payload) {
   loadData()
 }
 
-// inline edit (PATCH)
+// --- INLINE PATCH ---
 async function onInlinePatch({ id, field, value }) {
   await HTTPAuth.patch(
-    url({ type: 'u', url: `/api/${props.module}/${props.model}/${id}/` }),
+    url({ type: 'u', url: `/api/${props.module}/${props.model.toLowerCase()}s/${id}/` }),
     { [field]: value }
   )
   await loadData()
 }
 
-// executar action dinâmica (POST /custom-url ou /{id}/action/)
+// --- ACTION ---
 async function onRunAction({ action, row }) {
   if (action?.permission && !canDo(action.permission)) return
 
-  // action.url pode ser absoluto/relativo. Se for relativo, assume /api/...
   const actionUrl = action.url?.startsWith('http')
     ? action.url
     : `/api/${action.url?.replace(/^\//, '')}`
@@ -248,24 +256,34 @@ async function onRunAction({ action, row }) {
   await loadData()
 }
 
-
+// --- OBJECT FILTER ---
 async function onChangeObjects(val) {
   filters.value.objects = val
   pagination.value.page = 1
   await loadData()
 }
 
+// --- SEARCH (FINAL VERSION 🔥) ---
+const onSearch = debounce(async (val) => {
+  const clean = (val || '').trim()
 
-async function onSearch(val) {
+  // evita chamadas iguais
+  if (filters.value.search === clean) return
+
+  const token = ++lastToken
+
   filters.value = {
     ...filters.value,
-    search: val
+    search: clean || undefined
   }
 
   pagination.value.page = 1
-  await loadData()
-}
 
+  await loadData(token)
+
+}, 400)
+
+// --- WATCH ---
 watch(
   () => props.model,
   async (model) => {
