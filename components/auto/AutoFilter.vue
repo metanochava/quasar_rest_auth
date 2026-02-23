@@ -120,7 +120,7 @@ function apply() {
         <q-tab-panels v-model="tab">
 
           <!-- BASIC -->
-          <q-tab-panel name="basic" class="row">
+          <q-tab-panel name="basic" class="row q-col-gutter-sm">
             <div v-for="f in basicFields" :key="f.name" class="col-4">
               <component
                 :is="componentMap[f.component] || f.component"
@@ -128,13 +128,13 @@ function apply() {
                 v-bind="f.props"
                 :label="f.label"
                 dense
-                outlined
+                outline
               />
             </div>
           </q-tab-panel>
 
           <!-- ADVANCED -->
-          <q-tab-panel name="advanced" class="row" >
+          <q-tab-panel name="advanced" class="row q-col-gutter-sm" >
             <div v-for="f in advancedFields" :key="f.name" class="col-4">
               <component
                :is="componentMap[f.component] || f.component"
