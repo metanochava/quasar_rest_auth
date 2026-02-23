@@ -162,45 +162,45 @@ async function executeAction() {
 <template>
 
   <q-dialog v-model="showConfirm">
-  <q-card style="min-width: 400px">
+    <q-card style="min-width: 400px">
 
-    <q-card-section class="row items-center q-gutter-sm">
-      <q-icon
-        :name="actionType === 'hard_delete' ? 'warning' : 'help'"
-        :color="actionType === 'hard_delete' ? 'red' : 'orange'"
-        size="md"
-      />
-      <div class="text-h6">
-        {{ actionType === 'hard_delete' ? 'Eliminar permanentemente?' : 'Confirmar eliminação?' }}
-      </div>
-    </q-card-section>
+      <q-card-section class="row items-center q-gutter-sm">
+        <q-icon
+          :name="actionType === 'hard_delete' ? 'warning' : 'help'"
+          :color="actionType === 'hard_delete' ? 'red' : 'orange'"
+          size="md"
+        />
+        <div class="text-h6">
+          {{ actionType === 'hard_delete' ? 'Eliminar permanentemente?' : 'Confirmar eliminação?' }}
+        </div>
+      </q-card-section>
 
-    <q-card-section>
-      <div>
-        Tens certeza que queres eliminar:
-      </div>
+      <q-card-section>
+        <div>
+          {{tdc('Tens certeza que queres eliminar:')}}
+        </div>
 
-      <b>
-        {{ selectedRow?.nome || selectedRow?.name || selectedRow?.id }}
-      </b>
+        <b>
+          {{ selectedRow?.nome || selectedRow?.name || selectedRow?.id }}
+        </b>
 
-      <div v-if="actionType === 'hard_delete'" class="text-red q-mt-sm">
-        ⚠️ Esta ação é irreversível
-      </div>
-    </q-card-section>
+        <div v-if="actionType === 'hard_delete'" class="text-red q-mt-sm">
+          ⚠️ {{ tdc('Esta ação é irreversível') }}
+        </div>
+      </q-card-section>
 
-    <q-card-actions align="right">
-      <q-btn flat label="Cancelar" v-close-popup />
+      <q-card-actions align="right">
+        <q-btn flat label="Cancelar" v-close-popup />
 
-      <q-btn
-        :color="actionType === 'hard_delete' ? 'red' : 'orange'"
-        :label="actionType === 'hard_delete' ? 'Eliminar Permanentemente' : 'Eliminar'"
-        @click="executeAction"
-      />
-    </q-card-actions>
+        <q-btn
+          :color="actionType === 'hard_delete' ? 'red' : 'orange'"
+          :label="actionType === 'hard_delete' ? 'Eliminar Permanentemente' : 'Eliminar'"
+          @click="executeAction"
+        />
+      </q-card-actions>
 
-  </q-card>
-</q-dialog>
+    </q-card>
+  </q-dialog>
 
   <q-table
     :rows="rows"
