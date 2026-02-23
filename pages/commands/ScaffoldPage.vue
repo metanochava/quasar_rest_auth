@@ -49,6 +49,16 @@
               />
             </div>
 
+             <div class="col">
+              <q-toggle
+                v-model="form.crud"
+                label="Crudeble"
+                dense
+                outlined
+              >
+              </q-toggle>
+            </div>
+
             <div class="col">
               <q-select
                 v-model="form.icon"
@@ -83,15 +93,7 @@
               </q-select>
             </div>
 
-            <div class="col">
-              <q-toggle
-                v-model="form.icon"
-                label="Crudeble"
-                dense
-                outlined
-              >
-              </q-toggle>
-            </div>
+           
 
 
 
