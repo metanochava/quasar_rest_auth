@@ -133,6 +133,7 @@ export const LanguageStore = defineStore("lang", {
 export const UserStore = defineStore("user", {
   state: () => ({
     data: null,
+    Idioma: {},
     TipoEntidade: [],
     Entidades: [],
     Entidade: null,

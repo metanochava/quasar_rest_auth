@@ -18,7 +18,7 @@
         "
         :icon="App.icon"
         dense
-        :label="tdc(App.menu)"
+        :label="(tdc(App.menu))"
         :header-class="$q.dark.isActive ? 'bg-dark text-white' : 'bg-primary text-white'"
         :expand-icon-class="$q.dark.isActive ? 'text-white' : 'text-white'"
       >
@@ -40,7 +40,7 @@
 
 
 import { defineComponent } from 'vue'
-import { tdc } from '../boot/base'
+import { tdc, toPlural} from '../boot/base'
 import { AuthStore, UserStore } from '../stores/AuthStore'
 import SearchMenu from './SearchMenu.vue'
 import SubMenu from './SubMenu.vue'
@@ -59,7 +59,8 @@ export default defineComponent({
     return {
       Auth,
       User,
-      tdc
+      tdc,
+      toPlural
     }
   },
   data () {

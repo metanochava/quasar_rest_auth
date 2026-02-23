@@ -37,7 +37,7 @@ import { HTTPAuth, url } from '../../boot/api'
 import AutoCrud from './AutoCrud.vue'
 import { UserStore } from '../../stores/AuthStore'
 
-import { ref, watch, computed, onMounted} from 'vue'
+import { ref, watch, onMounted} from 'vue'
 import { useRoute } from 'vue-router'
 import { tdc } from '../../boot/base'
 

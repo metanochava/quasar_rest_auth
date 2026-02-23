@@ -4,7 +4,7 @@
         v-for="App in User.Menus" :key="App"
         style="padding: 0px;"
         :icon="App.icon"
-        :label="tdc(App.menu)"
+        :label="(tdc(App.menu))"
       >
         
         <q-menu >
@@ -19,7 +19,7 @@
 <script >
 
 import { defineComponent } from 'vue'
-import { tdc } from '../boot/base'
+import { tdc, toPlural } from '../boot/base'
 import { UserStore, AuthStore } from '../stores/AuthStore'
 import SubMenu from './SubMenu.vue'
 
@@ -39,7 +39,8 @@ export default defineComponent({
     return {
       User,
       Auth,
-      tdc
+      tdc,
+      toPlural
     }
   },
   data () {

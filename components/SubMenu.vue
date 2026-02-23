@@ -5,7 +5,7 @@
       :key="item.menu"
       clickable
       v-ripple
-      :to="{name: item.rota }"
+      :to="resolveRoute(item)"
     >
       <!-- Icon -->
       <q-item-section avatar>
@@ -14,12 +14,12 @@
 
       <!-- Title -->
       <q-item-section>
-        {{ tdc(item.menu) }}
+        {{ toPlural(tdc(item.menu)) }}
       </q-item-section>
 
       <!-- ADD BUTTON -->
       <q-item-section side v-if="item.add_rota">
-        <q-btn dense flat icon="add" :to="{ name: item.add_rota }" />
+        <q-btn dense flat icon="add" :to="resolveRoute(item, 1)" />
       </q-item-section>
 
       <!-- Arrow if has submenu -->
@@ -39,7 +39,8 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { tdc } from '../boot/base'
+import { resolveRoute, tdc, toPlural } from '../boot/base'
+
 
 export default defineComponent({
   name: 'SubMenu',
@@ -52,7 +53,7 @@ export default defineComponent({
   },
 
   setup () {
-    return { tdc }
+    return { tdc, toPlural, resolveRoute}
   }
 })
 </script>

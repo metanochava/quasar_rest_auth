@@ -121,10 +121,96 @@ export function ascii(text, font = 'Standard') {
 }
 
 
-export function toPluralEndpoint (modelName) {
-  // "Funcionario" -> "funcionarios"
-  // ajuste simples: lower + "s". Se tua API usa outro plural, substitui aqui.
-  return `${modelName.toLowerCase()}s`
+
+export function toPlural(word, count = 2) {
+  const User = UserStore()
+  lang = User.Idioma.code
+  const w = String(word || '').trim()
+  if (!w) return ''
+
+  // se for 0/1 -> singular
+  if (Number(count) === 1) return w
+
+  const lower = w.toLowerCase()
+
+  // 🔥 Irregulares (podes crescer isso ao longo do tempo)
+  const irregular = {
+    pt: {
+      'mão': 'mãos',
+      'cão': 'cães',
+      'pão': 'pães',
+      'país': 'países',
+      'luz': 'luzes',
+      'cidadão': 'cidadãos',
+      'alemão': 'alemães',
+    },
+    en: {
+      'person': 'people',
+      'man': 'men',
+      'woman': 'women',
+      'child': 'children',
+      'mouse': 'mice',
+      'goose': 'geese',
+      'tooth': 'teeth',
+      'foot': 'feet',
+    }
+  }
+
+  const irr = irregular[lang]?.[lower]
+  if (irr) return matchCase(w, irr)
+
+  // =========================
+  // 🇵🇹 PORTUGUÊS (regras comuns)
+  // =========================
+  if (lang === 'pt') {
+    // já termina em s/x/z? muitas vezes é invariável no plural (lápis, tórax, juiz->juízes é exceção)
+    // Como regra geral segura: se termina em "s" ou "x", mantém
+    if (/[sx]$/i.test(w)) return w
+
+    // termina em "m" => "ns" (homem->homens)
+    if (/m$/i.test(w)) return w.replace(/m$/i, 'ns')
+
+    // termina em "r" ou "z" => +es (flor->flores, luz->luzes [já cobre com +es, mas luz costuma +es])
+    if (/[rz]$/i.test(w)) return w + 'es'
+
+    // termina em "l" => "is" (papel->papeis) (há acentos que não tratamos aqui)
+    if (/l$/i.test(w)) return w.replace(/l$/i, 'is')
+
+    // termina em "ão" => "ões" (padrão mais comum; exceções vão no dicionário)
+    if (/ão$/i.test(w)) return w.replace(/ão$/i, 'ões')
+
+    // default: +s
+    return w + 's'
+  }
+
+  // =========================
+  // 🇬🇧 INGLÊS (regras comuns)
+  // =========================
+  if (lang === 'en') {
+    // city -> cities
+    if (/[^aeiou]y$/i.test(w)) return w.replace(/y$/i, 'ies')
+
+    // box, church, class -> +es
+    if (/(s|sh|ch|x|z)$/i.test(w)) return w + 'es'
+
+    // default
+    return w + 's'
+  }
+
+  // =========================
+  // 🌍 fallback
+  // =========================
+  return w + 's'
+}
+
+// Mantém a capitalização do original (simples)
+function matchCase(original, transformed) {
+  if (!original) return transformed
+  // Se original começa com Maiúscula, capitaliza
+  if (original[0] === original[0].toUpperCase()) {
+    return transformed[0].toUpperCase() + transformed.slice(1)
+  }
+  return transformed
 }
 
 export function guessLabelKey(obj) {
@@ -134,3 +220,29 @@ export function guessLabelKey(obj) {
   return 'id'
 }
 
+export function resolveRoute(item, add=0) {
+  if (!item) return null
+
+  if (item.crud) {
+    return {
+      name: 'crud',
+      params: item.crud || {},
+    }
+  }
+  if(add==1){
+    if (item.rota) {
+      return {
+        name: item.rota,
+      }
+    }
+  }else{
+
+    if (item.add_rota) {
+      return {
+        name: item.add_rota,
+      }
+    }
+  }
+
+  return null
+}
