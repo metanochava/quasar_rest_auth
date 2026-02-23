@@ -5,7 +5,7 @@
       :key="item.menu"
       clickable
       v-ripple
-      :to='{ "name": "crud", "params": { "module": "rh", "model": "Cargo" } } '
+      :to="resolveRoute(item)"
     >
       <!-- Icon -->
       <q-item-section avatar>
@@ -14,12 +14,12 @@
 
       <!-- Title -->
       <q-item-section>
-        {{ toPlural(tdc(item.menu)) }} {{ resolveRoute(item) }} | {{ resolveRoute(item, 1) }}
+        {{ toPlural(tdc(item.menu)) }}
       </q-item-section>
 
       <!-- ADD BUTTON -->
       <q-item-section side v-if="item.add_rota">
-        <q-btn dense flat icon="add" :to='resolveRoute(item, 1)' />
+        <q-btn dense flat icon="add" :to="resolveRoute(item, 1)" />
       </q-item-section>
 
       <!-- Arrow if has submenu -->
