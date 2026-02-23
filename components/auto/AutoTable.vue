@@ -162,21 +162,9 @@ function onRestore(row) {
     <template #top>
       <div class="row q-gutter-sm">
 
-        <q-btn icon="add" color="primary" @click="emit('create')" >
+        <q-btn icon="add" color="primary" @click="emit('create')" v-show="caDo('add_'+model.toLowerCase())" >
           <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
         </q-btn>
-        <q-btn icon="filter_list" @click="emit('filter')" />
-        <q-btn icon="refresh" @click="emit('refresh')" />
-        <q-btn icon="download" @click="exportCSV" />
-
-        <q-select
-          v-model="density"
-          :options="['dense','normal']"
-          dense
-          outlined
-          style="width:120px"
-        />
-
         <q-select
           v-model="objects"
           :options="objectsOptions"
@@ -187,6 +175,17 @@ function onRestore(row) {
           dense
           outlined
           @update:model-value="val => emit('objects', val)"
+        />
+        <q-btn icon="filter_list" @click="emit('filter')" />
+        <q-btn icon="refresh" @click="emit('refresh')" />
+        <q-btn icon="download" @click="exportCSV" />
+
+        <q-select
+          v-model="density"
+          :options="['dense','normal']"
+          dense
+          outlined
+          style="width:120px"
         />
 
         <q-select
@@ -248,7 +247,7 @@ function onRestore(row) {
 
               <!-- EDIT -->
               <q-item
-                v-if="canDo('chang_'+model.toLowerCase())"
+                v-if="canDo('change_'+model.toLowerCase())"
                 clickable
                 @click="emit('edit', props.row)"
               >
