@@ -258,7 +258,7 @@ const paginationLabel = (start, end, total) => {
               </q-item>
 
               <!-- HARD DELETE -->
-               {{ canDo('hard_delete_'+model.toLowerCase() }}
+               {{ canDo('hard_delete_'+model.toLowerCase()) }}
               <q-item
                 v-if="canDo('hard_delete_'+model.toLowerCase()) && isDeleted(props.row)"
                 clickable
