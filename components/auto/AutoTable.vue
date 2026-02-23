@@ -31,7 +31,9 @@ const emit = defineEmits([
   'run-action',
   'update:pagination',
 
-  'objects' // criado por Metano
+  'objects', // criado por Metano
+  'hard_delete',
+  'restore',
 ])
 
 // ---------------- LOCAL STATE (FIX V-MODEL) ----------------
@@ -119,38 +121,7 @@ const paginationLabel = (start, end, total) => {
   return `${start}-${end} ${tdc('de')} ${total}`
 }
 
-function onHardDelete(row) {
-  runAction({
-    url: `${props.module}/${props.model}/${row.id}/hard_delete/`,
-    method: 'DELETE',
-    confirm: true,
-    confirm_message: 'Eliminar permanentemente este registo?',
-    success_message: 'Eliminado permanentemente',
-    error_message: 'Erro ao eliminar permanentemente'
-  }, row)
-}
 
-function onDelete(row) {
-  runAction({
-    url: `${props.module}/${props.model}/${row.id}/delete/`,
-    method: 'DELETE',
-    confirm: true,
-    confirm_message: 'Eliminar permanentemente este registo?',
-    success_message: 'Eliminado permanentemente',
-    error_message: 'Erro ao eliminar permanentemente'
-  }, row)
-}
-
-function onRestore(row) {
-  runAction({
-    url: `${props.module}/${props.model}/${row.id}/restore/`,
-    method: 'POST',
-    confirm: true,
-    confirm_message: 'Restaurar este registo?',
-    success_message: 'Restaurado com sucesso',
-    error_message: 'Erro ao restaurar'
-  }, row)
-}
 </script>
 
 <template>
@@ -272,7 +243,7 @@ function onRestore(row) {
               <q-item
                 v-if="canDo('delete_'+model.toLowerCase()) && !props.row?.deleted_at"
                 clickable
-                @click="onDelete(props.row)"
+                @click="emit('delete', props.row)"
               >
                 <q-item-section avatar>
                   <q-icon name="delete" color="orange" />
@@ -284,7 +255,7 @@ function onRestore(row) {
               <q-item
                 v-if="canDo('hard_delete_'+model.toLowerCase()) && props.row?.deleted_at"
                 clickable
-                @click="onHardDelete(props.row)"
+                @click="emit('hard_delete', props.row)"
               >
                 <q-item-section avatar>
                   <q-icon name="delete_forever" color="red" />
@@ -296,7 +267,7 @@ function onRestore(row) {
               <q-item
                 v-if="canDo('restore_'+model.toLowerCase()) && props.row?.deleted_at"
                 clickable
-                @click="onRestore(props.row)"
+                 @click="emit('restore', props.row)"
               >
                 <q-item-section avatar>
                   <q-icon name="restore" color="green" />

@@ -21,6 +21,8 @@
       @refresh="loadData"
 
       @objects="onChangeObjects"
+      @hard_delete="onHardDelete"
+      @restore="onRestore"
     />
 
     <AutoForm
@@ -175,6 +177,16 @@ function openEdit(row) {
 
 async function onDelete(row) {
   await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model}/${row.id}/` }))
+  await loadData()
+}
+
+async function onHardDelete(row) {
+  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model}/${row.id}/hard_delete/` }))
+  await loadData()
+}
+
+async function onRestore(row) {
+  await HTTPAuth.post(url({ type: 'u', url: `/api/${props.module}/${props.model}/${row.id}/restore/` }))
   await loadData()
 }
 
