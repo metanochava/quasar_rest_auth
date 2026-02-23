@@ -226,7 +226,7 @@ export function resolveRoute(item, add=0) {
   if (item.crud) {
     return {
       name: 'crud',
-      params: item.crud || {},
+      params: {module: item.crud[0], model: item.crud[1]} || {},
     }
   }
   if(add==1){
