@@ -258,9 +258,20 @@ const paginationLabel = (start, end, total) => {
               </q-item>
 
               <!-- HARD DELETE -->
-               {{ canDo('hard_delete_'+model.toLowerCase()) }}
+               {{ 'hard_delete_'+model.toLowerCase() }}
               <q-item
                 v-if="canDo('hard_delete_'+model.toLowerCase()) && isDeleted(props.row)"
+                clickable
+                @click="emit('hard_delete', props.row)"
+              >
+                <q-item-section avatar>
+                  <q-icon name="delete_forever" color="red" />
+                </q-item-section>
+                <q-item-section>Eliminar Permanentemente</q-item-section>
+              </q-item>
+
+              <q-item
+                v-if="isDeleted(props.row)"
                 clickable
                 @click="emit('hard_delete', props.row)"
               >
