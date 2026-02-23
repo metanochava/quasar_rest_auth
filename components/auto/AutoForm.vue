@@ -126,6 +126,8 @@ async function save() {
 
 <template>
   <q-dialog v-model="localModel" persistent>
+
+    
     <q-card style="min-width: 760px; max-width: 92vw;">
 
       <!-- HEADER -->
@@ -143,7 +145,13 @@ async function save() {
       <q-separator />
 
       <!-- BODY -->
-      <q-card-section>
+      <q-card-section v-if="!schema.length">
+        <q-spinner />
+      </q-card-section>
+
+      <q-card-section v-else>
+          <!-- form normal -->
+
 
         <q-tabs v-model="tab" dense>
           <q-tab name="general" label="Geral" />

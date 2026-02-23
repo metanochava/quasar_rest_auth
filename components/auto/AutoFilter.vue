@@ -102,7 +102,12 @@ function apply() {
       <q-separator />
 
       <!-- BODY -->
-      <q-card-section>
+      <q-card-section v-if="!schema.length">
+        <q-spinner />
+      </q-card-section>
+
+      <q-card-section v-else>
+          <!-- form normal -->
 
         <q-tabs v-model="tab" dense>
           <q-tab name="basic" label="Básico" />
