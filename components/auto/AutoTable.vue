@@ -19,6 +19,10 @@ const props = defineProps({
   canDo: { type: Function, default: () => true }
 })
 
+const showConfirm = ref(false)
+const actionType = ref(null) // 'delete' | 'hard_delete'
+const selectedRow = ref(null)
+
 // ---------------- EMITS ----------------
 const emit = defineEmits([
   'request',
@@ -112,6 +116,12 @@ watch(
   { immediate: true }
 )
 
+function confirmAction(type, row) {
+  actionType.value = type
+  selectedRow.value = row
+  showConfirm.value = true
+}
+
 function getMethodColor(method) {
   switch ((method || '').toLowerCase()) {
     case 'get': return 'green'
@@ -128,9 +138,67 @@ const paginationLabel = (start, end, total) => {
 }
 
 
+async function executeAction() {
+  if (!selectedRow.value?.id) return
+
+  if (actionType.value === 'delete') {
+    emit('delete', selectedRow.value)
+  }
+
+  if (actionType.value === 'hard_delete') {
+    emit('hard_delete', selectedRow.value)
+  }
+
+  showConfirm.value = false
+  selectedRow.value = null
+  actionType.value = null
+}
+
 </script>
 
 <template>
+
+  <q-dialog v-model="showConfirm">
+  <q-card style="min-width: 400px">
+
+    <q-card-section class="row items-center q-gutter-sm">
+      <q-icon
+        :name="actionType === 'hard_delete' ? 'warning' : 'help'"
+        :color="actionType === 'hard_delete' ? 'red' : 'orange'"
+        size="md"
+      />
+      <div class="text-h6">
+        {{ actionType === 'hard_delete' ? 'Eliminar permanentemente?' : 'Confirmar eliminação?' }}
+      </div>
+    </q-card-section>
+
+    <q-card-section>
+      <div>
+        Tens certeza que queres eliminar:
+      </div>
+
+      <b>
+        {{ selectedRow?.nome || selectedRow?.name || selectedRow?.id }}
+      </b>
+
+      <div v-if="actionType === 'hard_delete'" class="text-red q-mt-sm">
+        ⚠️ Esta ação é irreversível
+      </div>
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn flat label="Cancelar" v-close-popup />
+
+      <q-btn
+        :color="actionType === 'hard_delete' ? 'red' : 'orange'"
+        :label="actionType === 'hard_delete' ? 'Eliminar Permanentemente' : 'Eliminar'"
+        @click="executeAction"
+      />
+    </q-card-actions>
+
+  </q-card>
+</q-dialog>
+
   <q-table
     :rows="rows"
     :columns="columns"
@@ -244,6 +312,32 @@ const paginationLabel = (start, end, total) => {
                 </q-item-section>
                 <q-item-section>Editar</q-item-section>
               </q-item>
+
+
+
+
+
+
+              <!-- DELETE -->
+              <q-item v-if="canDo('delete_'+model.toLowerCase()) && !isDeleted(props.row)" clickable @click="confirmAction('delete', props.row)">
+                <q-item-section avatar>
+                  <q-icon name="delete" color="orange" />
+                </q-item-section>
+                <q-item-section>Eliminar</q-item-section>
+              </q-item>
+
+              <!-- HARD DELETE -->
+              <q-item  v-if="canDo('hard_delete_'+model.toLowerCase()) && isDeleted(props.row)" clickable @click="confirmAction('hard_delete', props.row)">
+                <q-item-section avatar>
+                  <q-icon name="delete_forever" color="red" />
+                </q-item-section>
+                <q-item-section>Eliminar Permanentemente</q-item-section>
+              </q-item>
+
+
+
+
+
 
               <!-- SOFT DELETE -->
               <q-item
