@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
+  <div class="q-pa-sm q-gutter-sm">
     <h2>Definicoes</h2>
   </div>
 </template>

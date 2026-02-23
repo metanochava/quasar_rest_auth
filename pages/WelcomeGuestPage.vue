@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center bg-grey-1">
+  <q-page class="flex flex-center bg-grey-1 q-pa-sm">
     <q-card class="welcome-card shadow-10">
       <q-card-section class="text-center">
          <AllLogo />

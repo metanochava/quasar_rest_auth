@@ -1,5 +1,5 @@
 <template>
-  <q-page class=" q-pa-md">
+  <q-page class=" q-pa-sm">
 
     <q-dialog v-model="model_action" persistent full-width full-height>
       <ModelAction :modulo="form.modulo" :modelo="form.modelo"  :accao="accao" />

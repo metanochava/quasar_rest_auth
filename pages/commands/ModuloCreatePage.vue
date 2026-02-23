@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class=" q-pa-sm">
     <div class="text-h5 q-mb-lg">
       📦 Módulos
     </div>

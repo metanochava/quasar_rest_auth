@@ -203,6 +203,8 @@ async function executeAction() {
   </q-dialog>
 
   <q-table
+    flat
+    bordered
     :rows="rows"
     :columns="columns"
     :loading="loading"

@@ -102,7 +102,7 @@
 
     <!-- -------------------- PAGE CONTAINER -------------------- -->
 
-    <q-page-container class="">
+    <q-page-container >
       <router-view />
     </q-page-container>
 
