@@ -132,7 +132,7 @@ function onHardDelete(row) {
 
 function onDelete(row) {
   runAction({
-    url: `${props.module}/${props.model}/${row.id}/hard_delete/`,
+    url: `${props.module}/${props.model}/${row.id}/delete/`,
     method: 'DELETE',
     confirm: true,
     confirm_message: 'Eliminar permanentemente este registo?',
