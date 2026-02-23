@@ -67,6 +67,12 @@ const effectiveColumns = computed(() =>
   visibleColumns.value.length ? visibleColumns.value : allColumns.value
 )
 
+function isDeleted(x) {
+  // isDeleted({ deleted_at: '2026-01-01' }) // true
+  // isDeleted({ deleted_at: null })         // false
+  // isDeleted(null)                         // false
+  return Boolean(x && x.deleted_at)
+}
 
 
 // ---------------- INLINE EDIT ----------------
@@ -229,7 +235,7 @@ const paginationLabel = (start, end, total) => {
 
               <!-- EDIT -->
               <q-item
-                v-if="canDo('change_'+model.toLowerCase())"
+                v-if="canDo('change_'+model.toLowerCase()) && !isDeleted(props.row)"
                 clickable
                 @click="emit('edit', props.row)"
               >
@@ -241,7 +247,7 @@ const paginationLabel = (start, end, total) => {
 
               <!-- SOFT DELETE -->
               <q-item
-                v-if="canDo('delete_'+model.toLowerCase()) && !props.row?.deleted_at"
+                v-if="canDo('delete_'+model.toLowerCase()) && !isDeleted(props.row)"
                 clickable
                 @click="emit('delete', props.row)"
               >
@@ -252,8 +258,9 @@ const paginationLabel = (start, end, total) => {
               </q-item>
 
               <!-- HARD DELETE -->
+               {{ canDo('hard_delete_'+model.toLowerCase() }}
               <q-item
-                v-if="canDo('hard_delete_'+model.toLowerCase()) && props.row?.deleted_at"
+                v-if="canDo('hard_delete_'+model.toLowerCase()) && isDeleted(props.row)"
                 clickable
                 @click="emit('hard_delete', props.row)"
               >
@@ -265,7 +272,7 @@ const paginationLabel = (start, end, total) => {
 
               <!-- RESTORE -->
               <q-item
-                v-if="canDo('restore_'+model.toLowerCase()) && props.row?.deleted_at"
+                v-if="canDo('restore_'+model.toLowerCase()) && isDeleted(props.row)"
                 clickable
                  @click="emit('restore', props.row)"
               >
@@ -283,7 +290,7 @@ const paginationLabel = (start, end, total) => {
                 v-for="a in singularActions"
                 :key="a.url"
                 clickable
-                :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' + a.modelo .toLowerCase())"
+                :disable="a.permission && !canDo(a.method + '_' + a.permission + '_' + a.modelo.toLowerCase())"
                 @click="runAction(a, props.row)"
               >
                 <q-item-section avatar v-if="a.icon">
