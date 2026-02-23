@@ -130,6 +130,17 @@ function onHardDelete(row) {
   }, row)
 }
 
+function onDelete(row) {
+  runAction({
+    url: `${props.module}/${props.model}/${row.id}/hard_delete/`,
+    method: 'DELETE',
+    confirm: true,
+    confirm_message: 'Eliminar permanentemente este registo?',
+    success_message: 'Eliminado permanentemente',
+    error_message: 'Erro ao eliminar permanentemente'
+  }, row)
+}
+
 function onRestore(row) {
   runAction({
     url: `${props.module}/${props.model}/${row.id}/restore/`,
@@ -144,7 +155,6 @@ function onRestore(row) {
 
 <template>
   <q-table
-    flat
     :rows="rows"
     :columns="columns"
     :loading="loading"
@@ -161,64 +171,47 @@ function onRestore(row) {
 
     <!-- 🔥 TOP BAR -->
     <template #top>
-      <div class="row items-center q-gutter-sm">
-        <q-card >
-          <q-bar class="row items-center justify-between" :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
-            <div class="text-h6">
-              {{ model }}
-            </div>
+      <div class="row q-gutter-sm">
 
-            <q-separator vertical class="q-mx-sm" />
+        <q-btn  icon="add" color="primary" @click="emit('create')" v-show="canDo('add_'+model.toLowerCase())" >
+          <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
+        </q-btn>
+        <q-select
+          v-model="objects"
+          :options="objectsOptions"
+          option-label="label"
+          option-value="value"
+          emit-value
+          map-options
+          dense
+          outlined
+          @update:model-value="val => emit('objects', val)"
+        />
+        <q-btn flat icon="filter_list" @click="emit('filter')" />
+        <q-btn flat icon="refresh" @click="emit('refresh')" />
+        <q-btn flat icon="download" @click="exportCSV" />
 
-            <q-div >
-              <q-select
-                v-model="objects"
-                :options="objectsOptions"
-                option-label="label"
-                option-value="value"
-                emit-value
-                map-options
-                dense
-                outlined
-                @update:model-value="val => emit('objects', val)"
-              />
+        <q-select
+          v-model="density"
+          :options="['dense','normal']"
+          dense
+          outlined
+          style="width:120px"
+        />
 
-              <q-btn flat icon="filter_list" @click="emit('filter')" />
-              <q-btn flat icon="refresh" @click="emit('refresh')" />
-              <q-btn flat icon="download" @click="exportCSV" />
+        <q-select
+          v-model="visibleColumns"
+          :options="allColumns"
+          multiple
+          dense
+          outlined
+          style="min-width:200px"
+          label="Colunas"
+        />
 
-              <q-select
-                v-model="density"
-                :options="['dense','normal']"
-                dense
-                outlined
-                style="width:120px"
-              />
-
-              <q-select
-                v-model="visibleColumns"
-                :options="allColumns"
-                multiple
-                dense
-                outlined
-                style="min-width:200px"
-                label="Colunas"
-              />
-
-              <q-btn
-                icon="add"
-                color="primary"
-                @click="emit('create')"
-                v-show="canDo('add_'+model.toLowerCase())"
-              >
-                <q-tooltip>Create {{ model }}</q-tooltip>
-              </q-btn>
-            </q-div>
-          </q-bar>
-
-        </q-card>
       </div>
     </template>
+
     <!-- 🔥 INLINE EDIT -->
     <template #body-cell="props">
       <q-td :props="props">
@@ -289,7 +282,7 @@ function onRestore(row) {
 
               <!-- HARD DELETE -->
               <q-item
-                v-if="canDo('hard_delete_'+model.toLowerCase()) && !props.row?.deleted_at"
+                v-if="canDo('hard_delete_'+model.toLowerCase()) && props.row?.deleted_at"
                 clickable
                 @click="onHardDelete(props.row)"
               >
