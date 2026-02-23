@@ -219,7 +219,7 @@ async function executeAction() {
 
     <!-- 🔥 TOP BAR -->
     <template #top>
-      <div class="row items-center justify-between q-mb-md">
+      <div class="row col-12 items-center justify-between q-mb-md">
 
         <!-- LEFT -->
         <div class="text-h5">{{ model }}</div>
@@ -239,7 +239,7 @@ async function executeAction() {
             outlined
             style="min-width:200px"
             :label="tdc('Search')"
-            @keyup.enter="emit('search', val)"
+            @keyup.enter="emit('search', search)"
           />
           <q-btn
             icon="add"
@@ -251,8 +251,8 @@ async function executeAction() {
 
       </div>
       <div class="row q-gutter-sm q-col-gutter-sm">
-        <q-btn  icon="add" color="primary" @click=" show_filter = true" >
-          <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
+        <q-btn  icon="filter" color="accent" @click=" show_filter = !show_filter" >
+          <q-tooltip>{{tdc('Mostar Filtros')}} </q-tooltip>
         </q-btn>
 
 
