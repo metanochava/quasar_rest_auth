@@ -144,6 +144,7 @@ function onRestore(row) {
 
 <template>
   <q-table
+    flat
     :rows="rows"
     :columns="columns"
     :loading="loading"
@@ -162,9 +163,9 @@ function onRestore(row) {
     <template #top>
       <div class="row q-gutter-sm">
 
-        <q-btn flat icon="add" color="primary" @click="emit('create')" v-show="canDo('add_'+model.toLowerCase())" >
-          <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
-        </q-btn>
+        <b class="text-h4"> {{ model }}</b>
+        
+        <q-separator />
         <q-select
           v-model="objects"
           :options="objectsOptions"
@@ -197,6 +198,10 @@ function onRestore(row) {
           style="min-width:200px"
           label="Colunas"
         />
+
+        <q-btn  icon="add" color="primary" @click="emit('create')" v-show="canDo('add_'+model.toLowerCase())" >
+          <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
+        </q-btn>
 
       </div>
     </template>
