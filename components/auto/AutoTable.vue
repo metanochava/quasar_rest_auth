@@ -264,7 +264,7 @@ async function executeAction() {
           <q-btn v-if="show_filter" flat icon="refresh" @click="emit('refresh')" />
           <q-btn v-if="show_filter" flat icon="download" @click="exportCSV" />
 
-          <q-btn  flat :icon="show_filter? 'chevron_right' : 'chevron_left'" color="accent" @click=" show_filter = !show_filter" >
+          <q-btn  flat :icon="show_filter? 'arrow_forward' : 'arrow_back'"  @click=" show_filter = !show_filter" >
             <q-tooltip>{{tdc('Mostar Filtros')}} </q-tooltip>
           </q-btn>
 
