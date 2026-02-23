@@ -183,8 +183,22 @@ async function onSaved() {
   await loadData()
 }
 
+function clean(obj) {
+  const out = {}
+  Object.entries(obj || {}).forEach(([k, v]) => {
+    if (v !== null && v !== undefined && v !== '') {
+      out[k] = v
+    }
+  })
+  return out
+}
+
 function onApplyFilter(payload) {
-  filters.value = payload || {}
+  filters.value = clean({
+    ...filters.value,
+    ...(payload || {})
+  })
+
   pagination.value.page = 1
   showFilter.value = false
   loadData()
