@@ -5,7 +5,7 @@
         <q-select
           v-model="module"
           :options="modules"
-          label="module"
+          :label="tdc('module')"
           outlined
           dense 
           map-options
@@ -19,7 +19,7 @@
         <q-select
           v-model="model"
           :options="models"
-          label="model"
+          :label="tdc('model')"
           outlined
           dense 
         />
@@ -35,11 +35,11 @@
 
 import { HTTPAuth, url } from '../../boot/api'
 import AutoCrud from './AutoCrud.vue'
-import { buildFormFromSchema } from '../../utils/autoForm'
 import { UserStore } from '../../stores/AuthStore'
 
 import { ref, watch, computed, onMounted} from 'vue'
 import { useRoute } from 'vue-router'
+import { tdc } from '../../boot/base'
 
 const User = UserStore()
 const route = useRoute()
@@ -50,12 +50,12 @@ const modules = ref([])
 const models = ref([])
 
 async function loadApps() {
-  const {data} = await HTTPAuth.get(utl({type:'u', url:'/api/django_saas/modulos/', params:{}}))
+  const {data} = await HTTPAuth.get(url({type:'u', url:'/api/django_saas/modulos/', params:{}}))
   modules.value = data.apps
 }
 
 async function loadModelsRelation(){
-  const {data} = await HTTPAuth.get(utl({type:'u', url:'/api/django_saas/modulos/'+ module.value, params:{}}))
+  const {data} = await HTTPAuth.get(url({type:'u', url:'/api/django_saas/modulos/'+ module.value, params:{}}))
   models.value = data.models
 }
 onMounted(async () => {
