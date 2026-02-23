@@ -161,11 +161,13 @@ function onRestore(row) {
 
     <!-- 🔥 TOP BAR -->
     <template #top>
-      <div class="row q-gutter-sm">
+      <div class="row items-center q-gutter-sm">
 
-        <b class="text-h4"> {{ model }}</b>
-        
-        <q-separator />
+        <b class="text-h4">{{ model }}</b>
+
+        <!-- ✅ FIX -->
+        <q-separator vertical class="q-mx-sm" />
+
         <q-select
           v-model="objects"
           :options="objectsOptions"
@@ -177,6 +179,7 @@ function onRestore(row) {
           outlined
           @update:model-value="val => emit('objects', val)"
         />
+
         <q-btn flat icon="filter_list" @click="emit('filter')" />
         <q-btn flat icon="refresh" @click="emit('refresh')" />
         <q-btn flat icon="download" @click="exportCSV" />
@@ -199,13 +202,17 @@ function onRestore(row) {
           label="Colunas"
         />
 
-        <q-btn  icon="add" color="primary" @click="emit('create')" v-show="canDo('add_'+model.toLowerCase())" >
-          <q-tooltip>{{('Create')}} {{ model }}</q-tooltip>
+        <q-btn
+          icon="add"
+          color="primary"
+          @click="emit('create')"
+          v-show="canDo('add_'+model.toLowerCase())"
+        >
+          <q-tooltip>Create {{ model }}</q-tooltip>
         </q-btn>
 
       </div>
     </template>
-
     <!-- 🔥 INLINE EDIT -->
     <template #body-cell="props">
       <q-td :props="props">
@@ -276,7 +283,7 @@ function onRestore(row) {
 
               <!-- HARD DELETE -->
               <q-item
-                v-if="canDo('hard_delete_'+model.toLowerCase()) && props.row?.deleted_at"
+                v-if="canDo('hard_delete_'+model.toLowerCase()) && !props.row?.deleted_at"
                 clickable
                 @click="onHardDelete(props.row)"
               >
