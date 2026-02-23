@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { componentMap } from '../../boot/component_map'
+
 
 // ---------------- PROPS ----------------
 const props = defineProps({
@@ -90,9 +92,6 @@ function apply() {
   <q-dialog v-model="localModel" persistent>
     <q-card style="min-width: 720px; max-width: 92vw;">
     <q-btn label="Aplicar ({{ activeCount }})" />
-
-      {{ schema }}
-
       <!-- HEADER -->
       <q-bar class="row items-center justify-between" :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
         <div class="text-h6">Filtros</div>
@@ -124,10 +123,12 @@ function apply() {
           <q-tab-panel name="basic">
             <div v-for="f in basicFields" :key="f.name">
               <component
-                :is="f.component"
+                :is="componentMap[f.component] || f.component"
                 v-model="filters[f.name]"
                 v-bind="f.props"
                 :label="f.label"
+                dense
+                outlined
               />
             </div>
           </q-tab-panel>
@@ -136,10 +137,12 @@ function apply() {
           <q-tab-panel name="advanced">
             <div v-for="f in advancedFields" :key="f.name">
               <component
-                :is="f.component"
+               :is="componentMap[f.component] || f.component"
                 v-model="filters[f.name]"
                 v-bind="f.props"
                 :label="f.label"
+                dense
+                outlined
               />
             </div>
           </q-tab-panel>

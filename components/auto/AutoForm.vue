@@ -4,6 +4,8 @@
 import { ref, watch, computed } from 'vue'
 import { tdc } from '../../boot/base'
 import { HTTPAuth, url } from '../../boot/api'
+import { componentMap } from '../../boot/component_map'
+
 
 // ---------------- PROPS ----------------
 const props = defineProps({
@@ -129,15 +131,12 @@ async function save() {
 
     
     <q-card style="min-width: 760px; max-width: 92vw;">
-{{ data }}
-<br>
-{{ model }}
       <!-- HEADER -->
 
       <!-- HEADER -->
       <q-bar class="row items-center justify-between" :class="$q.dark.isActive ? 'bg-primary text-white' : 'bg-primary text-white'">
          <div class="text-h6">
-          {{ form?.id ? 'Editar' : 'Novo' }}
+          {{ form?.id ? ('Editar') : tdc('Novo') }}
         </div>
         <q-btn dense flat icon="close" @click="close" >
           <q-tooltip>{{('Fechar')}}</q-tooltip>
@@ -168,14 +167,26 @@ async function save() {
           <!-- GENERAL -->
           <q-tab-panel name="general">
             <div v-for="f in generalFields" :key="f.name">
-              <component :is="f.component" v-model="form[f.name]" v-bind="f.props" />
+              <component
+                :is="componentMap[f.component] || f.component"
+                v-model="form[f.name]"
+                v-bind="f.props"
+                dense
+                outlined
+              />
             </div>
           </q-tab-panel>
 
           <!-- RELATIONS -->
           <q-tab-panel name="relations">
             <div v-for="f in relationFields" :key="f.name">
-              <component :is="f.component" v-model="form[f.name]" v-bind="f.props" />
+              <component
+                :is="componentMap[f.component] || f.component"
+                v-model="form[f.name]"
+                v-bind="f.props"
+                dense
+                outlined
+              />
             </div>
           </q-tab-panel>
 
@@ -190,7 +201,13 @@ async function save() {
                 style="max-width:100px"
               />
 
-              <component :is="f.component" v-model="form[f.name]" v-bind="f.props" />
+              <component
+                :is="componentMap[f.component] || f.component"
+                v-model="form[f.name]"
+                v-bind="f.props"
+                dense
+                outlined
+              />
 
             </div>
 
