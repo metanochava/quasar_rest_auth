@@ -176,17 +176,17 @@ function openEdit(row) {
 }
 
 async function onDelete(row) {
-  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model}/${row.id}/`, params:{} }))
+  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/`, params:{} }))
   await loadData()
 }
 
 async function onHardDelete(row) {
-  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model}/${row.id}/hard_delete/`, params:{} }))
+  await HTTPAuth.delete(url({ type: 'u', url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/hard_delete/`, params:{} }))
   await loadData()
 }
 
 async function onRestore(row) {
-  await HTTPAuth.post(url({ type: 'u', url: `/api/${props.module}/${props.model}/${row.id}/restore/`, params:{}}), {})
+  await HTTPAuth.post(url({ type: 'u', url: `/api/${props.module}/${props.model.toLowerCase()}s/${row.id}/restore/`, params:{}}), {})
   await loadData()
 }
 
